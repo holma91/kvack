@@ -1,10 +1,6 @@
 import { createRoot } from 'react-dom/client';
-
+import Home from './index';
 const container = document.getElementById('root');
 const root = createRoot(container);
 
-root.render(
-  <>
-    <div className="bg-red-200">Hello from reactovic!!</div>
-  </>
-);
+root.render(<Home />);

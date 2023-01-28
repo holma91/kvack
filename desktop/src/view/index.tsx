@@ -1,32 +1,43 @@
-const sites = ['google', 'stackoverflow', 'reddit', 'wolframalpha'];
+const nameToUrl: { [key: string]: string } = {
+  google: 'https://google.com',
+  duckduckgo: 'https://duckduckgo.com',
+  wolframalpha: 'https://wolframalpha.com',
+};
+
+const calculateViewSize = (width: number, height: number) => {
+  const viewWidth = (width * 3) / 4;
+};
 
 export default function Home() {
-  const goToSite = (site: string) => {
-    api.openSite(site);
-    // load site in a BrowserView?
+  const setView = (id: string) => {
+    api.setView(id);
+  };
+
+  const addTab = () => {
+    console.log('adding tab');
+    api.createView();
   };
 
   return (
     <div className="flex">
-      <aside className="w-3/12 bg-gray-200 h-screen">
+      <aside className="w-[325px] bg-gray-200 h-screen">
         <h3 className="text-lg font-medium p-4">Sites</h3>
         <div className="flex flex-col pt-4">
-          {sites.map((site) => {
+          {Object.keys(nameToUrl).map((name) => {
             return (
               <div
-                key={site}
+                key={name}
                 className="p-2 pl-4 hover:bg-gray-300 cursor-pointer"
-                onClick={() => goToSite(site)}
+                onClick={() => setView(name)}
               >
-                <p className="text-gray-700">{site}</p>
+                <p className="text-gray-700">{name}</p>
               </div>
             );
           })}
         </div>
       </aside>
-      <main className="w-8/12 p-4">
-        <h1 className="text-2xl font-medium">Main Content</h1>
-        <p className="text-gray-700">Some main content goes here</p>
+      <main id="header" className="flex-1 h-[76px] bg-gray-200">
+        <h3 className="text-lg font-medium p-4">Main Content</h3>
       </main>
     </div>
   );

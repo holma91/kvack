@@ -6,6 +6,7 @@ import {
   ipcRenderer,
 } from 'electron';
 import path from 'path';
+import { injects } from './injects';
 
 type WindowSettings = {
   height: number;
@@ -82,13 +83,17 @@ class MainProcess {
 
   setView(id: string) {
     let view = this.viewMap[id];
-    if (view && this.selectedView !== id) {
-      this.mainWindow.setBrowserView(view);
-      view.webContents.loadURL(idToUrl[id]);
+    if (!view) return;
 
+    this.mainWindow.setBrowserView(view);
+    if (!this.viewStateMap[id].loadedInitialURL) {
+      view.webContents.loadURL(idToUrl[id]);
+      // view.webContents.openDevTools();
       view.webContents.on('did-finish-load', () => {
-        // view.webContents.insertCSS('html, body { background-color: #f00; }');
-        // is immediately replaces afterwards if page is dynamic
+        view.webContents.insertCSS(injects[id].css);
+        view.webContents.executeJavaScript(injects[id].js).then(() => {
+          console.log('success?');
+        });
       });
 
       const [width, height] = this.mainWindow.getSize();
@@ -104,8 +109,11 @@ class MainProcess {
 
       view.setBounds(bounds);
       view.setAutoResize({ height: true, width: true });
-      this.selectedView = id;
+
+      this.viewStateMap[id].loadedInitialURL = true;
     }
+
+    this.selectedView = id;
   }
 }
 

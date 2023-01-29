@@ -7,6 +7,7 @@ import {
 } from 'electron';
 import path from 'path';
 import { injects } from './injects';
+import { idToUrl } from '../utils/utils';
 
 type WindowSettings = {
   height: number;
@@ -18,7 +19,7 @@ type ViewStateMap = {
 };
 
 const HEADER_SIZE = 76;
-const SIDEBAR_SIZE = 225;
+const SIDEBAR_SIZE = 0;
 
 const defaultViewWebPreferences = {
   nodeIntegration: false,
@@ -38,13 +39,6 @@ const defaultViewWebPreferences = {
   minimumFontSize: 6,
 };
 
-const idToUrl: { [key: string]: string } = {
-  google: 'https://google.com',
-  duckduckgo: 'https://duckduckgo.com',
-  wolframalpha: 'https://wolframalpha.com',
-  static: 'https://realpython.github.io/fake-jobs/',
-};
-
 // 1 MainWindow have 1 BrowserWindow and multiple BrowserViews
 class MainProcess {
   mainWindow: BrowserWindow;
@@ -58,6 +52,8 @@ class MainProcess {
       height: 800,
       width: 1200,
       frame: true,
+      title: 'kvack',
+      // type: 'panel',
       webPreferences: {
         preload,
       },

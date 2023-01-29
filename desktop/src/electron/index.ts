@@ -18,7 +18,14 @@ if (require('electron-squirrel-startup')) {
   app.quit();
 }
 
-const defaultExtensions = ['duckduckgo', 'wolframalpha', 'google', 'static'];
+const defaultExtensions = [
+  'wolframalpha',
+  'google',
+  'static',
+  'bing',
+  'duckduckgo',
+  'chatgpt',
+];
 
 const start = (): void => {
   const mainProcess = new MainProcess(

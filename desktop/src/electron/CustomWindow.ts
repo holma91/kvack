@@ -17,7 +17,7 @@ type ViewStateMap = {
 };
 
 const HEADER_SIZE = 76;
-const SIDEBAR_SIZE = 325;
+const SIDEBAR_SIZE = 225;
 
 const defaultViewWebPreferences = {
   nodeIntegration: false,
@@ -41,6 +41,7 @@ const idToUrl: { [key: string]: string } = {
   google: 'https://google.com',
   duckduckgo: 'https://duckduckgo.com',
   wolframalpha: 'https://wolframalpha.com',
+  static: 'https://realpython.github.io/fake-jobs/',
 };
 
 // 1 MainWindow have 1 BrowserWindow and multiple BrowserViews
@@ -74,13 +75,22 @@ class MainProcess {
 
       this.viewMap[id] = view;
       this.viewStateMap[id] = { loadedInitialURL: false };
+
+      // maybe set up listeners like view.webContents.on("blah")
     }
   }
 
   setView(id: string) {
-    if (this.viewMap[id] && this.selectedView !== id) {
-      this.mainWindow.setBrowserView(this.viewMap[id]);
-      this.viewMap[id].webContents.loadURL(idToUrl[id]);
+    let view = this.viewMap[id];
+    if (view && this.selectedView !== id) {
+      this.mainWindow.setBrowserView(view);
+      view.webContents.loadURL(idToUrl[id]);
+
+      view.webContents.on('did-finish-load', () => {
+        // view.webContents.insertCSS('html, body { background-color: #f00; }');
+        // is immediately replaces afterwards if page is dynamic
+      });
+
       const [width, height] = this.mainWindow.getSize();
       const [_, contentHeight] = this.mainWindow.getContentSize();
       const topFrame = height - contentHeight;
@@ -91,10 +101,9 @@ class MainProcess {
         width: Math.round(width - SIDEBAR_SIZE),
         height: Math.round(contentHeight - HEADER_SIZE),
       };
-      console.log(bounds);
 
-      this.viewMap[id].setBounds(bounds);
-      this.viewMap[id].setAutoResize({ height: true, width: true });
+      view.setBounds(bounds);
+      view.setAutoResize({ height: true, width: true });
       this.selectedView = id;
     }
   }

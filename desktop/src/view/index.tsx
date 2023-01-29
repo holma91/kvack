@@ -2,6 +2,7 @@ const nameToUrl: { [key: string]: string } = {
   google: 'https://google.com',
   duckduckgo: 'https://duckduckgo.com',
   wolframalpha: 'https://wolframalpha.com',
+  static: 'https://realpython.github.io/fake-jobs/',
 };
 
 const calculateViewSize = (width: number, height: number) => {
@@ -20,7 +21,7 @@ export default function Home() {
 
   return (
     <div className="flex">
-      <aside className="w-[325px] bg-gray-200 h-screen">
+      <aside className="w-[225px] bg-gray-200 h-screen">
         <h3 className="text-lg font-medium p-4">Sites</h3>
         <div className="flex flex-col pt-4">
           {Object.keys(nameToUrl).map((name) => {

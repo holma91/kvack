@@ -4,6 +4,9 @@ import {
   BrowserView,
   ipcMain,
   webContents,
+  Menu,
+  MenuItem,
+  globalShortcut,
 } from 'electron';
 import path from 'path';
 import MainProcess from './CustomWindow';
@@ -47,10 +50,39 @@ const start = (): void => {
   });
 };
 
+const menu = new Menu();
+menu.append(
+  new MenuItem({
+    label: 'Electron',
+    submenu: [
+      {
+        role: 'help',
+        accelerator:
+          process.platform === 'darwin' ? 'Alt+Cmd+J' : 'Alt+Shift+J',
+        click: () => {
+          console.log('Electron rocks!');
+        },
+      },
+      {
+        role: 'selectNextTab',
+        accelerator: 'Control+Tab',
+        click: () => {
+          console.log('tab it!');
+        },
+      },
+    ],
+  })
+);
+
+Menu.setApplicationMenu(menu);
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
+  globalShortcut.register('Alt+CommandOrControl+K', () => {
+    console.log('Electron loves global shortcuts!');
+  });
   start();
 });
 

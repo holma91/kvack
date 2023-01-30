@@ -1,4 +1,5 @@
 ## TODO
 
-- load google, stack, wolf and reddit side by side
-- tab between them
+- read up on shortcuts
+- make it possible to tab between extensions
+- puzzle with the UI

@@ -84,12 +84,23 @@ class MainProcess {
     this.mainWindow.setBrowserView(view);
     if (!this.viewStateMap[id].loadedInitialURL) {
       view.webContents.loadURL(idToUrl[id]);
-      // view.webContents.openDevTools();
+      view.webContents.openDevTools();
       view.webContents.on('did-finish-load', () => {
         view.webContents.insertCSS(injects[id].css);
         view.webContents.executeJavaScript(injects[id].js).then(() => {
           console.log('success?');
         });
+      });
+
+      view.webContents.on('before-input-event', (event, input) => {
+        // can watch everything that's coming from the user here
+        // console.log('input.control:', input.control);
+        // console.log('input.key.toLowerCase():', input.key.toLowerCase());
+
+        if (input.control && input.key.toLowerCase() === 'i') {
+          console.log('Pressed Control+I');
+          event.preventDefault();
+        }
       });
 
       const [width, height] = this.mainWindow.getSize();

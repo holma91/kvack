@@ -14,6 +14,8 @@ export default function Home() {
     api.createView();
   };
 
+  // listens for tab changes here and make the state change
+
   return (
     <div className="flex">
       <main id="header" className="flex-1 h-[76px] bg-gray-200 flex">

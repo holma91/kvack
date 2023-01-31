@@ -23,6 +23,7 @@ export default function Home() {
         {Object.keys(idToUrl).map((name) => {
           return (
             <div
+              id="tab"
               key={name}
               className={
                 `p-6 hover:bg-gray-300 cursor-pointer ` +

@@ -63,16 +63,14 @@ menu.append(
           console.log('Electron rocks!');
         },
       },
-      {
-        role: 'selectNextTab',
-        accelerator: 'Control+Tab',
-        click: () => {
-          console.log('tab it!');
-        },
-      },
     ],
   })
 );
+menu.append(new MenuItem({ role: 'fileMenu' }));
+menu.append(new MenuItem({ role: 'appMenu' }));
+menu.append(new MenuItem({ role: 'editMenu' }));
+menu.append(new MenuItem({ role: 'viewMenu' }));
+menu.append(new MenuItem({ role: 'windowMenu' }));
 
 Menu.setApplicationMenu(menu);
 

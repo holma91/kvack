@@ -1,20 +1,41 @@
-import { useState } from 'react';
+// import { ipcRenderer } from 'electron/renderer';
+import { useEffect, useState } from 'react';
 
 import { idToUrl } from '../utils/utils';
 
+let extensions = ['google', 'duckduckgo', 'wolframalpha', 'chatgpt', 'bing'];
+
 export default function Home() {
-  const [currentView, setCurrentView] = useState('chatgpt');
+  const [currentView, setCurrentView] = useState('google');
   const setView = (id: string) => {
     api.setView(id);
     setCurrentView(id);
   };
 
-  const addTab = () => {
-    console.log('adding tab');
-    api.createView();
-  };
+  useEffect(() => {
+    const listeners = [
+      api.onNextTab(() => {
+        const nextIndex = extensions.indexOf(currentView) + 1;
+        let nextView =
+          extensions[nextIndex >= extensions.length ? 0 : nextIndex];
 
-  // listens for tab changes here and make the state change
+        api.setView(nextView);
+        setCurrentView(nextView);
+      }),
+      api.onPreviousTab(() => {
+        const nextIndex = extensions.indexOf(currentView) - 1;
+        let nextView =
+          extensions[nextIndex < 0 ? extensions.length - 1 : nextIndex];
+
+        api.setView(nextView);
+        setCurrentView(nextView);
+      }),
+    ];
+
+    return () => {
+      listeners.forEach((removeListener: () => void) => removeListener());
+    };
+  }, [currentView, setCurrentView]);
 
   return (
     <div className="flex">

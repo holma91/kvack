@@ -1,15 +1,20 @@
-const { ipcRenderer } = require('electron');
-
+import { ipcRenderer } from 'electron';
 const api = {
-  // setTitle: (title) => ipcRenderer.send('set-title', title),
-  openSite: (site: string, sidebarWidth: number, headerHeight: number) =>
-    ipcRenderer.send('change-site', site, sidebarWidth, headerHeight),
-  sayHello: () => console.log('hello'),
   setView: (viewId: string) => ipcRenderer.send('setView', viewId),
   createView: () => ipcRenderer.send('createView'),
-  // openFile: () => ipcRenderer.invoke('dialog:openFile'),
-  // handleCounter: (callback) => ipcRenderer.on('update-counter', callback),
-  // ipcRenderer,
+  // onNextTab: (callback: any) => ipcRenderer.on('nextTab', callback),
+  onNextTab: (callback: any) => {
+    ipcRenderer.on('nextTab', callback);
+    return () => {
+      ipcRenderer.removeAllListeners('nextTab');
+    };
+  },
+  onPreviousTab: (callback: any) => {
+    ipcRenderer.on('previousTab', callback);
+    return () => {
+      ipcRenderer.removeAllListeners('previousTab');
+    };
+  },
 };
 
 export default api;

@@ -21,13 +21,16 @@ if (require('electron-squirrel-startup')) {
   app.quit();
 }
 
+function sendIPCToWindow(window: any, action: string, data: any) {
+  window.webContents.send(action, data || {});
+}
+
 const defaultExtensions = [
-  'wolframalpha',
   'google',
-  'static',
-  'bing',
   'duckduckgo',
+  'wolframalpha',
   'chatgpt',
+  'bing',
 ];
 
 const start = (): void => {
@@ -35,44 +38,43 @@ const start = (): void => {
     MAIN_WINDOW_WEBPACK_ENTRY,
     MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY
   );
-  for (const id of defaultExtensions) {
+  for (const id of defaultExtensions.reverse()) {
     // load everything into the cache on startup
     mainProcess.createView(id);
     mainProcess.setView(id);
   }
-  // mainWindow.webContents.openDevTools();
+  // mainProcess.mainWindow.webContents.openDevTools();
   // console.log(mainProcess.viewMap['google'].webContents);
+  console.log(ipcMain);
 
-  console.log(webContents.getFocusedWebContents());
+  const menu = new Menu();
+  menu.append(
+    new MenuItem({
+      label: 'Tab',
+      submenu: [
+        {
+          label: 'Select Next Tab',
+          accelerator: 'Ctrl+Tab',
+          click: () => {
+            mainProcess.mainWindow.webContents.send('nextTab');
+          },
+        },
+        {
+          label: 'Select Previous Tab',
+          accelerator: 'Ctrl+Shift+Tab',
+          click: () => {
+            mainProcess.mainWindow.webContents.send('previousTab');
+          },
+        },
+      ],
+    })
+  );
+  Menu.setApplicationMenu(menu);
 
   ipcMain.on('setView', (e: any, viewId: string) => {
     mainProcess.setView(viewId);
   });
 };
-
-const menu = new Menu();
-menu.append(
-  new MenuItem({
-    label: 'Electron',
-    submenu: [
-      {
-        role: 'help',
-        accelerator:
-          process.platform === 'darwin' ? 'Alt+Cmd+J' : 'Alt+Shift+J',
-        click: () => {
-          console.log('Electron rocks!');
-        },
-      },
-    ],
-  })
-);
-menu.append(new MenuItem({ role: 'fileMenu' }));
-menu.append(new MenuItem({ role: 'appMenu' }));
-menu.append(new MenuItem({ role: 'editMenu' }));
-menu.append(new MenuItem({ role: 'viewMenu' }));
-menu.append(new MenuItem({ role: 'windowMenu' }));
-
-Menu.setApplicationMenu(menu);
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.

@@ -4,5 +4,4 @@ export const idToUrl: { [key: string]: string } = {
   wolframalpha: 'https://wolframalpha.com',
   chatgpt: 'https://chat.openai.com',
   bing: 'https://bing.com',
-  static: 'https://realpython.github.io/fake-jobs/',
 };

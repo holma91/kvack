@@ -38,14 +38,14 @@ const start = (): void => {
     MAIN_WINDOW_WEBPACK_ENTRY,
     MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY
   );
+
+  // read the settings, load up all the extensions
   for (const id of defaultExtensions.reverse()) {
     // load everything into the cache on startup
     mainProcess.createView(id);
     mainProcess.setView(id);
   }
   // mainProcess.mainWindow.webContents.openDevTools();
-  // console.log(mainProcess.viewMap['google'].webContents);
-  console.log(ipcMain);
 
   const menu = new Menu();
   menu.append(

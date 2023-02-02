@@ -73,15 +73,9 @@ class MainProcess {
     const group = groups[id];
 
     for (let i = 0; i < group.extensions.length; i++) {
-      if (this.viewMap[`${id}:${group.extensions[i]}`]) continue;
-
       let view = new BrowserView({
         webPreferences: defaultViewWebPreferences,
       });
-      this.viewMap[`${id}:${group.extensions[i]}`] = view;
-      this.viewStateMap[`${id}:${group.extensions[i]}`] = {
-        loadedInitialURL: false,
-      };
 
       group.views[i] = view;
     }
@@ -101,42 +95,47 @@ class MainProcess {
         this.mainWindow.addBrowserView(group.views[i]);
       }
 
-      if (group.loadedInitialURLs[i]) continue;
+      if (!group.loadedInitialURLs[i]) {
+        group.views[i].webContents.loadURL(idToUrl[group.extensions[i]]);
+        group.views[i].webContents.on('did-finish-load', () => {
+          group.views[i].webContents.insertCSS(
+            injects[groups[id].extensions[i]].css
+          );
+          group.views[i].webContents
+            .executeJavaScript(injects[groups[id].extensions[i]].js)
+            .then(() => {
+              console.log('success?');
+            });
+        });
+        group.loadedInitialURLs[i] = true;
+      }
 
-      group.views[i].webContents.loadURL(idToUrl[group.extensions[i]]);
-
-      // view.webContents.on('did-finish-load', () => {
-      //   view.webContents.insertCSS(injects[groups[id].extensions[0]].css);
-      //   view.webContents
-      //     .executeJavaScript(injects[groups[id].extensions[0]].js)
-      //     .then(() => {
-      //       console.log('success?');
-      //     });
-      // });
-
-      const [width, height] = this.mainWindow.getSize();
-      const [_, contentHeight] = this.mainWindow.getContentSize();
-      const topFrame = height - contentHeight;
-
-      let bounds = {
-        x: Math.round(SIDEBAR_SIZE) + width * group.xOffsets[i],
-        y: Math.round(HEADER_SIZE + topFrame),
-        width: Math.round(width - SIDEBAR_SIZE) * group.dimensions[i],
-        height: Math.round(contentHeight - HEADER_SIZE),
-      };
-
-      group.views[i].setBounds(bounds);
-      group.views[i].setAutoResize({
-        height: true,
-        width: true,
-        vertical: true,
-        horizontal: true,
-      });
-
-      group.loadedInitialURLs[i] = true;
+      // always set bounds
+      this.setBounds(group, i);
     }
 
     this.selectedGroup = id;
+  }
+
+  setBounds(group: Group, i: number) {
+    const [width, height] = this.mainWindow.getSize();
+    const [_, contentHeight] = this.mainWindow.getContentSize();
+    const topFrame = height - contentHeight;
+
+    // bounds values MUST be positive
+    let bounds = {
+      x: Math.round((SIDEBAR_SIZE + width) * group.xOffsets[i]),
+      y: Math.round(HEADER_SIZE + topFrame),
+      width: Math.round((width - SIDEBAR_SIZE) * group.dimensions[i]),
+      height: Math.round(contentHeight - HEADER_SIZE),
+    };
+
+    group.views[i].setBounds(bounds);
+    group.views[i].setAutoResize({
+      height: true,
+      width: true,
+      horizontal: true,
+    });
   }
 }
 

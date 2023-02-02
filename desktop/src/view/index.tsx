@@ -1,12 +1,12 @@
 // import { ipcRenderer } from 'electron/renderer';
 import { useEffect, useState } from 'react';
 
-import { idToUrl } from '../utils/utils';
+import { groups, idToUrl } from '../utils/utils';
 
-let extensions = ['google', 'duckduckgo', 'wolframalpha', 'chatgpt', 'bing'];
+const extensions = ['google', 'duckduckgo', 'chatgpt', 'google-duckduckgo'];
 
 export default function Home() {
-  const [currentView, setCurrentView] = useState('google');
+  const [currentView, setCurrentView] = useState('google-duckduckgo');
   const setView = (id: string) => {
     api.setView(id);
     setCurrentView(id);
@@ -41,7 +41,7 @@ export default function Home() {
     <div className="flex">
       <main id="header" className="flex-1 h-[76px] bg-gray-200 flex">
         {/* <h3 className="text-lg font-medium p-6">Extensions</h3> */}
-        {Object.keys(idToUrl).map((name) => {
+        {Object.keys(groups).map((name) => {
           return (
             <div
               id="tab"

@@ -1,7 +1,5 @@
 ## TODO
 
-- read up on shortcuts
-- make it possible to tab between extensions
-- puzzle with the UI
-
-listens for tabs in the main process? and send an event to the frontend
+- change dimensions for browserviews when resizing the BrowserWindow
+  - listen for BrowserWindow resizing
+- change dimensions for browserviews when resizing a browserview

@@ -7,7 +7,7 @@ import {
 } from 'electron';
 import path from 'path';
 import { injects } from './injects';
-import { idToUrl } from '../utils/utils';
+import { Group, groups, idToUrl } from '../utils/utils';
 
 type WindowSettings = {
   height: number;
@@ -16,6 +16,9 @@ type WindowSettings = {
 
 type ViewStateMap = {
   loadedInitialURL: boolean;
+};
+type GroupStateMap = {
+  loadedInitialURLs: boolean[];
 };
 
 const HEADER_SIZE = 76;
@@ -45,12 +48,15 @@ class MainProcess {
   viewMap: { [key: string]: BrowserView } = {};
   viewStateMap: { [key: string]: ViewStateMap } = {};
   selectedView: string = '';
-  viewCount: number = 0;
+  selectedGroup: string = '';
+
+  groupMap: { [key: string]: Group } = {};
+  groupStateMap: { [key: string]: GroupStateMap } = {};
 
   constructor(url: string, preload: string) {
     let window = new BrowserWindow({
-      height: 800,
-      width: 1200,
+      height: 850,
+      width: 1400,
       frame: true,
       title: 'kvack',
       // type: 'panel',
@@ -63,64 +69,74 @@ class MainProcess {
     this.mainWindow = window;
   }
 
-  createView(id: string) {
-    // 1 view per ID
-    if (!this.viewMap[id]) {
+  createGroup(id: string) {
+    const group = groups[id];
+
+    for (let i = 0; i < group.extensions.length; i++) {
+      if (this.viewMap[`${id}:${group.extensions[i]}`]) continue;
+
       let view = new BrowserView({
         webPreferences: defaultViewWebPreferences,
       });
+      this.viewMap[`${id}:${group.extensions[i]}`] = view;
+      this.viewStateMap[`${id}:${group.extensions[i]}`] = {
+        loadedInitialURL: false,
+      };
 
-      this.viewMap[id] = view;
-      this.viewStateMap[id] = { loadedInitialURL: false };
-
-      // maybe set up listeners like view.webContents.on("blah")
+      group.views[i] = view;
     }
+
+    this.groupMap[id] = group;
+    // maybe set up listeners like view.webContents.on("blah")
   }
 
-  setView(id: string) {
-    let view = this.viewMap[id];
-    if (!view) return;
+  setGroup(id: string) {
+    let group = this.groupMap[id];
+    if (!group) return;
 
-    this.mainWindow.setBrowserView(view);
-    if (!this.viewStateMap[id].loadedInitialURL) {
-      view.webContents.loadURL(idToUrl[id]);
-      view.webContents.openDevTools();
-      view.webContents.on('did-finish-load', () => {
-        view.webContents.insertCSS(injects[id].css);
-        view.webContents.executeJavaScript(injects[id].js).then(() => {
-          console.log('success?');
-        });
-      });
+    for (let i = 0; i < group.extensions.length; i++) {
+      if (i === 0) {
+        this.mainWindow.setBrowserView(group.views[i]);
+      } else {
+        this.mainWindow.addBrowserView(group.views[i]);
+      }
 
-      view.webContents.on('before-input-event', (event, input) => {
-        // can watch everything that's coming from the user here
-        // console.log('input.control:', input.control);
-        // console.log('input.key.toLowerCase():', input.key.toLowerCase());
+      if (group.loadedInitialURLs[i]) continue;
 
-        if (input.control && input.key.toLowerCase() === 'i') {
-          console.log('Pressed Control+I');
-          event.preventDefault();
-        }
-      });
+      group.views[i].webContents.loadURL(idToUrl[group.extensions[i]]);
+
+      // view.webContents.on('did-finish-load', () => {
+      //   view.webContents.insertCSS(injects[groups[id].extensions[0]].css);
+      //   view.webContents
+      //     .executeJavaScript(injects[groups[id].extensions[0]].js)
+      //     .then(() => {
+      //       console.log('success?');
+      //     });
+      // });
 
       const [width, height] = this.mainWindow.getSize();
       const [_, contentHeight] = this.mainWindow.getContentSize();
       const topFrame = height - contentHeight;
 
       let bounds = {
-        x: Math.round(SIDEBAR_SIZE),
+        x: Math.round(SIDEBAR_SIZE) + width * group.xOffsets[i],
         y: Math.round(HEADER_SIZE + topFrame),
-        width: Math.round(width - SIDEBAR_SIZE),
+        width: Math.round(width - SIDEBAR_SIZE) * group.dimensions[i],
         height: Math.round(contentHeight - HEADER_SIZE),
       };
 
-      view.setBounds(bounds);
-      view.setAutoResize({ height: true, width: true });
+      group.views[i].setBounds(bounds);
+      group.views[i].setAutoResize({
+        height: true,
+        width: true,
+        vertical: true,
+        horizontal: true,
+      });
 
-      this.viewStateMap[id].loadedInitialURL = true;
+      group.loadedInitialURLs[i] = true;
     }
 
-    this.selectedView = id;
+    this.selectedGroup = id;
   }
 }
 

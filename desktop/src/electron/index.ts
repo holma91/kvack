@@ -16,6 +16,8 @@ import MainProcess from './CustomWindow';
 // whether you're running in development or production).
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string; // http://localhost:3000/main_window
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string; // /Users/lapuerta/dev/kvack/desktop/.webpack/renderer/main_window/preload.js
+declare const SEPARATOR_WINDOW_WEBPACK_ENTRY: string;
+declare const SEPARATOR_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -29,10 +31,10 @@ function sendIPCToWindow(window: any, action: string, data: any) {
 const start = (): void => {
   const mainProcess = new MainProcess(
     MAIN_WINDOW_WEBPACK_ENTRY,
-    MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY
+    MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
+    SEPARATOR_WINDOW_WEBPACK_ENTRY,
+    SEPARATOR_WINDOW_PRELOAD_WEBPACK_ENTRY
   );
-
-  console.log(MAIN_WINDOW_WEBPACK_ENTRY);
 
   // read the settings, load up all the extensions
   for (const id of Object.keys(groups)) {

@@ -59,7 +59,7 @@ const groups: { [key: string]: Group } = {
   'google-duckduckgo': {
     id: 'google-duckduckgo',
     short: 'gd',
-    extensions: ['google', 'bing', 'duckduckgo'],
+    extensions: ['google', 'separator', 'duckduckgo'],
     views: [
       {
         id: 'google',
@@ -69,14 +69,14 @@ const groups: { [key: string]: Group } = {
       },
       {
         id: 'separator',
-        dimension: 0.01,
+        dimension: 0.001,
         xOffset: 0.5,
         loadedInitialURL: false,
       },
       {
         id: 'duckduckgo',
-        dimension: 0.49,
-        xOffset: 0.51,
+        dimension: 0.499,
+        xOffset: 0.501,
         loadedInitialURL: false,
       },
     ],

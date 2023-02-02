@@ -53,7 +53,15 @@ class MainProcess {
   groupMap: { [key: string]: Group } = {};
   groupStateMap: { [key: string]: GroupStateMap } = {};
 
-  constructor(url: string, preload: string) {
+  separatorEntry: string;
+  separatorPreload: string;
+
+  constructor(
+    url: string,
+    preload: string,
+    separatorEntry: string,
+    separatorPreload: string
+  ) {
     let window = new BrowserWindow({
       height: 850,
       width: 1400,
@@ -67,6 +75,9 @@ class MainProcess {
 
     window.loadURL(url);
     this.mainWindow = window;
+
+    this.separatorEntry = separatorEntry;
+    this.separatorPreload = separatorPreload;
   }
 
   createGroup(id: string) {
@@ -96,7 +107,18 @@ class MainProcess {
       }
 
       if (!extendedView.loadedInitialURL) {
-        extendedView.view.webContents.loadURL(idToUrl[extendedView.id]);
+        console.log(
+          'sep entry',
+          extendedView.id === 'separator'
+            ? this.separatorEntry
+            : idToUrl[extendedView.id]
+        );
+
+        extendedView.view.webContents.loadURL(
+          extendedView.id === 'separator'
+            ? this.separatorEntry
+            : idToUrl[extendedView.id]
+        );
         // extendedView.view.webContents.on('did-finish-load', () => {
         //   extendedView.view.webContents.insertCSS(injects[extendedView.id].css);
         //   extendedView.view.webContents

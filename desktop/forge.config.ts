@@ -31,6 +31,14 @@ const config: ForgeConfig = {
               js: './src/electron/preload.ts',
             },
           },
+          {
+            html: './src/view/separator.html',
+            js: './src/electron/separator.ts',
+            name: 'separator_window',
+            preload: {
+              js: './src/electron/preload.ts',
+            },
+          },
         ],
       },
     }),

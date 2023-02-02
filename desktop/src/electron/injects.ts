@@ -61,4 +61,8 @@ export const injects: { [key: string]: { js: string; css: string } } = {
     js: ``,
     css: ``,
   },
+  separator: {
+    js: ``,
+    css: ``,
+  },
 };

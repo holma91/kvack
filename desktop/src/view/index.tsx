@@ -3,7 +3,13 @@ import { useEffect, useState } from 'react';
 
 import { groups, idToUrl } from '../utils/utils';
 
-const extensions = ['google', 'duckduckgo', 'chatgpt', 'google-duckduckgo'];
+const extensions = [
+  'google',
+  'duckduckgo',
+  'chatgpt',
+  'google-duckduckgo',
+  // 'google-chatgpt',
+];
 
 export default function Home() {
   const [currentView, setCurrentView] = useState('google-duckduckgo');

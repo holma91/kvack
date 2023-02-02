@@ -32,13 +32,16 @@ const start = (): void => {
     MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY
   );
 
+  console.log(MAIN_WINDOW_WEBPACK_ENTRY);
+
   // read the settings, load up all the extensions
   for (const id of Object.keys(groups)) {
     // load everything into the cache on startup
     mainProcess.createGroup(id);
     mainProcess.setGroup(id);
+    console.log(id);
   }
-  console.log(mainProcess.groupMap);
+  // console.log(mainProcess.groupMap);
 
   // mainProcess.mainWindow.webContents.openDevTools();
 

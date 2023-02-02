@@ -5,10 +5,15 @@ type Group = {
   id: string;
   short: string;
   extensions: string[];
-  dimensions: number[];
-  xOffsets: number[];
-  loadedInitialURLs: boolean[];
-  views: BrowserView[];
+  views: ExtendedView[];
+};
+
+type ExtendedView = {
+  view?: BrowserView;
+  id: string;
+  dimension: number;
+  xOffset: number;
+  loadedInitialURL: boolean;
 };
 
 const groups: { [key: string]: Group } = {
@@ -16,38 +21,89 @@ const groups: { [key: string]: Group } = {
     id: 'google',
     short: 'g',
     extensions: ['google'],
-    dimensions: [1],
-    xOffsets: [0],
-    loadedInitialURLs: [false],
-    views: [],
+    views: [
+      {
+        id: 'google',
+        dimension: 1,
+        xOffset: 0,
+        loadedInitialURL: false,
+      },
+    ],
   },
   duckduckgo: {
     id: 'duckduckgo',
     short: 'd',
     extensions: ['duckduckgo'],
-    dimensions: [1],
-    xOffsets: [0],
-    loadedInitialURLs: [false],
-    views: [],
+    views: [
+      {
+        id: 'duckduckgo',
+        dimension: 1,
+        xOffset: 0,
+        loadedInitialURL: false,
+      },
+    ],
   },
   chatgpt: {
     id: 'chatgpt',
     short: 'c',
     extensions: ['chatgpt'],
-    dimensions: [1],
-    xOffsets: [0],
-    loadedInitialURLs: [false],
-    views: [],
+    views: [
+      {
+        id: 'chatgpt',
+        dimension: 1,
+        xOffset: 0,
+        loadedInitialURL: false,
+      },
+    ],
   },
   'google-duckduckgo': {
     id: 'google-duckduckgo',
     short: 'gd',
-    extensions: ['google', 'duckduckgo'],
-    dimensions: [0.5, 0.5],
-    xOffsets: [0, 0.5],
-    loadedInitialURLs: [false, false],
-    views: [],
+    extensions: ['google', 'bing', 'duckduckgo'],
+    views: [
+      {
+        id: 'google',
+        dimension: 0.5,
+        xOffset: 0,
+        loadedInitialURL: false,
+      },
+      {
+        id: 'separator',
+        dimension: 0.01,
+        xOffset: 0.5,
+        loadedInitialURL: false,
+      },
+      {
+        id: 'duckduckgo',
+        dimension: 0.49,
+        xOffset: 0.51,
+        loadedInitialURL: false,
+      },
+    ],
   },
+  // 'google-chatgpt': {
+  //   id: 'google-chatgpt',
+  //   short: 'gc',
+  //   extensions: ['google', 'chatgpt'],
+  //   dimensions: [0.5, 0.4],
+  //   xOffsets: [0, 0.6],
+  //   loadedInitialURLs: [false, false],
+  //   views: [
+  //     {
+  //       id: 'google',
+  //       dimension: 0.6,
+  //       xOffset: 0,
+  //       loadedInitialURL: false,
+  //     },
+  //     {
+  //       id: 'chatgpt',
+  //       dimension: 0.4,
+  //       xOffset: 0.6,
+  //       loadedInitialURL: false,
+  //     },
+  //   ],
+  //   separators: [],
+  // },
 };
 
 const idToUrl: { [key: string]: string } = {
@@ -56,6 +112,7 @@ const idToUrl: { [key: string]: string } = {
   wolframalpha: 'https://wolframalpha.com',
   chatgpt: 'https://chat.openai.com',
   bing: 'https://bing.com',
+  separator: 'https://google.com',
 };
 
-export { extensions, groups, idToUrl, Group };
+export { extensions, groups, idToUrl, Group, ExtendedView };

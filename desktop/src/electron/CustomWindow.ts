@@ -7,7 +7,7 @@ import {
 } from 'electron';
 import path from 'path';
 import { injects } from './injects';
-import { Group, groups, idToUrl } from '../utils/utils';
+import { Group, ExtendedView, groups, idToUrl } from '../utils/utils';
 
 type WindowSettings = {
   height: number;
@@ -76,8 +76,7 @@ class MainProcess {
       let view = new BrowserView({
         webPreferences: defaultViewWebPreferences,
       });
-
-      group.views[i] = view;
+      group.views[i].view = view;
     }
 
     this.groupMap[id] = group;
@@ -89,49 +88,50 @@ class MainProcess {
     if (!group) return;
 
     for (let i = 0; i < group.extensions.length; i++) {
+      let extendedView = group.views[i];
       if (i === 0) {
-        this.mainWindow.setBrowserView(group.views[i]);
+        this.mainWindow.setBrowserView(extendedView.view);
       } else {
-        this.mainWindow.addBrowserView(group.views[i]);
+        this.mainWindow.addBrowserView(extendedView.view);
       }
 
-      if (!group.loadedInitialURLs[i]) {
-        group.views[i].webContents.loadURL(idToUrl[group.extensions[i]]);
-        group.views[i].webContents.on('did-finish-load', () => {
-          group.views[i].webContents.insertCSS(
-            injects[groups[id].extensions[i]].css
-          );
-          group.views[i].webContents
-            .executeJavaScript(injects[groups[id].extensions[i]].js)
-            .then(() => {
-              console.log('success?');
-            });
-        });
-        group.loadedInitialURLs[i] = true;
+      if (!extendedView.loadedInitialURL) {
+        extendedView.view.webContents.loadURL(idToUrl[extendedView.id]);
+        // extendedView.view.webContents.on('did-finish-load', () => {
+        //   extendedView.view.webContents.insertCSS(injects[extendedView.id].css);
+        //   extendedView.view.webContents
+        //     .executeJavaScript(injects[extendedView.id].js)
+        //     .then(() => {
+        //       console.log('success?');
+        //     });
+        // });
+
+        extendedView.loadedInitialURL = true;
       }
 
       // always set bounds
-      this.setBounds(group, i);
+      this.setBounds(extendedView);
     }
 
     this.selectedGroup = id;
+    console.log(id, 'loaded');
   }
 
-  setBounds(group: Group, i: number) {
+  setBounds(extendedView: ExtendedView) {
     const [width, height] = this.mainWindow.getSize();
     const [_, contentHeight] = this.mainWindow.getContentSize();
     const topFrame = height - contentHeight;
 
-    // bounds values MUST be positive
+    // bounds values MUST be integers
     let bounds = {
-      x: Math.round((SIDEBAR_SIZE + width) * group.xOffsets[i]),
+      x: Math.round((SIDEBAR_SIZE + width) * extendedView.xOffset),
       y: Math.round(HEADER_SIZE + topFrame),
-      width: Math.round((width - SIDEBAR_SIZE) * group.dimensions[i]),
+      width: Math.round((width - SIDEBAR_SIZE) * extendedView.dimension),
       height: Math.round(contentHeight - HEADER_SIZE),
     };
 
-    group.views[i].setBounds(bounds);
-    group.views[i].setAutoResize({
+    extendedView.view.setBounds(bounds);
+    extendedView.view.setAutoResize({
       height: true,
       width: true,
       horizontal: true,

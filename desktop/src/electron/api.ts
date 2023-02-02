@@ -2,7 +2,14 @@ import { ipcRenderer } from 'electron';
 const api = {
   setView: (viewId: string) => ipcRenderer.send('setView', viewId),
   createView: () => ipcRenderer.send('createView'),
-  // onNextTab: (callback: any) => ipcRenderer.on('nextTab', callback),
+  resizeGroup: (
+    screenX0: number,
+    screenX1: number,
+    t0: number,
+    t1: number,
+    clientX: number
+  ) => ipcRenderer.send('resizeGroup', screenX0, screenX1, t0, t1, clientX),
+
   onNextTab: (callback: any) => {
     ipcRenderer.on('nextTab', callback);
     return () => {

@@ -24,10 +24,6 @@ if (require('electron-squirrel-startup')) {
   app.quit();
 }
 
-function sendIPCToWindow(window: any, action: string, data: any) {
-  window.webContents.send(action, data || {});
-}
-
 const start = (): void => {
   const mainProcess = new MainProcess(
     MAIN_WINDOW_WEBPACK_ENTRY,
@@ -74,6 +70,32 @@ const start = (): void => {
   ipcMain.on('setView', (e: any, viewId: string) => {
     mainProcess.setGroup(viewId);
   });
+
+  ipcMain.on(
+    'resizeGroup',
+    (
+      e: any,
+      screenX0: number,
+      screenX1: number,
+      t0: number,
+      t1: number,
+      clientX: number
+    ) => {
+      console.log(
+        'time to resize, screenX:',
+        screenX0,
+        ', screenX1:',
+        screenX1,
+        ', t0:',
+        t0,
+        ', t1:',
+        t1,
+        ', clientX:',
+        clientX
+      );
+      mainProcess.resizeGroup(screenX0, screenX1, t0, t1);
+    }
+  );
 };
 
 // This method will be called when Electron has finished

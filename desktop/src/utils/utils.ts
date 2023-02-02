@@ -69,41 +69,43 @@ const groups: { [key: string]: Group } = {
       },
       {
         id: 'separator',
-        dimension: 0.001,
+        dimension: 0.01,
         xOffset: 0.5,
         loadedInitialURL: false,
       },
       {
         id: 'duckduckgo',
-        dimension: 0.499,
-        xOffset: 0.501,
+        dimension: 0.49,
+        xOffset: 0.51,
         loadedInitialURL: false,
       },
     ],
   },
-  // 'google-chatgpt': {
-  //   id: 'google-chatgpt',
-  //   short: 'gc',
-  //   extensions: ['google', 'chatgpt'],
-  //   dimensions: [0.5, 0.4],
-  //   xOffsets: [0, 0.6],
-  //   loadedInitialURLs: [false, false],
-  //   views: [
-  //     {
-  //       id: 'google',
-  //       dimension: 0.6,
-  //       xOffset: 0,
-  //       loadedInitialURL: false,
-  //     },
-  //     {
-  //       id: 'chatgpt',
-  //       dimension: 0.4,
-  //       xOffset: 0.6,
-  //       loadedInitialURL: false,
-  //     },
-  //   ],
-  //   separators: [],
-  // },
+  'google-chatgpt': {
+    id: 'google-chatgpt',
+    short: 'gc',
+    extensions: ['google', 'separator', 'chatgpt'],
+    views: [
+      {
+        id: 'google',
+        dimension: 0.6,
+        xOffset: 0,
+        loadedInitialURL: false,
+      },
+      {
+        id: 'separator',
+        dimension: 0.01,
+        xOffset: 0.6,
+        loadedInitialURL: false,
+      },
+      {
+        id: 'chatgpt',
+        dimension: 0.39,
+        xOffset: 0.61,
+        loadedInitialURL: false,
+      },
+    ],
+  },
 };
 
 const idToUrl: { [key: string]: string } = {

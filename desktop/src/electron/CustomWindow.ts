@@ -14,9 +14,6 @@ type WindowSettings = {
   width: number;
 };
 
-type ViewStateMap = {
-  loadedInitialURL: boolean;
-};
 type GroupStateMap = {
   loadedInitialURLs: boolean[];
 };
@@ -45,11 +42,7 @@ const defaultViewWebPreferences = {
 // 1 MainWindow have 1 BrowserWindow and multiple BrowserViews
 class MainProcess {
   mainWindow: BrowserWindow;
-  viewMap: { [key: string]: BrowserView } = {};
-  viewStateMap: { [key: string]: ViewStateMap } = {};
-  selectedView: string = '';
   selectedGroup: string = '';
-
   groupMap: { [key: string]: Group } = {};
   groupStateMap: { [key: string]: GroupStateMap } = {};
 
@@ -107,18 +100,12 @@ class MainProcess {
       }
 
       if (!extendedView.loadedInitialURL) {
-        console.log(
-          'sep entry',
-          extendedView.id === 'separator'
-            ? this.separatorEntry
-            : idToUrl[extendedView.id]
-        );
-
         extendedView.view.webContents.loadURL(
           extendedView.id === 'separator'
             ? this.separatorEntry
             : idToUrl[extendedView.id]
         );
+
         // extendedView.view.webContents.on('did-finish-load', () => {
         //   extendedView.view.webContents.insertCSS(injects[extendedView.id].css);
         //   extendedView.view.webContents
@@ -158,6 +145,32 @@ class MainProcess {
       width: true,
       horizontal: true,
     });
+  }
+
+  resizeGroup(screenX0: number, screenX1: number, t0: number, t1: number) {
+    let dx = screenX1 - screenX0;
+    let dt = t1 - t0;
+
+    let dxdt = dx === 0 || dt === 0 ? 0 : dx / dt;
+    dxdt /= 150;
+
+    console.log('dx =', dx, 'dt =', dt, ', dx/dt =', dxdt);
+
+    console.log(this.selectedGroup);
+    let group = this.groupMap[this.selectedGroup];
+
+    // resize all views in group accordingly
+    let google = group.views[0];
+    google.dimension += dxdt;
+    let separator = group.views[1];
+    separator.xOffset += dxdt;
+    let duckduckgo = group.views[2];
+    duckduckgo.xOffset += dxdt;
+    duckduckgo.dimension -= dxdt;
+
+    this.setBounds(google);
+    this.setBounds(separator);
+    this.setBounds(duckduckgo);
   }
 }
 

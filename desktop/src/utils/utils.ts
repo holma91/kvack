@@ -12,7 +12,10 @@ type ExtendedView = {
   view?: BrowserView;
   id: string;
   dimension: number;
+  x: number;
+  y: number;
   xOffset: number;
+  yOffset: number;
   loadedInitialURL: boolean;
 };
 
@@ -25,7 +28,10 @@ const groups: { [key: string]: Group } = {
       {
         id: 'google',
         dimension: 1,
+        x: 1,
+        y: 1,
         xOffset: 0,
+        yOffset: 0,
         loadedInitialURL: false,
       },
     ],
@@ -38,7 +44,10 @@ const groups: { [key: string]: Group } = {
       {
         id: 'duckduckgo',
         dimension: 1,
+        x: 1,
+        y: 1,
         xOffset: 0,
+        yOffset: 0,
         loadedInitialURL: false,
       },
     ],
@@ -51,7 +60,10 @@ const groups: { [key: string]: Group } = {
       {
         id: 'chatgpt',
         dimension: 1,
+        x: 1,
+        y: 1,
         xOffset: 0,
+        yOffset: 0,
         loadedInitialURL: false,
       },
     ],
@@ -64,19 +76,28 @@ const groups: { [key: string]: Group } = {
       {
         id: 'separator',
         dimension: 1,
+        x: 1,
+        y: 1,
         xOffset: 0,
+        yOffset: 0,
         loadedInitialURL: false,
       },
       {
         id: 'google',
         dimension: 0.5,
+        x: 0.5,
+        y: 1,
         xOffset: 0,
+        yOffset: 0,
         loadedInitialURL: false,
       },
       {
         id: 'duckduckgo',
         dimension: 0.49,
+        x: 0.5,
+        y: 1,
         xOffset: 0.51,
+        yOffset: 0,
         loadedInitialURL: false,
       },
     ],
@@ -89,19 +110,28 @@ const groups: { [key: string]: Group } = {
       {
         id: 'separator',
         dimension: 1,
+        x: 1,
+        y: 1,
         xOffset: 0,
+        yOffset: 0,
         loadedInitialURL: false,
       },
       {
         id: 'google',
         dimension: 0.5,
+        x: 0.5,
+        y: 1,
         xOffset: 0,
+        yOffset: 0,
         loadedInitialURL: false,
       },
       {
         id: 'chatgpt',
         dimension: 0.49,
+        x: 0.49,
+        y: 1,
         xOffset: 0.51,
+        yOffset: 0,
         loadedInitialURL: false,
       },
     ],

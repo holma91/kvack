@@ -63,6 +63,10 @@ export const injects: { [key: string]: { js: string; css: string } } = {
   },
   separator: {
     js: ``,
-    css: ``,
+    css: `
+      #resizer {
+        left: 650px;
+      }
+    `,
   },
 };

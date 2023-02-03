@@ -110,16 +110,18 @@ class MainProcess {
             : idToUrl[extendedView.id]
         );
 
+        // get the group dimensions
+        // calculate pixel sizes
         // can inject the starting separator offset here
 
-        // extendedView.view.webContents.on('did-finish-load', () => {
-        //   extendedView.view.webContents.insertCSS(injects[extendedView.id].css);
-        //   extendedView.view.webContents
-        //     .executeJavaScript(injects[extendedView.id].js)
-        //     .then(() => {
-        //       console.log('success?');
-        //     });
-        // });
+        extendedView.view.webContents.on('did-finish-load', () => {
+          extendedView.view.webContents.insertCSS(injects[extendedView.id].css);
+          extendedView.view.webContents
+            .executeJavaScript(injects[extendedView.id].js)
+            .then(() => {
+              console.log('success?');
+            });
+        });
 
         extendedView.loadedInitialURL = true;
       }
@@ -139,13 +141,18 @@ class MainProcess {
     const [_, contentHeight] = this.mainWindow.getContentSize();
     const topFrame = height - contentHeight;
 
+    const appOffsetY = HEADER_SIZE + topFrame;
+    const appSpaceY = height - appOffsetY;
+
     // bounds values MUST be integers
     let bounds = {
-      x: Math.round((SIDEBAR_SIZE + width) * extendedView.xOffset),
-      y: Math.round(HEADER_SIZE + topFrame),
-      width: Math.round((width - SIDEBAR_SIZE) * extendedView.dimension),
-      height: Math.round(contentHeight - HEADER_SIZE),
+      x: Math.round(width * extendedView.xOffset),
+      y: Math.round(appOffsetY + appSpaceY * extendedView.yOffset),
+      width: Math.round(width * extendedView.x),
+      height: Math.round(contentHeight),
     };
+
+    // fix shit below
 
     if (extendedView.id === 'google') {
       bounds = { ...bounds, x: 0, width: 650 };

@@ -74,14 +74,17 @@ export default function Separator() {
   };
 
   useEffect(() => {
-    const initValue = 650; // get this value from the current group
-    resizer.current.style.left = initValue + 'px';
-
-    // listen for resize event
+    // const initValue = 650; // get this value from the current group
+    // resizer.current.style.left = initValue + 'px';
+    // listen for resize event and change the left value accordingly
   }, []);
 
   return (
-    <div className="absolute z-10 bg-red-400 text-center" ref={resizer}>
+    <div
+      id="resizer"
+      className="absolute z-10 bg-red-400 text-center"
+      ref={resizer}
+    >
       <div
         className="p-0 cursor-move w-[5px] h-screen z-20 bg-red-400 text-white"
         onMouseDown={dragMouseDown}

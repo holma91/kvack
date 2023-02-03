@@ -93,14 +93,26 @@ class MainProcess {
     let group = this.groupMap[id];
     if (!group) return;
 
+    const [width, height] = this.mainWindow.getSize();
+
     for (let i = 0; i < group.extensions.length; i++) {
       let extendedView = group.views[i];
       if (i === 0) {
         this.mainWindow.setBrowserView(extendedView.view);
       } else {
         this.mainWindow.addBrowserView(extendedView.view);
-        if (extendedView.id !== 'chatgpt') {
-        }
+      }
+
+      let separatorCSS = '';
+      if (extendedView.id === 'separator') {
+        const leftOffset = width * extendedView.leftOffset;
+        console.log('leftOffset:', leftOffset);
+
+        separatorCSS = `
+          #resizer {
+            left: ${leftOffset}px;
+          }
+        `;
       }
 
       if (!extendedView.loadedInitialURL) {
@@ -116,19 +128,31 @@ class MainProcess {
 
         extendedView.view.webContents.on('did-finish-load', () => {
           extendedView.view.webContents.insertCSS(injects[extendedView.id].css);
+          extendedView.view.webContents.insertCSS(separatorCSS);
+
           extendedView.view.webContents
             .executeJavaScript(injects[extendedView.id].js)
-            .then(() => {
-              console.log('success?');
-            });
+            .then(() => {});
         });
 
         extendedView.loadedInitialURL = true;
+        extendedView.loadedHeight = height;
+        extendedView.loadedWidth = width;
+        this.setBounds(extendedView);
       }
 
-      // always set bounds
-      this.setBounds(extendedView);
-      if (extendedView.id !== 'chatgpt') {
+      // setBounds if window size has changed... and insert new separator css
+      if (
+        width !== extendedView.loadedWidth ||
+        height !== extendedView.loadedHeight
+      ) {
+        extendedView.loadedHeight = height;
+        extendedView.loadedWidth = width;
+
+        console.log('inserting new css');
+        extendedView.view.webContents.insertCSS(separatorCSS);
+
+        this.setBounds(extendedView);
       }
     }
 
@@ -146,27 +170,28 @@ class MainProcess {
 
     // bounds values MUST be integers
     let bounds = {
-      x: Math.round(width * extendedView.xOffset),
-      y: Math.round(appOffsetY + appSpaceY * extendedView.yOffset),
-      width: Math.round(width * extendedView.x),
+      x: Math.round(width * extendedView.x),
+      y: Math.round(appOffsetY + appSpaceY * extendedView.y),
+      width: Math.round(width * extendedView.width),
       height: Math.round(contentHeight),
     };
 
     // fix shit below
 
-    if (extendedView.id === 'google') {
-      bounds = { ...bounds, x: 0, width: 650 };
-    } else if (extendedView.id === 'chatgpt') {
-      bounds = { ...bounds, x: 655, width: 145 };
-    } else if (extendedView.id === 'separator') {
-      bounds = { ...bounds, x: 0, width: 800 };
-    }
+    // if (extendedView.id === 'google') {
+    //   bounds = { ...bounds, x: 0, width: 650 };
+    // } else if (extendedView.id === 'chatgpt') {
+    //   bounds = { ...bounds, x: 655, width: 145 };
+    // } else if (extendedView.id === 'separator') {
+    //   bounds = { ...bounds, x: 0, width: 800 };
+    // }
 
     extendedView.view.setBounds(bounds);
     extendedView.view.setAutoResize({
-      height: true,
+      // height: true,
       width: true,
       horizontal: true,
+      // vertical: true,
     });
   }
 
@@ -220,9 +245,9 @@ class MainProcess {
     let google = group.views[0];
     google.dimension += dxdt;
     let separator = group.views[1];
-    separator.xOffset += dxdt;
+    // separator.xOffset += dxdt;
     let duckduckgo = group.views[2];
-    duckduckgo.xOffset += dxdt;
+    // duckduckgo.xOffset += dxdt;
     duckduckgo.dimension -= dxdt;
 
     this.setBounds(google);

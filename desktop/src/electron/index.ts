@@ -37,7 +37,7 @@ const start = (): void => {
     // load everything into the cache on startup
     mainProcess.createGroup(id);
     mainProcess.setGroup(id);
-    console.log(id);
+    // console.log(id);
   }
   // console.log(mainProcess.groupMap);
 

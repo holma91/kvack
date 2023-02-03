@@ -12,14 +12,18 @@ type ExtendedView = {
   view?: BrowserView;
   id: string;
   dimension: number;
+  width: number;
+  height: number;
   x: number;
   y: number;
-  xOffset: number;
-  yOffset: number;
   loadedInitialURL: boolean;
+  loadedHeight: number;
+  loadedWidth: number;
+  insertedCSS?: any;
+  leftOffset?: number;
 };
 
-const groups: { [key: string]: Group } = {
+const groups: { [keheight: string]: Group } = {
   google: {
     id: 'google',
     short: 'g',
@@ -28,11 +32,13 @@ const groups: { [key: string]: Group } = {
       {
         id: 'google',
         dimension: 1,
-        x: 1,
-        y: 1,
-        xOffset: 0,
-        yOffset: 0,
+        width: 1,
+        height: 1,
+        x: 0,
+        y: 0,
         loadedInitialURL: false,
+        loadedHeight: 0,
+        loadedWidth: 0,
       },
     ],
   },
@@ -44,11 +50,13 @@ const groups: { [key: string]: Group } = {
       {
         id: 'duckduckgo',
         dimension: 1,
-        x: 1,
-        y: 1,
-        xOffset: 0,
-        yOffset: 0,
+        width: 1,
+        height: 1,
+        x: 0,
+        y: 0,
         loadedInitialURL: false,
+        loadedHeight: 0,
+        loadedWidth: 0,
       },
     ],
   },
@@ -60,85 +68,101 @@ const groups: { [key: string]: Group } = {
       {
         id: 'chatgpt',
         dimension: 1,
-        x: 1,
-        y: 1,
-        xOffset: 0,
-        yOffset: 0,
+        width: 1,
+        height: 1,
+        x: 0,
+        y: 0,
         loadedInitialURL: false,
+        loadedHeight: 0,
+        loadedWidth: 0,
       },
     ],
   },
   'google-duckduckgo': {
     id: 'google-duckduckgo',
     short: 'gd',
-    extensions: ['google', 'separator', 'duckduckgo'],
+    extensions: ['separator', 'google', 'duckduckgo'],
     views: [
       {
         id: 'separator',
         dimension: 1,
-        x: 1,
-        y: 1,
-        xOffset: 0,
-        yOffset: 0,
+        width: 1,
+        height: 1,
+        x: 0,
+        y: 0,
         loadedInitialURL: false,
+        leftOffset: 0.5,
+        loadedHeight: 0,
+        loadedWidth: 0,
       },
       {
         id: 'google',
         dimension: 0.5,
-        x: 0.5,
-        y: 1,
-        xOffset: 0,
-        yOffset: 0,
+        width: 0.5,
+        height: 1,
+        x: 0,
+        y: 0,
         loadedInitialURL: false,
+        loadedHeight: 0,
+        loadedWidth: 0,
       },
       {
         id: 'duckduckgo',
         dimension: 0.49,
-        x: 0.5,
-        y: 1,
-        xOffset: 0.51,
-        yOffset: 0,
+        width: 0.5,
+        height: 1,
+        x: 0.51,
+        y: 0,
         loadedInitialURL: false,
+        loadedHeight: 0,
+        loadedWidth: 0,
       },
     ],
   },
   'google-chatgpt': {
     id: 'google-chatgpt',
     short: 'gc',
-    extensions: ['google', 'separator', 'chatgpt'],
+    extensions: ['separator', 'google', 'chatgpt'],
     views: [
       {
         id: 'separator',
         dimension: 1,
-        x: 1,
-        y: 1,
-        xOffset: 0,
-        yOffset: 0,
+        width: 1,
+        height: 1,
+        x: 0,
+        y: 0,
         loadedInitialURL: false,
+        leftOffset: 0.6,
+        loadedHeight: 0,
+        loadedWidth: 0,
       },
       {
         id: 'google',
         dimension: 0.5,
-        x: 0.5,
-        y: 1,
-        xOffset: 0,
-        yOffset: 0,
+        width: 0.6,
+        height: 1,
+        x: 0,
+        y: 0,
         loadedInitialURL: false,
+        loadedHeight: 0,
+        loadedWidth: 0,
       },
       {
         id: 'chatgpt',
         dimension: 0.49,
-        x: 0.49,
-        y: 1,
-        xOffset: 0.51,
-        yOffset: 0,
+        width: 0.39,
+        height: 1,
+        x: 0.61,
+        y: 0,
         loadedInitialURL: false,
+        loadedHeight: 0,
+        loadedWidth: 0,
       },
     ],
   },
 };
 
-const idToUrl: { [key: string]: string } = {
+const idToUrl: { [keheight: string]: string } = {
   google: 'https://google.com',
   duckduckgo: 'https://duckduckgo.com',
   wolframalpha: 'https://wolframalpha.com',

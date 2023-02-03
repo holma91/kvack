@@ -12,7 +12,7 @@ const extensions = [
 ];
 
 export default function Home() {
-  const [currentView, setCurrentView] = useState('google-duckduckgo');
+  const [currentView, setCurrentView] = useState('google-chatgpt');
   const setView = (id: string) => {
     api.setView(id);
     setCurrentView(id);

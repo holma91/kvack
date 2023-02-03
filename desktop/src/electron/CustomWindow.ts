@@ -39,6 +39,8 @@ const defaultViewWebPreferences = {
   minimumFontSize: 6,
 };
 
+const SEPARATOR_WIDTH = 5;
+
 // 1 MainWindow have 1 BrowserWindow and multiple BrowserViews
 class MainProcess {
   mainWindow: BrowserWindow;
@@ -56,8 +58,8 @@ class MainProcess {
     separatorPreload: string
   ) {
     let window = new BrowserWindow({
-      height: 850,
-      width: 1400,
+      height: 600,
+      width: 800,
       frame: true,
       title: 'kvack',
       // type: 'panel',
@@ -97,6 +99,8 @@ class MainProcess {
         this.mainWindow.setBrowserView(extendedView.view);
       } else {
         this.mainWindow.addBrowserView(extendedView.view);
+        if (extendedView.id !== 'chatgpt') {
+        }
       }
 
       if (!extendedView.loadedInitialURL) {
@@ -105,6 +109,8 @@ class MainProcess {
             ? this.separatorEntry
             : idToUrl[extendedView.id]
         );
+
+        // can inject the starting separator offset here
 
         // extendedView.view.webContents.on('did-finish-load', () => {
         //   extendedView.view.webContents.insertCSS(injects[extendedView.id].css);
@@ -120,6 +126,8 @@ class MainProcess {
 
       // always set bounds
       this.setBounds(extendedView);
+      if (extendedView.id !== 'chatgpt') {
+      }
     }
 
     this.selectedGroup = id;
@@ -139,12 +147,54 @@ class MainProcess {
       height: Math.round(contentHeight - HEADER_SIZE),
     };
 
+    if (extendedView.id === 'google') {
+      bounds = { ...bounds, x: 0, width: 650 };
+    } else if (extendedView.id === 'chatgpt') {
+      bounds = { ...bounds, x: 655, width: 145 };
+    } else if (extendedView.id === 'separator') {
+      bounds = { ...bounds, x: 0, width: 800 };
+    }
+
     extendedView.view.setBounds(bounds);
     extendedView.view.setAutoResize({
       height: true,
       width: true,
       horizontal: true,
     });
+  }
+
+  resizeBar(leftOffset: number) {
+    const [width, height] = this.mainWindow.getSize();
+    const [_, contentHeight] = this.mainWindow.getContentSize();
+    const topFrame = height - contentHeight;
+
+    const w1 = leftOffset;
+    // const w2 = 800 - value + 30;
+    const w2 = width - leftOffset; // screen width - leftOffset
+    console.log(leftOffset, w1, w2);
+
+    let group = this.groupMap[this.selectedGroup];
+
+    // resize all views in group accordingly
+    let google = group.views[1];
+    let chatgpt = group.views[2];
+
+    let gbounds = {
+      x: 0,
+      y: Math.round(HEADER_SIZE + topFrame),
+      width: Math.round(w1),
+      height: Math.round(contentHeight - HEADER_SIZE),
+    };
+
+    let cbounds = {
+      x: Math.round(leftOffset + SEPARATOR_WIDTH), // value + separator width
+      y: Math.round(HEADER_SIZE + topFrame),
+      width: Math.round(w2),
+      height: Math.round(contentHeight - HEADER_SIZE),
+    };
+
+    google.view.setBounds(gbounds);
+    chatgpt.view.setBounds(cbounds);
   }
 
   resizeGroup(screenX0: number, screenX1: number, t0: number, t1: number) {

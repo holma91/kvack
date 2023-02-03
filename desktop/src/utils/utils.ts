@@ -62,15 +62,15 @@ const groups: { [key: string]: Group } = {
     extensions: ['google', 'separator', 'duckduckgo'],
     views: [
       {
-        id: 'google',
-        dimension: 0.5,
+        id: 'separator',
+        dimension: 1,
         xOffset: 0,
         loadedInitialURL: false,
       },
       {
-        id: 'separator',
-        dimension: 0.01,
-        xOffset: 0.5,
+        id: 'google',
+        dimension: 0.5,
+        xOffset: 0,
         loadedInitialURL: false,
       },
       {
@@ -87,21 +87,21 @@ const groups: { [key: string]: Group } = {
     extensions: ['google', 'separator', 'chatgpt'],
     views: [
       {
-        id: 'google',
-        dimension: 0.6,
+        id: 'separator',
+        dimension: 1,
         xOffset: 0,
         loadedInitialURL: false,
       },
       {
-        id: 'separator',
-        dimension: 0.01,
-        xOffset: 0.6,
+        id: 'google',
+        dimension: 0.5,
+        xOffset: 0,
         loadedInitialURL: false,
       },
       {
         id: 'chatgpt',
-        dimension: 0.39,
-        xOffset: 0.61,
+        dimension: 0.49,
+        xOffset: 0.51,
         loadedInitialURL: false,
       },
     ],

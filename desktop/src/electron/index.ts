@@ -71,6 +71,17 @@ const start = (): void => {
     mainProcess.setGroup(viewId);
   });
 
+  ipcMain.on('resize-bar', (e, leftOffset) => {
+    if (leftOffset === -21) {
+      console.log(leftOffset);
+      return;
+    }
+    mainProcess.resizeBar(leftOffset);
+
+    // view.setBounds({ x: 1, y: 1, width: w1, height: 600 })
+    // view2.setBounds({ x: value + 20, y: 1, width: w2, height: 600 })
+  });
+
   ipcMain.on(
     'resizeGroup',
     (

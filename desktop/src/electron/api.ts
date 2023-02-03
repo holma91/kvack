@@ -10,6 +10,8 @@ const api = {
     clientX: number
   ) => ipcRenderer.send('resizeGroup', screenX0, screenX1, t0, t1, clientX),
 
+  resizeBar: (minMax: any) => ipcRenderer.send('resize-bar', minMax),
+
   onNextTab: (callback: any) => {
     ipcRenderer.on('nextTab', callback);
     return () => {

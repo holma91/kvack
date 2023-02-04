@@ -13,7 +13,6 @@ type Group = {
 type ExtendedView = {
   view?: BrowserView;
   id: string;
-  dimension: number;
   width: number;
   height: number;
   x: number;
@@ -33,7 +32,6 @@ const groups: { [key: string]: Group } = {
     views: [
       {
         id: 'google',
-        dimension: 1,
         width: 1,
         height: 1,
         x: 0,
@@ -51,7 +49,6 @@ const groups: { [key: string]: Group } = {
     views: [
       {
         id: 'duckduckgo',
-        dimension: 1,
         width: 1,
         height: 1,
         x: 0,
@@ -69,7 +66,6 @@ const groups: { [key: string]: Group } = {
     views: [
       {
         id: 'chatgpt',
-        dimension: 1,
         width: 1,
         height: 1,
         x: 0,
@@ -87,7 +83,6 @@ const groups: { [key: string]: Group } = {
     views: [
       {
         id: 'separator',
-        dimension: 1,
         width: 1,
         height: 1,
         x: 0,
@@ -97,7 +92,6 @@ const groups: { [key: string]: Group } = {
       },
       {
         id: 'google',
-        dimension: 0.5,
         width: 0.5,
         height: 1,
         x: 0,
@@ -106,7 +100,6 @@ const groups: { [key: string]: Group } = {
       },
       {
         id: 'duckduckgo',
-        dimension: 0.49,
         width: 0.5,
         height: 1,
         x: 0.51,
@@ -124,7 +117,6 @@ const groups: { [key: string]: Group } = {
     views: [
       {
         id: 'separator',
-        dimension: 1,
         width: 1,
         height: 1,
         x: 0,
@@ -134,7 +126,6 @@ const groups: { [key: string]: Group } = {
       },
       {
         id: 'google',
-        dimension: 0.5,
         width: 0.6,
         height: 1,
         x: 0,
@@ -143,7 +134,6 @@ const groups: { [key: string]: Group } = {
       },
       {
         id: 'chatgpt',
-        dimension: 0.49,
         width: 0.39,
         height: 1,
         x: 0.61,

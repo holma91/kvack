@@ -95,6 +95,8 @@ class MainProcess {
 
     const [width, height] = this.mainWindow.getSize();
 
+    let leftOffsetAbsolute = 0;
+
     for (let i = 0; i < group.extensions.length; i++) {
       let extendedView = group.views[i];
       if (i === 0) {
@@ -103,13 +105,9 @@ class MainProcess {
         this.mainWindow.addBrowserView(extendedView.view);
       }
 
-      let leftOffsetAbsolute = 0;
       if (extendedView.id === 'separator') {
         leftOffsetAbsolute = width * extendedView.leftOffset;
-        console.log('leftOffsetAbsolute:', leftOffsetAbsolute);
       }
-
-      // extendedView.view.webContents.send('windowResize', leftOffset);
 
       if (!extendedView.loadedInitialURL) {
         extendedView.view.webContents.loadURL(
@@ -117,11 +115,6 @@ class MainProcess {
             ? this.separatorEntry
             : idToUrl[extendedView.id]
         );
-
-        // get the group dimensions
-        // calculate pixel sizes
-        // can inject the starting separator offset here
-        // extendedView.view.webContents.send('windowResize', leftOffset);
 
         extendedView.view.webContents.on('did-finish-load', () => {
           extendedView.view.webContents.insertCSS(injects[extendedView.id].css);
@@ -133,26 +126,29 @@ class MainProcess {
         });
 
         extendedView.loadedInitialURL = true;
-        extendedView.loadedHeight = height;
-        extendedView.loadedWidth = width;
         this.setBounds(extendedView);
       }
 
-      if (
-        width !== extendedView.loadedWidth ||
-        height !== extendedView.loadedHeight
-      ) {
-        // will get here if window size has changed but the url was loaded earlier
-        // extendedView.loadedHeight = height;
-        // extendedView.loadedWidth = width;
-        //   console.log('new leftOffset:', leftOffsetAbsolute);
-        //   // extendedView.view.webContents.insertCSS(separatorCSS);
-        //   extendedView.view.webContents.send('windowResize', leftOffsetAbsolute);
-        //   this.setBounds(extendedView);
+      if (width !== group.loadedWidth || height !== group.loadedHeight) {
+        // will get here if window size has changed but the group was loaded earlier
+
+        if (group.views.length === 1) {
+          this.setBounds(extendedView);
+        }
       }
     }
 
+    if (width !== group.loadedWidth || height !== group.loadedHeight) {
+      if (group.views.length > 1) {
+        // will get here if window size has changed but the group was loaded earlier and the group have a separator
+        this.resizeSplitScreen(leftOffsetAbsolute, id);
+      }
+    }
+
+    group.loadedHeight = height;
+    group.loadedWidth = width;
     this.selectedGroup = id;
+
     console.log(id, 'loaded');
   }
 
@@ -169,7 +165,7 @@ class MainProcess {
       x: Math.round(width * extendedView.x),
       y: Math.round(appOffsetY + appSpaceY * extendedView.y),
       width: Math.round(width * extendedView.width),
-      height: Math.round(contentHeight),
+      height: Math.round(appSpaceY * extendedView.height),
     };
 
     extendedView.view.setBounds(bounds);
@@ -181,54 +177,35 @@ class MainProcess {
     });
   }
 
-  resizeBar(leftOffset: number) {
-    const [width, height] = this.mainWindow.getSize();
-    const [_, contentHeight] = this.mainWindow.getContentSize();
-    const topFrame = height - contentHeight;
+  resizeSplitScreen(leftOffset: number, groupId: string) {
+    const [width, _] = this.mainWindow.getSize();
 
     const w1 = leftOffset;
-    // const w2 = 800 - value + 30;
-    const w2 = width - leftOffset; // screen width - leftOffset
-    console.log(leftOffset, w1, w2);
+    const w2 = width - leftOffset;
 
-    let group = this.groupMap[this.selectedGroup];
+    let group = this.groupMap[groupId];
 
     // resize all views in group accordingly
     let separator = group.views[0];
-    // separator.leftOffset = Math.round(leftOffset / width);
-    let google = group.views[1];
-    let chatgpt = group.views[2];
+    let leftView = group.views[1];
+    let rightView = group.views[2];
 
-    let gbounds = {
-      x: 0,
-      y: Math.round(HEADER_SIZE + topFrame),
-      width: Math.round(w1),
-      height: Math.round(contentHeight - HEADER_SIZE),
-    };
+    leftView.x = 0 / width;
+    leftView.y = 0;
+    leftView.width = w1 / width;
+    leftView.height = 1;
 
-    google.x = gbounds.x;
-    google.y = gbounds.y;
-    google.width = gbounds.width / width;
-    google.height = gbounds.height / width;
+    rightView.x = Math.round(leftOffset + SEPARATOR_WIDTH) / width;
+    rightView.y = 0;
+    rightView.width = Math.round(w2) / width;
+    rightView.height = 1;
 
-    let cbounds = {
-      x: Math.round(leftOffset + SEPARATOR_WIDTH), // value + separator width
-      y: Math.round(HEADER_SIZE + topFrame),
-      width: Math.round(w2),
-      height: Math.round(contentHeight - HEADER_SIZE),
-    };
+    separator.leftOffset = leftView.width;
 
-    chatgpt.x = cbounds.x;
-    chatgpt.y = cbounds.y;
-    chatgpt.width = cbounds.width / width;
-    chatgpt.height = cbounds.height / width;
+    // console.log(group);
 
-    separator.leftOffset = google.width;
-
-    console.log(group);
-
-    google.view.setBounds(gbounds);
-    chatgpt.view.setBounds(cbounds);
+    this.setBounds(leftView);
+    this.setBounds(rightView);
   }
 }
 

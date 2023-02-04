@@ -73,36 +73,21 @@ const start = (): void => {
 
   ipcMain.on('resize-bar', (e, leftOffset) => {
     const groupString = mainProcess.selectedGroup;
-    const group = mainProcess.groupMap[groupString];
 
-    mainProcess.resizeBar(leftOffset);
-
-    // view.setBounds({ x: 1, y: 1, width: w1, height: 600 })
-    // view2.setBounds({ x: value + 20, y: 1, width: w2, height: 600 })
+    mainProcess.resizeSplitScreen(leftOffset, groupString);
   });
 
-  mainProcess.mainWindow.on(
-    'will-resize',
-    function (event, newBounds, details) {
-      // console.log('newBounds:', newBounds, ', details:', details);
-      console.log('resizing');
-      // find selected group
-      const groupString = mainProcess.selectedGroup;
-      const group = mainProcess.groupMap[groupString];
+  mainProcess.mainWindow.on('will-resize', function (_, newBounds, __) {
+    const groupString = mainProcess.selectedGroup;
+    const group = mainProcess.groupMap[groupString];
 
-      group.views.forEach((extendedView: ExtendedView) => {
-        if (extendedView.id === 'separator') {
-          const leftOffsetAbsolute = newBounds.width * extendedView.leftOffset;
-          console.log('leftOffset:', leftOffsetAbsolute);
-
-          extendedView.view.webContents.send(
-            'windowResize',
-            leftOffsetAbsolute
-          );
-        }
-      });
-    }
-  );
+    group.views.forEach((extendedView: ExtendedView) => {
+      if (extendedView.id === 'separator') {
+        const leftOffsetAbsolute = newBounds.width * extendedView.leftOffset;
+        extendedView.view.webContents.send('windowResize', leftOffsetAbsolute);
+      }
+    });
+  });
 };
 
 // This method will be called when Electron has finished

@@ -6,6 +6,8 @@ type Group = {
   short: string;
   extensions: string[];
   views: ExtendedView[];
+  loadedHeight: number;
+  loadedWidth: number;
 };
 
 type ExtendedView = {
@@ -17,8 +19,6 @@ type ExtendedView = {
   x: number;
   y: number;
   loadedInitialURL: boolean;
-  loadedHeight: number;
-  loadedWidth: number;
   insertedCSS?: any;
   leftOffset?: number;
 };
@@ -28,6 +28,8 @@ const groups: { [key: string]: Group } = {
     id: 'google',
     short: 'g',
     extensions: ['google'],
+    loadedHeight: 0,
+    loadedWidth: 0,
     views: [
       {
         id: 'google',
@@ -37,8 +39,6 @@ const groups: { [key: string]: Group } = {
         x: 0,
         y: 0,
         loadedInitialURL: false,
-        loadedHeight: 0,
-        loadedWidth: 0,
       },
     ],
   },
@@ -46,6 +46,8 @@ const groups: { [key: string]: Group } = {
     id: 'duckduckgo',
     short: 'd',
     extensions: ['duckduckgo'],
+    loadedHeight: 0,
+    loadedWidth: 0,
     views: [
       {
         id: 'duckduckgo',
@@ -55,8 +57,6 @@ const groups: { [key: string]: Group } = {
         x: 0,
         y: 0,
         loadedInitialURL: false,
-        loadedHeight: 0,
-        loadedWidth: 0,
       },
     ],
   },
@@ -64,6 +64,8 @@ const groups: { [key: string]: Group } = {
     id: 'chatgpt',
     short: 'c',
     extensions: ['chatgpt'],
+    loadedHeight: 0,
+    loadedWidth: 0,
     views: [
       {
         id: 'chatgpt',
@@ -73,8 +75,6 @@ const groups: { [key: string]: Group } = {
         x: 0,
         y: 0,
         loadedInitialURL: false,
-        loadedHeight: 0,
-        loadedWidth: 0,
       },
     ],
   },
@@ -82,6 +82,8 @@ const groups: { [key: string]: Group } = {
     id: 'google-duckduckgo',
     short: 'gd',
     extensions: ['separator', 'google', 'duckduckgo'],
+    loadedHeight: 0,
+    loadedWidth: 0,
     views: [
       {
         id: 'separator',
@@ -92,8 +94,6 @@ const groups: { [key: string]: Group } = {
         y: 0,
         loadedInitialURL: false,
         leftOffset: 0.5,
-        loadedHeight: 0,
-        loadedWidth: 0,
       },
       {
         id: 'google',
@@ -103,8 +103,6 @@ const groups: { [key: string]: Group } = {
         x: 0,
         y: 0,
         loadedInitialURL: false,
-        loadedHeight: 0,
-        loadedWidth: 0,
       },
       {
         id: 'duckduckgo',
@@ -114,8 +112,6 @@ const groups: { [key: string]: Group } = {
         x: 0.51,
         y: 0,
         loadedInitialURL: false,
-        loadedHeight: 0,
-        loadedWidth: 0,
       },
     ],
   },
@@ -123,6 +119,8 @@ const groups: { [key: string]: Group } = {
     id: 'google-chatgpt',
     short: 'gc',
     extensions: ['separator', 'google', 'chatgpt'],
+    loadedHeight: 0,
+    loadedWidth: 0,
     views: [
       {
         id: 'separator',
@@ -133,8 +131,6 @@ const groups: { [key: string]: Group } = {
         y: 0,
         loadedInitialURL: false,
         leftOffset: 0.6,
-        loadedHeight: 0,
-        loadedWidth: 0,
       },
       {
         id: 'google',
@@ -144,8 +140,6 @@ const groups: { [key: string]: Group } = {
         x: 0,
         y: 0,
         loadedInitialURL: false,
-        loadedHeight: 0,
-        loadedWidth: 0,
       },
       {
         id: 'chatgpt',
@@ -155,20 +149,18 @@ const groups: { [key: string]: Group } = {
         x: 0.61,
         y: 0,
         loadedInitialURL: false,
-        loadedHeight: 0,
-        loadedWidth: 0,
       },
     ],
   },
 };
 
 const idToUrl: { [keheight: string]: string } = {
-  // google: 'https://google.com',
-  google: 'https://brave.com',
+  google: 'https://google.com',
+  // google: 'https://brave.com',
   duckduckgo: 'https://duckduckgo.com',
   wolframalpha: 'https://wolframalpha.com',
-  // chatgpt: 'https://chat.openai.com',
-  chatgpt: 'https://microsoft.com',
+  chatgpt: 'https://chat.openai.com',
+  // chatgpt: 'https://microsoft.com',
   bing: 'https://bing.com',
   separator: 'https://google.com',
 };

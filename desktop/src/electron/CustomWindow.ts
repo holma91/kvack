@@ -73,7 +73,6 @@ class MainProcess {
     }
 
     this.groupMap[id] = group;
-    // maybe set up listeners like view.webContents.on("blah")
   }
 
   setGroup(id: string) {
@@ -105,7 +104,6 @@ class MainProcess {
 
         extendedView.view.webContents.on('did-finish-load', () => {
           extendedView.view.webContents.insertCSS(injects[extendedView.id].css);
-          // extendedView.view.webContents.insertCSS(separatorCSS);
           extendedView.view.webContents.send(
             'windowResize',
             leftOffsetAbsolute
@@ -118,7 +116,6 @@ class MainProcess {
 
       if (width !== group.loadedWidth || height !== group.loadedHeight) {
         // will get here if window size has changed but the group was loaded earlier
-
         if (group.views.length === 1) {
           this.setBounds(extendedView);
         }
@@ -129,8 +126,6 @@ class MainProcess {
       if (group.views.length > 1) {
         // will get here if window size has changed but the group was loaded earlier and the group have a separator
         this.resizeSplitScreen(leftOffsetAbsolute, id);
-        // I think we need to add a notification to Separator.tsx here
-        // did this just fix the damn bug? think so
         group.views[0].view.webContents.send(
           'windowResize',
           leftOffsetAbsolute
@@ -153,7 +148,7 @@ class MainProcess {
     const appOffsetY = HEADER_SIZE + topFrame;
     const appSpaceY = height - appOffsetY;
 
-    // bounds values MUST be integers
+    // bounds values MUST be positive integers
     let bounds = {
       x: Math.round(width * extendedView.x),
       y: Math.round(appOffsetY + appSpaceY * extendedView.y),
@@ -163,18 +158,17 @@ class MainProcess {
 
     extendedView.view.setBounds(bounds);
     extendedView.view.setAutoResize({
-      // height: true,
       width: true,
       horizontal: true,
-      // vertical: true,
     });
   }
 
-  // when should resizeSplitScreen get called?
-  //    - every time someone drags the vertical bar
-  //    - every time someone resizes the main window
-  //         - we are not doing this currently because it resizes automatically
-  //    - if we change tab and the window size has changed since the last load
+  /*
+   when should resizeSplitScreen get called?
+      - every time someone drags the vertical bar
+      - every time someone resizes the main window
+      - if we change tab and the window size has changed since the last load
+  */
   resizeSplitScreen(leftOffset: number, groupId: string) {
     const [width, _] = this.mainWindow.getSize();
 
@@ -200,8 +194,7 @@ class MainProcess {
 
     separator.leftOffset = leftView.width;
 
-    // console.log(group);
-
+    this.setBounds(separator);
     this.setBounds(leftView);
     this.setBounds(rightView);
   }

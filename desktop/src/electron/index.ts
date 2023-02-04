@@ -78,6 +78,8 @@ const start = (): void => {
   });
 
   mainProcess.mainWindow.on('will-resize', function (_, newBounds, __) {
+    console.log(newBounds);
+
     const groupString = mainProcess.selectedGroup;
     const group = mainProcess.groupMap[groupString];
 
@@ -85,6 +87,7 @@ const start = (): void => {
       if (extendedView.id === 'separator') {
         const leftOffsetAbsolute = newBounds.width * extendedView.leftOffset;
         extendedView.view.webContents.send('windowResize', leftOffsetAbsolute);
+        mainProcess.resizeSplitScreen(leftOffsetAbsolute, groupString);
       }
     });
   });

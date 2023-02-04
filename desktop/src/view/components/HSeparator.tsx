@@ -1,36 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 
-export default function Separator() {
-  const [mouseDown, setMouseDown] = useState(false);
-  const [positions, setPositions] = useState([]);
-  const [prevX, setPrevX] = useState(null);
-  const [prevT, setPrevT] = useState(null);
-
-  // let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-  // const [pos, setPos] = useState([0, 0, 0, 0]);
-
-  const resize = (e: any) => {
-    e.preventDefault();
-    if (mouseDown) {
-      let currentT = new Date().getTime();
-      let currentX = e.screenX;
-      if (prevX && prevT) {
-        console.log('clientX:', e.clientX);
-
-        api.resizeGroup(prevX, currentX, prevT, currentT, e.clientX);
-      }
-      setPrevX(currentX);
-      setPrevT(currentT);
-    }
-  };
-
-  const mouseUpOrOut = (e: any) => {
-    e.preventDefault();
-    setMouseDown(false);
-    setPrevX(null);
-    setPrevT(null);
-  };
-
+export default function HSeparator() {
   const resizer = useRef(null);
   let pos1 = useRef(0);
   let pos2 = useRef(0);
@@ -74,12 +44,7 @@ export default function Separator() {
   };
 
   useEffect(() => {
-    // const initValue = 650; // get this value from the current group
-    // resizer.current.style.left = initValue + 'px';
-    // listen for resize event and change the left value accordingly
-    // should also get red bar width from main here
     api.onWindowResize((leftOffset: number) => {
-      // alert(leftOffset);
       resizer.current.style.left = leftOffset + 'px';
     });
   }, []);
@@ -95,16 +60,5 @@ export default function Separator() {
         onMouseDown={dragMouseDown}
       ></div>
     </div>
-    // <div className="h-full w-full">
-    //   <div className="flex w-full overflow-hidden">
-    //     <div
-    //       className="h-screen w-3 m-0 p-0 relative cursor-col-resize"
-    //       onMouseMove={resize}
-    //       onMouseDown={() => setMouseDown(true)}
-    //       onMouseUp={mouseUpOrOut}
-    //       // onMouseOut={mouseUpOrOut}
-    //     ></div>
-    //   </div>
-    // </div>
   );
 }

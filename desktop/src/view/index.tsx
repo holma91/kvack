@@ -8,11 +8,12 @@ const extensions = [
   'duckduckgo',
   'chatgpt',
   'google-duckduckgo',
-  // 'google-chatgpt',
+  'google-chatgpt',
+  'wikipedia',
 ];
 
 export default function Home() {
-  const [currentView, setCurrentView] = useState('google-chatgpt');
+  const [currentView, setCurrentView] = useState('wikipedia');
   const setView = (id: string) => {
     api.setView(id);
     setCurrentView(id);

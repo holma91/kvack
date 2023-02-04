@@ -8,7 +8,7 @@ type GroupStateMap = {
 
 const HEADER_SIZE = 76;
 const SIDEBAR_SIZE = 0;
-const SEPARATOR_WIDTH = 5;
+const VSEPARATOR_WIDTH = 5;
 
 const defaultViewWebPreferences = {
   nodeIntegration: false,
@@ -35,14 +35,18 @@ class MainProcess {
   groupMap: { [key: string]: Group } = {};
   groupStateMap: { [key: string]: GroupStateMap } = {};
 
-  separatorEntry: string;
-  separatorPreload: string;
+  vSeparatorEntry: string;
+  vSeparatorPreload: string;
+  hSeparatorEntry: string;
+  hSeparatorPreload: string;
 
   constructor(
     url: string,
     preload: string,
-    separatorEntry: string,
-    separatorPreload: string
+    vSeparatorEntry: string,
+    vSeparatorPreload: string,
+    hSeparatorEntry: string,
+    hSeparatorPreload: string
   ) {
     let window = new BrowserWindow({
       height: 800,
@@ -58,8 +62,10 @@ class MainProcess {
     window.loadURL(url);
     this.mainWindow = window;
 
-    this.separatorEntry = separatorEntry;
-    this.separatorPreload = separatorPreload;
+    this.vSeparatorEntry = vSeparatorEntry;
+    this.vSeparatorPreload = vSeparatorPreload;
+    this.hSeparatorEntry = hSeparatorEntry;
+    this.hSeparatorPreload = hSeparatorPreload;
   }
 
   createGroup(id: string) {
@@ -91,14 +97,14 @@ class MainProcess {
         this.mainWindow.addBrowserView(extendedView.view);
       }
 
-      if (extendedView.id === 'separator') {
+      if (extendedView.id === 'vSeparator') {
         leftOffsetAbsolute = width * extendedView.leftOffset;
       }
 
       if (!extendedView.loadedInitialURL) {
         extendedView.view.webContents.loadURL(
-          extendedView.id === 'separator'
-            ? this.separatorEntry
+          extendedView.id === 'vSeparator'
+            ? this.vSeparatorEntry
             : idToUrl[extendedView.id]
         );
 
@@ -125,7 +131,7 @@ class MainProcess {
     if (width !== group.loadedWidth || height !== group.loadedHeight) {
       if (group.views.length > 1) {
         // will get here if window size has changed but the group was loaded earlier and the group have a separator
-        this.resizeSplitScreen(leftOffsetAbsolute, id);
+        this.resizeVerticalSplitScreen(leftOffsetAbsolute, id);
         group.views[0].view.webContents.send(
           'windowResize',
           leftOffsetAbsolute
@@ -164,12 +170,12 @@ class MainProcess {
   }
 
   /*
-   when should resizeSplitScreen get called?
+   when should resizeVerticalSplitScreen get called?
       - every time someone drags the vertical bar
       - every time someone resizes the main window
       - if we change tab and the window size has changed since the last load
   */
-  resizeSplitScreen(leftOffset: number, groupId: string) {
+  resizeVerticalSplitScreen(leftOffset: number, groupId: string) {
     const [width, _] = this.mainWindow.getSize();
 
     const w1 = leftOffset;
@@ -178,26 +184,28 @@ class MainProcess {
     let group = this.groupMap[groupId];
 
     // resize all views in group accordingly
-    let separator = group.views[0];
+    let vSeparator = group.views[0];
     let leftView = group.views[1];
-    let rightView = group.views[2];
 
     leftView.x = 0 / width;
     leftView.y = 0;
     leftView.width = w1 / width;
     leftView.height = 1;
 
-    rightView.x = Math.round(leftOffset + SEPARATOR_WIDTH) / width;
+    let rightView = group.views[2];
+    rightView.x = Math.round(leftOffset + VSEPARATOR_WIDTH) / width;
     rightView.y = 0;
     rightView.width = Math.round(w2) / width;
     rightView.height = 1;
 
-    separator.leftOffset = leftView.width;
+    vSeparator.leftOffset = leftView.width;
 
-    this.setBounds(separator);
+    this.setBounds(vSeparator);
     this.setBounds(leftView);
     this.setBounds(rightView);
   }
+
+  resizeHorizontalSplitScreen(topOffset: number, groupId: string) {}
 }
 
 export default MainProcess;

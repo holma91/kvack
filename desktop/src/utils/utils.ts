@@ -77,12 +77,12 @@ const groups: { [key: string]: Group } = {
   'google-duckduckgo': {
     id: 'google-duckduckgo',
     short: 'gd',
-    extensions: ['separator', 'google', 'duckduckgo'],
+    extensions: ['vSeparator', 'google', 'duckduckgo'],
     loadedHeight: 0,
     loadedWidth: 0,
     views: [
       {
-        id: 'separator',
+        id: 'vSeparator',
         width: 1,
         height: 1,
         x: 0,
@@ -111,12 +111,12 @@ const groups: { [key: string]: Group } = {
   'google-chatgpt': {
     id: 'google-chatgpt',
     short: 'gc',
-    extensions: ['separator', 'google', 'chatgpt'],
+    extensions: ['vSeparator', 'google', 'chatgpt'],
     loadedHeight: 0,
     loadedWidth: 0,
     views: [
       {
-        id: 'separator',
+        id: 'vSeparator',
         width: 1,
         height: 1,
         x: 0,
@@ -142,6 +142,40 @@ const groups: { [key: string]: Group } = {
       },
     ],
   },
+  wikipedia: {
+    id: 'wikipedia',
+    short: 'w',
+    extensions: ['vSeparator', 'wikipedia', 'wikipedia'],
+    loadedHeight: 0,
+    loadedWidth: 0,
+    views: [
+      {
+        id: 'vSeparator',
+        width: 1,
+        height: 1,
+        x: 0,
+        y: 0,
+        loadedInitialURL: false,
+        leftOffset: 0.5,
+      },
+      {
+        id: 'wikipedia',
+        width: 0.5,
+        height: 1,
+        x: 0,
+        y: 0,
+        loadedInitialURL: false,
+      },
+      {
+        id: 'wikipedia',
+        width: 0.49,
+        height: 1,
+        x: 0.51,
+        y: 0,
+        loadedInitialURL: false,
+      },
+    ],
+  },
 };
 
 const idToUrl: { [keheight: string]: string } = {
@@ -152,7 +186,8 @@ const idToUrl: { [keheight: string]: string } = {
   // chatgpt: 'https://chat.openai.com',
   chatgpt: 'https://microsoft.com',
   bing: 'https://bing.com',
-  separator: 'https://google.com',
+  vSeparator: 'https://google.com',
+  wikipedia: 'https://wikipedia.com',
 };
 
 export { extensions, groups, idToUrl, Group, ExtendedView };

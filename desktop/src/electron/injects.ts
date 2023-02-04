@@ -49,6 +49,10 @@ export const injects: { [key: string]: { js: string; css: string } } = {
     js: ``,
     css: ``,
   },
+  wikipedia: {
+    js: ``,
+    css: ``,
+  },
   static: {
     js: ``,
     css: ``,
@@ -61,7 +65,13 @@ export const injects: { [key: string]: { js: string; css: string } } = {
     js: ``,
     css: ``,
   },
-  separator: {
+  vSeparator: {
+    js: ``,
+    css: `
+      
+    `,
+  },
+  hSeparator: {
     js: ``,
     css: `
       

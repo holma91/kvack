@@ -32,9 +32,17 @@ const config: ForgeConfig = {
             },
           },
           {
-            html: './src/view/separator.html',
-            js: './src/electron/separator.ts',
-            name: 'separator_window',
+            html: './src/view/vSeparator.html',
+            js: './src/electron/vSeparator.ts',
+            name: 'vseparator_window',
+            preload: {
+              js: './src/electron/preload.ts',
+            },
+          },
+          {
+            html: './src/view/hSeparator.html',
+            js: './src/electron/hSeparator.ts',
+            name: 'hseparator_window',
             preload: {
               js: './src/electron/preload.ts',
             },

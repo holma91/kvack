@@ -23,7 +23,7 @@ type ExtendedView = {
   leftOffset?: number;
 };
 
-const groups: { [keheight: string]: Group } = {
+const groups: { [key: string]: Group } = {
   google: {
     id: 'google',
     short: 'g',
@@ -163,10 +163,12 @@ const groups: { [keheight: string]: Group } = {
 };
 
 const idToUrl: { [keheight: string]: string } = {
-  google: 'https://google.com',
+  // google: 'https://google.com',
+  google: 'https://brave.com',
   duckduckgo: 'https://duckduckgo.com',
   wolframalpha: 'https://wolframalpha.com',
-  chatgpt: 'https://chat.openai.com',
+  // chatgpt: 'https://chat.openai.com',
+  chatgpt: 'https://microsoft.com',
   bing: 'https://bing.com',
   separator: 'https://google.com',
 };

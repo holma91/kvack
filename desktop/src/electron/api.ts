@@ -12,6 +12,11 @@ const api = {
 
   resizeBar: (minMax: any) => ipcRenderer.send('resize-bar', minMax),
 
+  onWindowResize: (callback: any) => {
+    ipcRenderer.on('windowResize', (event, message) => callback(message));
+    return () => [ipcRenderer.removeAllListeners('windowResize')];
+  },
+
   onNextTab: (callback: any) => {
     ipcRenderer.on('nextTab', callback);
     return () => {

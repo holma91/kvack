@@ -59,7 +59,7 @@ export default function Separator() {
 
     const minMax = Math.max(
       40,
-      Math.min(resizer.current.offsetLeft - pos1.current, 780)
+      Math.min(resizer.current.offsetLeft - pos1.current, 1100)
     );
     resizer.current.style.left = minMax + 'px';
 
@@ -77,6 +77,11 @@ export default function Separator() {
     // const initValue = 650; // get this value from the current group
     // resizer.current.style.left = initValue + 'px';
     // listen for resize event and change the left value accordingly
+    // should also get red bar width from main here
+    api.onWindowResize((leftOffset: number) => {
+      // alert(leftOffset);
+      resizer.current.style.left = leftOffset + 'px';
+    });
   }, []);
 
   return (
@@ -86,7 +91,7 @@ export default function Separator() {
       ref={resizer}
     >
       <div
-        className="p-0 cursor-move w-[5px] h-screen z-20 bg-red-400 text-white"
+        className="p-0 cursor-move w-[50px] h-screen z-20 bg-red-400 text-white"
         onMouseDown={dragMouseDown}
       ></div>
     </div>

@@ -1,18 +1,6 @@
-import {
-  app,
-  BrowserWindow,
-  BrowserView,
-  ipcMain,
-  ipcRenderer,
-} from 'electron';
-import path from 'path';
+import { BrowserWindow, BrowserView } from 'electron';
 import { injects } from './injects';
 import { Group, ExtendedView, groups, idToUrl } from '../utils/utils';
-
-type WindowSettings = {
-  height: number;
-  width: number;
-};
 
 type GroupStateMap = {
   loadedInitialURLs: boolean[];
@@ -20,6 +8,7 @@ type GroupStateMap = {
 
 const HEADER_SIZE = 76;
 const SIDEBAR_SIZE = 0;
+const SEPARATOR_WIDTH = 5;
 
 const defaultViewWebPreferences = {
   nodeIntegration: false,
@@ -38,8 +27,6 @@ const defaultViewWebPreferences = {
   // match Chrome's default for anti-fingerprinting purposes (Electron defaults to 0)
   minimumFontSize: 6,
 };
-
-const SEPARATOR_WIDTH = 5;
 
 // 1 MainWindow have 1 BrowserWindow and multiple BrowserViews
 class MainProcess {
@@ -142,6 +129,12 @@ class MainProcess {
       if (group.views.length > 1) {
         // will get here if window size has changed but the group was loaded earlier and the group have a separator
         this.resizeSplitScreen(leftOffsetAbsolute, id);
+        // I think we need to add a notification to Separator.tsx here
+        // did this just fix the damn bug? think so
+        group.views[0].view.webContents.send(
+          'windowResize',
+          leftOffsetAbsolute
+        );
       }
     }
 
@@ -177,6 +170,11 @@ class MainProcess {
     });
   }
 
+  // when should resizeSplitScreen get called?
+  //    - every time someone drags the vertical bar
+  //    - every time someone resizes the main window
+  //         - we are not doing this currently because it resizes automatically
+  //    - if we change tab and the window size has changed since the last load
   resizeSplitScreen(leftOffset: number, groupId: string) {
     const [width, _] = this.mainWindow.getSize();
 

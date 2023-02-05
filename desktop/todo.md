@@ -7,3 +7,5 @@
 ### rules
 
 ONLY set bounds via CustomWindow.setBounds
+
+divide into different types for every view.

@@ -6,24 +6,50 @@ type Group = {
   short: string;
   extensions: string[];
   positioning: ('page' | 'hSeparator' | 'vSeparator')[];
-  vSeparators: ExtendedView[];
-  hSeparators: ExtendedView[];
-  pages: ExtendedView[];
+  vSeparators: VSeparatorView[];
+  hSeparators: HSeparatorView[];
+  pages: PageView[];
   loadedHeight: number;
   loadedWidth: number;
 };
 
-type ExtendedView = {
-  view?: BrowserView;
+// hSeparatorView, vSeparatorView and pageView
+type PageView = {
   id: string;
   width: number;
   height: number;
   x: number;
   y: number;
   loadedInitialURL: boolean;
-  insertedCSS?: any;
+  view?: BrowserView;
+  processId?: number;
+};
+
+type VSeparatorView = {
+  id: string;
+  width: number;
+  height: number;
+  x: number;
+  y: number;
+  loadedInitialURL: boolean;
+  view?: BrowserView;
+  processId?: number;
   leftOffset?: number;
 };
+
+type HSeparatorView = {
+  id: string;
+  width: number;
+  height: number;
+  x: number;
+  y: number;
+  loadedInitialURL: boolean;
+  view?: BrowserView;
+  processId?: number;
+  topOffset?: number;
+};
+
+type SomeView = PageView | VSeparatorView | HSeparatorView;
 
 const groups: { [key: string]: Group } = {
   // google: {
@@ -206,4 +232,13 @@ const idToUrl: { [keheight: string]: string } = {
   wikipedia: 'https://wikipedia.com',
 };
 
-export { extensions, groups, idToUrl, Group, ExtendedView };
+export {
+  extensions,
+  groups,
+  idToUrl,
+  Group,
+  PageView,
+  VSeparatorView,
+  HSeparatorView,
+  SomeView,
+};

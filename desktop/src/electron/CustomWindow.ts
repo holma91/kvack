@@ -1,10 +1,14 @@
 import { BrowserWindow, BrowserView } from 'electron';
 import { injects } from './injects';
-import { Group, ExtendedView, groups, idToUrl } from '../utils/utils';
-
-type GroupStateMap = {
-  loadedInitialURLs: boolean[];
-};
+import {
+  Group,
+  groups,
+  idToUrl,
+  PageView,
+  VSeparatorView,
+  HSeparatorView,
+  SomeView,
+} from '../utils/utils';
 
 const HEADER_SIZE = 76;
 const SIDEBAR_SIZE = 0;
@@ -33,11 +37,7 @@ class MainProcess {
   mainWindow: BrowserWindow;
   selectedGroup: string = '';
   groupMap: { [key: string]: Group } = {};
-  groupStateMap: { [key: string]: GroupStateMap } = {};
-  processIdsMap: { [key: string]: number[] } = {};
-
-  extendedViewByProcessId: { [key: number]: ExtendedView } = {};
-  // could create view array here
+  viewsByGroup: { [key: string]: SomeView[] } = {};
 
   vSeparatorEntry: string;
   vSeparatorPreload: string;
@@ -74,6 +74,7 @@ class MainProcess {
 
   createGroup(id: string) {
     const group = groups[id];
+    this.viewsByGroup[id] = [];
     let processIds = [];
 
     let pageCount = 0;
@@ -89,21 +90,23 @@ class MainProcess {
 
       if (group.positioning[i] === 'page') {
         group.pages[pageCount].view = view;
-        this.extendedViewByProcessId[processId] = group.pages[pageCount];
+        group.pages[pageCount].processId = processId;
+        this.viewsByGroup[id].push(group.pages[pageCount]);
         pageCount++;
       } else if (group.positioning[i] === 'vSeparator') {
         group.vSeparators[vSepCount].view = view;
-        this.extendedViewByProcessId[processId] = group.vSeparators[vSepCount];
+        group.vSeparators[vSepCount].processId = processId;
+        this.viewsByGroup[id].push(group.vSeparators[vSepCount]);
         vSepCount++;
       } else {
         group.hSeparators[hSepCount].view = view;
-        this.extendedViewByProcessId[processId] = group.hSeparators[hSepCount];
+        group.hSeparators[hSepCount].processId = processId;
+        this.viewsByGroup[id].push(group.hSeparators[hSepCount]);
         hSepCount++;
       }
     }
 
     this.groupMap[id] = group;
-    this.processIdsMap[id] = processIds;
   }
 
   setGroup(id: string) {
@@ -116,30 +119,29 @@ class MainProcess {
     let hSeparatorOffsets = group.hSeparators.map((_) => 0);
 
     for (let i = 0; i < group.vSeparators.length; i++) {
-      let extendedView = group.vSeparators[i];
-      console.log('setting vSep');
+      let vSeparatorView = group.vSeparators[i];
 
       if (i === 0) {
-        this.mainWindow.setBrowserView(extendedView.view);
+        this.mainWindow.setBrowserView(vSeparatorView.view);
       } else {
-        this.mainWindow.addBrowserView(extendedView.view);
+        this.mainWindow.addBrowserView(vSeparatorView.view);
       }
 
-      let leftOffsetAbsolute = width * extendedView.leftOffset;
+      let leftOffsetAbsolute = width * vSeparatorView.leftOffset;
       vSeparatorOffsets[i] = leftOffsetAbsolute;
 
-      if (!extendedView.loadedInitialURL) {
-        extendedView.view.webContents.loadURL(this.vSeparatorEntry);
-        extendedView.view.webContents.on('did-finish-load', () => {
-          extendedView.view.webContents.insertCSS(injects['vSeparator'].css);
-          extendedView.view.webContents.send(
+      if (!vSeparatorView.loadedInitialURL) {
+        vSeparatorView.view.webContents.loadURL(this.vSeparatorEntry);
+        vSeparatorView.view.webContents.on('did-finish-load', () => {
+          vSeparatorView.view.webContents.insertCSS(injects['vSeparator'].css);
+          vSeparatorView.view.webContents.send(
             'windowResize',
             leftOffsetAbsolute
           );
         });
 
-        extendedView.loadedInitialURL = true;
-        this.setBounds(extendedView);
+        vSeparatorView.loadedInitialURL = true;
+        this.setBounds(vSeparatorView);
       }
     }
 
@@ -147,50 +149,48 @@ class MainProcess {
 
     for (let i = 0; i < group.pages.length; i++) {
       console.log('setting page');
-      let extendedView = group.pages[i];
+      let pageView = group.pages[i];
       if (
         group.vSeparators.length === 0 &&
         group.hSeparators.length === 0 &&
         i === 0
       ) {
-        this.mainWindow.setBrowserView(extendedView.view);
+        this.mainWindow.setBrowserView(pageView.view);
       } else {
-        this.mainWindow.addBrowserView(extendedView.view);
+        this.mainWindow.addBrowserView(pageView.view);
       }
 
-      if (!extendedView.loadedInitialURL) {
-        extendedView.view.webContents.loadURL(idToUrl[extendedView.id]);
-        extendedView.view.webContents.on('did-finish-load', () => {
-          extendedView.view.webContents.insertCSS(injects[extendedView.id].css);
+      if (!pageView.loadedInitialURL) {
+        pageView.view.webContents.loadURL(idToUrl[pageView.id]);
+        pageView.view.webContents.on('did-finish-load', () => {
+          pageView.view.webContents.insertCSS(injects[pageView.id].css);
         });
 
-        extendedView.loadedInitialURL = true;
-        this.setBounds(extendedView);
+        pageView.loadedInitialURL = true;
+        this.setBounds(pageView);
       }
 
       if (width !== group.loadedWidth || height !== group.loadedHeight) {
         // will get here if window size has changed but the group was loaded earlier
         if (group.vSeparators.length === 0 && group.hSeparators.length === 0) {
-          this.setBounds(extendedView);
+          this.setBounds(pageView);
         }
       }
     }
 
     if (width !== group.loadedWidth || height !== group.loadedHeight) {
-      if (group.vSeparators.length > 0) {
-        // find separators
-        // will get here if window size has changed but the group was loaded earlier and the group have a separator
-        let processId = group.vSeparators[0].view.webContents.getProcessId();
+      for (let i = 0; i < group.vSeparators.length; i++) {
+        let processId = group.vSeparators[i].processId;
         this.resizeVerticalSplitScreen(
-          vSeparatorOffsets[0],
+          vSeparatorOffsets[i],
           id,
           processId,
           false
         );
-        // find separator by id
-        group.vSeparators[0].view.webContents.send(
+
+        group.vSeparators[i].view.webContents.send(
           'windowResize',
-          vSeparatorOffsets[0]
+          vSeparatorOffsets[i]
         );
       }
     }
@@ -198,11 +198,9 @@ class MainProcess {
     group.loadedHeight = height;
     group.loadedWidth = width;
     this.selectedGroup = id;
-
-    console.log(id, 'loaded');
   }
 
-  setBounds(extendedView: ExtendedView) {
+  setBounds(extendedView: SomeView) {
     const [width, height] = this.mainWindow.getSize();
     const [_, contentHeight] = this.mainWindow.getContentSize();
     const topFrame = height - contentHeight;
@@ -242,15 +240,19 @@ class MainProcess {
     const w1 = leftOffset;
     const w2 = width - leftOffset;
 
-    // find separator by id
-    let processIds = this.processIdsMap[groupId];
-    let position = processIds.indexOf(processId);
-    let leftViewProcessId = processIds[position - 1];
-    let rightViewProcessId = processIds[position + 1];
+    let views = this.viewsByGroup[groupId];
 
-    let vSeparator = this.extendedViewByProcessId[processId];
-    let leftView = this.extendedViewByProcessId[leftViewProcessId];
-    let rightView = this.extendedViewByProcessId[rightViewProcessId];
+    let index = -1;
+    for (let i = 0; i < views.length; i++) {
+      if (views[i].processId === processId) {
+        index = i;
+        break;
+      }
+    }
+
+    let vSeparator: VSeparatorView = views[index];
+    let leftView: PageView = views[index - 1];
+    let rightView: PageView = views[index + 1];
 
     leftView.x = 0 / width;
     leftView.y = 0;

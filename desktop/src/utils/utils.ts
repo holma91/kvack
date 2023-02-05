@@ -118,7 +118,7 @@ const groups: { [key: string]: Group } = {
     vSeparators: [
       {
         id: 'vSeparator',
-        width: 1,
+        width: 0.51, // and resize so it's always ~the same as it's left view
         height: 1,
         x: 0,
         y: 0,
@@ -156,7 +156,7 @@ const groups: { [key: string]: Group } = {
     vSeparators: [
       {
         id: 'vSeparator',
-        width: 1,
+        width: 0.31,
         height: 1,
         x: 0,
         y: 0,
@@ -165,9 +165,9 @@ const groups: { [key: string]: Group } = {
       },
       {
         id: 'vSeparator',
-        width: 1,
+        width: 0.61,
         height: 1,
-        x: 0,
+        x: 0.6,
         y: 0,
         loadedInitialURL: false,
         leftOffset: 0.6,

@@ -13,6 +13,7 @@ import {
 const HEADER_SIZE = 76;
 const SIDEBAR_SIZE = 0;
 const VSEPARATOR_WIDTH = 5;
+const VSEPARATOR_WIDTH_RELATIVE = 0.01;
 
 const defaultViewWebPreferences = {
   nodeIntegration: false,
@@ -204,15 +205,12 @@ class MainProcess {
 
     const appOffsetY = HEADER_SIZE + topFrame;
     const appSpaceY = height - appOffsetY;
-    let k = 0;
-    if (extendedView.id === 'chatgpt') {
-      // k = 200;
-    }
+
     // bounds values MUST be positive integers
     let bounds = {
-      x: Math.round(width * extendedView.x) + k,
+      x: Math.round(width * extendedView.x),
       y: Math.round(appOffsetY + appSpaceY * extendedView.y),
-      width: Math.round(width * extendedView.width) - k,
+      width: Math.round(width * extendedView.width),
       height: Math.round(appSpaceY * extendedView.height),
     };
 
@@ -267,9 +265,6 @@ class MainProcess {
     const shouldSetLeftOffset = true;
     const [width, _] = this.mainWindow.getSize();
 
-    const w1 = leftOffset;
-    const w2 = width - leftOffset;
-
     let views = this.viewsByGroup[groupId];
 
     let index = -1;
@@ -283,25 +278,43 @@ class MainProcess {
     let vSeparator: VSeparatorView = views[index];
     let leftView: PageView = views[index - 1];
     let rightView: PageView = views[index + 1];
-
+    let sum = leftView.width + VSEPARATOR_WIDTH_RELATIVE + rightView.width;
+    console.log(
+      leftView.width,
+      VSEPARATOR_WIDTH_RELATIVE,
+      rightView.width,
+      sum
+    );
     // let thisWidth = leftView.width + vSeparator.width + rightView.width;
     // console.log('thisWidth:', thisWidth);
+    const workingWidth = Math.min(
+      (leftView.width + VSEPARATOR_WIDTH_RELATIVE + rightView.width) * width,
+      width
+    );
+    console.log('workingWidth:', workingWidth, 'width:', width);
+
+    const w1 = leftOffset;
+    // const w2 = width - leftOffset;
+    const w2 = workingWidth - leftOffset;
 
     // THE RELATIVE WIDTH NEED TO CHANGE BETTER
 
     // leftView.x = 0 / width;
     // leftView.x = leftView.x / width;
     leftView.y = 0;
-    leftView.width = w1 / width; // changes wrongly with triple screen
+    leftView.width = w1 / workingWidth; // changes wrongly with triple screen
     // leftView.width = w1 / thisWidth; // changes wrongly with triple screen
     // leftView.width = (w1 * leftView.width) / width;
     leftView.height = 1;
-    console.log('leftView:', leftView);
+    // console.log('leftView:', leftView);
 
     rightView.x = Math.round(leftOffset + VSEPARATOR_WIDTH) / width;
     rightView.y = 0;
-    rightView.width = Math.round(w2) / width;
+    // rightView.width = Math.round(w2) / width;
+    rightView.width = w2 / width;
     rightView.height = 1;
+
+    vSeparator.width = leftView.width + 0.01; // seems to work
 
     // think we will need to change things on the separator here
 

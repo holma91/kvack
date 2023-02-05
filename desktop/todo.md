@@ -8,4 +8,10 @@
 
 ONLY set bounds via CustomWindow.setBounds
 
-divide into different types for every view.
+when window resize:
+
+- dimensions do NOT change
+
+when bar resize:
+
+- dimensions of surrounding views change

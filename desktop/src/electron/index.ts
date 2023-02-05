@@ -79,11 +79,10 @@ const start = (): void => {
     const groupString = mainProcess.selectedGroup;
     // here the position of ONLY one separator will change
     // find the separator by process ID
-    mainProcess.resizeVerticalSplitScreen(
+    mainProcess.resizeVerticalSplitScreenFromBarChange(
       leftOffset,
       groupString,
-      e.processId,
-      true
+      e.processId
     );
   });
 

@@ -54,7 +54,7 @@ class MainProcess {
   ) {
     let window = new BrowserWindow({
       height: 800,
-      width: 1200,
+      width: 1450,
       frame: true,
       title: 'kvack',
       // type: 'panel',
@@ -75,7 +75,6 @@ class MainProcess {
   createGroup(id: string) {
     const group = groups[id];
     this.viewsByGroup[id] = [];
-    let processIds = [];
 
     let pageCount = 0;
     let vSepCount = 0;
@@ -86,7 +85,6 @@ class MainProcess {
       });
 
       let processId = view.webContents.getProcessId();
-      processIds.push(processId);
 
       if (group.positioning[i] === 'page') {
         group.pages[pageCount].view = view;
@@ -148,7 +146,6 @@ class MainProcess {
     // do the same for hSeparators
 
     for (let i = 0; i < group.pages.length; i++) {
-      console.log('setting page');
       let pageView = group.pages[i];
       if (
         group.vSeparators.length === 0 &&
@@ -207,12 +204,15 @@ class MainProcess {
 
     const appOffsetY = HEADER_SIZE + topFrame;
     const appSpaceY = height - appOffsetY;
-
+    let k = 0;
+    if (extendedView.id === 'chatgpt') {
+      // k = 200;
+    }
     // bounds values MUST be positive integers
     let bounds = {
-      x: Math.round(width * extendedView.x),
+      x: Math.round(width * extendedView.x) + k,
       y: Math.round(appOffsetY + appSpaceY * extendedView.y),
-      width: Math.round(width * extendedView.width),
+      width: Math.round(width * extendedView.width) - k,
       height: Math.round(appSpaceY * extendedView.height),
     };
 
@@ -254,15 +254,56 @@ class MainProcess {
     let leftView: PageView = views[index - 1];
     let rightView: PageView = views[index + 1];
 
-    leftView.x = 0 / width;
+    this.setBounds(vSeparator);
+    this.setBounds(leftView);
+    this.setBounds(rightView);
+  }
+
+  resizeVerticalSplitScreenFromBarChange(
+    leftOffset: number,
+    groupId: string,
+    processId: number
+  ) {
+    const shouldSetLeftOffset = true;
+    const [width, _] = this.mainWindow.getSize();
+
+    const w1 = leftOffset;
+    const w2 = width - leftOffset;
+
+    let views = this.viewsByGroup[groupId];
+
+    let index = -1;
+    for (let i = 0; i < views.length; i++) {
+      if (views[i].processId === processId) {
+        index = i;
+        break;
+      }
+    }
+
+    let vSeparator: VSeparatorView = views[index];
+    let leftView: PageView = views[index - 1];
+    let rightView: PageView = views[index + 1];
+
+    // let thisWidth = leftView.width + vSeparator.width + rightView.width;
+    // console.log('thisWidth:', thisWidth);
+
+    // THE RELATIVE WIDTH NEED TO CHANGE BETTER
+
+    // leftView.x = 0 / width;
+    // leftView.x = leftView.x / width;
     leftView.y = 0;
-    leftView.width = w1 / width;
+    leftView.width = w1 / width; // changes wrongly with triple screen
+    // leftView.width = w1 / thisWidth; // changes wrongly with triple screen
+    // leftView.width = (w1 * leftView.width) / width;
     leftView.height = 1;
+    console.log('leftView:', leftView);
 
     rightView.x = Math.round(leftOffset + VSEPARATOR_WIDTH) / width;
     rightView.y = 0;
     rightView.width = Math.round(w2) / width;
     rightView.height = 1;
+
+    // think we will need to change things on the separator here
 
     if (shouldSetLeftOffset) {
       vSeparator.leftOffset = leftView.width;
@@ -272,6 +313,8 @@ class MainProcess {
     this.setBounds(leftView);
     this.setBounds(rightView);
   }
+
+  resizeVerticalSplitScreenFromWindowChange() {}
 
   resizeHorizontalSplitScreen(
     topOffset: number,

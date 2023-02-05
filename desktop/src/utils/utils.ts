@@ -149,11 +149,20 @@ const groups: { [key: string]: Group } = {
   'google-chatgpt': {
     id: 'google-chatgpt',
     short: 'gc',
-    extensions: ['google', 'chatgpt'],
+    extensions: ['google', 'chatgpt', 'duckduckgo'],
     loadedHeight: 0,
     loadedWidth: 0,
-    positioning: ['page', 'vSeparator', 'page'],
+    positioning: ['page', 'vSeparator', 'page', 'vSeparator', 'page'],
     vSeparators: [
+      {
+        id: 'vSeparator',
+        width: 1,
+        height: 1,
+        x: 0,
+        y: 0,
+        loadedInitialURL: false,
+        leftOffset: 0.3,
+      },
       {
         id: 'vSeparator',
         width: 1,
@@ -168,7 +177,7 @@ const groups: { [key: string]: Group } = {
     pages: [
       {
         id: 'google',
-        width: 0.6,
+        width: 0.3,
         height: 1,
         x: 0,
         y: 0,
@@ -176,6 +185,14 @@ const groups: { [key: string]: Group } = {
       },
       {
         id: 'chatgpt',
+        width: 0.29,
+        height: 1,
+        x: 0.31,
+        y: 0,
+        loadedInitialURL: false,
+      },
+      {
+        id: 'duckduckgo',
         width: 0.39,
         height: 1,
         x: 0.61,

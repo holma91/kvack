@@ -78,9 +78,17 @@ const start = (): void => {
   });
 
   ipcMain.on('resize-bar', (e, leftOffset) => {
+    // console.log(e);
+    console.log(e.processId);
     const groupString = mainProcess.selectedGroup;
     // here the position of ONLY one separator will change
-    mainProcess.resizeVerticalSplitScreen(leftOffset, groupString, true);
+    // find the separator by process ID
+    mainProcess.resizeVerticalSplitScreen(
+      leftOffset,
+      groupString,
+      e.processId,
+      true
+    );
   });
 
   mainProcess.mainWindow.on('will-resize', function (_, newBounds, __) {
@@ -89,6 +97,27 @@ const start = (): void => {
     const groupString = mainProcess.selectedGroup;
     const group = mainProcess.groupMap[groupString];
 
+    group.vSeparators.forEach((extendedView) => {
+      const leftOffsetAbsolute = newBounds.width * extendedView.leftOffset;
+      console.log(
+        'extendedView.leftOffset',
+        extendedView.leftOffset,
+        ', leftOffsetAbsolute:',
+        leftOffsetAbsolute
+      );
+
+      let processId = extendedView.view.webContents.getProcessId();
+
+      extendedView.view.webContents.send('windowResize', leftOffsetAbsolute);
+      mainProcess.resizeVerticalSplitScreen(
+        leftOffsetAbsolute,
+        groupString,
+        processId,
+        false
+      );
+    });
+
+    /*
     group.views.forEach((extendedView: ExtendedView) => {
       if (extendedView.id === 'vSeparator') {
         const leftOffsetAbsolute = newBounds.width * extendedView.leftOffset;
@@ -99,14 +128,18 @@ const start = (): void => {
           leftOffsetAbsolute
         );
 
+        let processId = extendedView.view.webContents.getProcessId();
+
         extendedView.view.webContents.send('windowResize', leftOffsetAbsolute);
         mainProcess.resizeVerticalSplitScreen(
           leftOffsetAbsolute,
           groupString,
+          processId,
           false
         );
       }
     });
+    */
   });
 };
 

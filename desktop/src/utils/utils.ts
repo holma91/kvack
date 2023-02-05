@@ -5,7 +5,10 @@ type Group = {
   id: string;
   short: string;
   extensions: string[];
-  views: ExtendedView[];
+  positioning: ('page' | 'hSeparator' | 'vSeparator')[];
+  vSeparators: ExtendedView[];
+  hSeparators: ExtendedView[];
+  pages: ExtendedView[];
   loadedHeight: number;
   loadedWidth: number;
 };
@@ -23,47 +26,52 @@ type ExtendedView = {
 };
 
 const groups: { [key: string]: Group } = {
-  google: {
-    id: 'google',
-    short: 'g',
-    extensions: ['google'],
-    loadedHeight: 0,
-    loadedWidth: 0,
-    views: [
-      {
-        id: 'google',
-        width: 1,
-        height: 1,
-        x: 0,
-        y: 0,
-        loadedInitialURL: false,
-      },
-    ],
-  },
-  duckduckgo: {
-    id: 'duckduckgo',
-    short: 'd',
-    extensions: ['duckduckgo'],
-    loadedHeight: 0,
-    loadedWidth: 0,
-    views: [
-      {
-        id: 'duckduckgo',
-        width: 1,
-        height: 1,
-        x: 0,
-        y: 0,
-        loadedInitialURL: false,
-      },
-    ],
-  },
+  // google: {
+  //   id: 'google',
+  //   short: 'g',
+  //   extensions: ['google'],
+  //   separators: [],
+  //   loadedHeight: 0,
+  //   loadedWidth: 0,
+  //   views: [
+  //     {
+  //       id: 'google',
+  //       width: 1,
+  //       height: 1,
+  //       x: 0,
+  //       y: 0,
+  //       loadedInitialURL: false,
+  //     },
+  //   ],
+  // },
+  // duckduckgo: {
+  //   id: 'duckduckgo',
+  //   short: 'd',
+  //   extensions: ['duckduckgo'],
+  //   separators: [],
+  //   loadedHeight: 0,
+  //   loadedWidth: 0,
+  //   views: [
+  //     {
+  //       id: 'duckduckgo',
+  //       width: 1,
+  //       height: 1,
+  //       x: 0,
+  //       y: 0,
+  //       loadedInitialURL: false,
+  //     },
+  //   ],
+  // },
   chatgpt: {
     id: 'chatgpt',
     short: 'c',
     extensions: ['chatgpt'],
     loadedHeight: 0,
     loadedWidth: 0,
-    views: [
+    vSeparators: [],
+    hSeparators: [],
+    positioning: ['page'],
+    pages: [
       {
         id: 'chatgpt',
         width: 1,
@@ -77,18 +85,11 @@ const groups: { [key: string]: Group } = {
   'google-duckduckgo': {
     id: 'google-duckduckgo',
     short: 'gd',
-    extensions: ['google', 'vSeparator', 'duckduckgo'],
+    extensions: ['google', 'duckduckgo'],
     loadedHeight: 0,
     loadedWidth: 0,
-    views: [
-      {
-        id: 'google',
-        width: 0.5,
-        height: 1,
-        x: 0,
-        y: 0,
-        loadedInitialURL: false,
-      },
+    positioning: ['page', 'vSeparator', 'page'],
+    vSeparators: [
       {
         id: 'vSeparator',
         width: 1,
@@ -98,9 +99,20 @@ const groups: { [key: string]: Group } = {
         loadedInitialURL: false,
         leftOffset: 0.5,
       },
+    ],
+    hSeparators: [],
+    pages: [
+      {
+        id: 'google',
+        width: 0.5,
+        height: 1,
+        x: 0,
+        y: 0,
+        loadedInitialURL: false,
+      },
       {
         id: 'duckduckgo',
-        width: 0.5,
+        width: 0.49,
         height: 1,
         x: 0.51,
         y: 0,
@@ -111,18 +123,11 @@ const groups: { [key: string]: Group } = {
   'google-chatgpt': {
     id: 'google-chatgpt',
     short: 'gc',
-    extensions: ['google', 'vSeparator', 'chatgpt'],
+    extensions: ['google', 'chatgpt'],
     loadedHeight: 0,
     loadedWidth: 0,
-    views: [
-      {
-        id: 'google',
-        width: 0.6,
-        height: 1,
-        x: 0,
-        y: 0,
-        loadedInitialURL: false,
-      },
+    positioning: ['page', 'vSeparator', 'page'],
+    vSeparators: [
       {
         id: 'vSeparator',
         width: 1,
@@ -131,6 +136,17 @@ const groups: { [key: string]: Group } = {
         y: 0,
         loadedInitialURL: false,
         leftOffset: 0.6,
+      },
+    ],
+    hSeparators: [],
+    pages: [
+      {
+        id: 'google',
+        width: 0.6,
+        height: 1,
+        x: 0,
+        y: 0,
+        loadedInitialURL: false,
       },
       {
         id: 'chatgpt',
@@ -142,40 +158,40 @@ const groups: { [key: string]: Group } = {
       },
     ],
   },
-  wikipedia: {
-    id: 'wikipedia',
-    short: 'w',
-    extensions: ['wikipedia', 'vSeparator', 'wikipedia'],
-    loadedHeight: 0,
-    loadedWidth: 0,
-    views: [
-      {
-        id: 'wikipedia',
-        width: 0.5,
-        height: 1,
-        x: 0,
-        y: 0,
-        loadedInitialURL: false,
-      },
-      {
-        id: 'vSeparator',
-        width: 1,
-        height: 1,
-        x: 0,
-        y: 0,
-        loadedInitialURL: false,
-        leftOffset: 0.5,
-      },
-      {
-        id: 'wikipedia',
-        width: 0.49,
-        height: 1,
-        x: 0.51,
-        y: 0,
-        loadedInitialURL: false,
-      },
-    ],
-  },
+  // wikipedia: {
+  //   id: 'wikipedia',
+  //   short: 'w',
+  //   extensions: ['wikipedia', 'wikipedia'],
+  //   loadedHeight: 0,
+  //   loadedWidth: 0,
+  //   views: [
+  //     {
+  //       id: 'wikipedia',
+  //       width: 0.5,
+  //       height: 1,
+  //       x: 0,
+  //       y: 0,
+  //       loadedInitialURL: false,
+  //     },
+  //     {
+  //       id: 'vSeparator',
+  //       width: 1,
+  //       height: 1,
+  //       x: 0,
+  //       y: 0,
+  //       loadedInitialURL: false,
+  //       leftOffset: 0.5,
+  //     },
+  //     {
+  //       id: 'wikipedia',
+  //       width: 0.49,
+  //       height: 1,
+  //       x: 0.51,
+  //       y: 0,
+  //       loadedInitialURL: false,
+  //     },
+  //   ],
+  // },
 };
 
 const idToUrl: { [keheight: string]: string } = {

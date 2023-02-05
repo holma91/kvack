@@ -77,10 +77,18 @@ const groups: { [key: string]: Group } = {
   'google-duckduckgo': {
     id: 'google-duckduckgo',
     short: 'gd',
-    extensions: ['vSeparator', 'google', 'duckduckgo'],
+    extensions: ['google', 'vSeparator', 'duckduckgo'],
     loadedHeight: 0,
     loadedWidth: 0,
     views: [
+      {
+        id: 'google',
+        width: 0.5,
+        height: 1,
+        x: 0,
+        y: 0,
+        loadedInitialURL: false,
+      },
       {
         id: 'vSeparator',
         width: 1,
@@ -89,14 +97,6 @@ const groups: { [key: string]: Group } = {
         y: 0,
         loadedInitialURL: false,
         leftOffset: 0.5,
-      },
-      {
-        id: 'google',
-        width: 0.5,
-        height: 1,
-        x: 0,
-        y: 0,
-        loadedInitialURL: false,
       },
       {
         id: 'duckduckgo',
@@ -111,10 +111,18 @@ const groups: { [key: string]: Group } = {
   'google-chatgpt': {
     id: 'google-chatgpt',
     short: 'gc',
-    extensions: ['vSeparator', 'google', 'chatgpt'],
+    extensions: ['google', 'vSeparator', 'chatgpt'],
     loadedHeight: 0,
     loadedWidth: 0,
     views: [
+      {
+        id: 'google',
+        width: 0.6,
+        height: 1,
+        x: 0,
+        y: 0,
+        loadedInitialURL: false,
+      },
       {
         id: 'vSeparator',
         width: 1,
@@ -123,14 +131,6 @@ const groups: { [key: string]: Group } = {
         y: 0,
         loadedInitialURL: false,
         leftOffset: 0.6,
-      },
-      {
-        id: 'google',
-        width: 0.6,
-        height: 1,
-        x: 0,
-        y: 0,
-        loadedInitialURL: false,
       },
       {
         id: 'chatgpt',
@@ -145,10 +145,18 @@ const groups: { [key: string]: Group } = {
   wikipedia: {
     id: 'wikipedia',
     short: 'w',
-    extensions: ['vSeparator', 'wikipedia', 'wikipedia'],
+    extensions: ['wikipedia', 'vSeparator', 'wikipedia'],
     loadedHeight: 0,
     loadedWidth: 0,
     views: [
+      {
+        id: 'wikipedia',
+        width: 0.5,
+        height: 1,
+        x: 0,
+        y: 0,
+        loadedInitialURL: false,
+      },
       {
         id: 'vSeparator',
         width: 1,
@@ -157,14 +165,6 @@ const groups: { [key: string]: Group } = {
         y: 0,
         loadedInitialURL: false,
         leftOffset: 0.5,
-      },
-      {
-        id: 'wikipedia',
-        width: 0.5,
-        height: 1,
-        x: 0,
-        y: 0,
-        loadedInitialURL: false,
       },
       {
         id: 'wikipedia',

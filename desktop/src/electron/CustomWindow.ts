@@ -131,8 +131,8 @@ class MainProcess {
     if (width !== group.loadedWidth || height !== group.loadedHeight) {
       if (group.views.length > 1) {
         // will get here if window size has changed but the group was loaded earlier and the group have a separator
-        this.resizeVerticalSplitScreen(leftOffsetAbsolute, id);
-        group.views[0].view.webContents.send(
+        this.resizeVerticalSplitScreen(leftOffsetAbsolute, id, false);
+        group.views[1].view.webContents.send(
           'windowResize',
           leftOffsetAbsolute
         );
@@ -171,11 +171,15 @@ class MainProcess {
 
   /*
    when should resizeVerticalSplitScreen get called?
-      - every time someone drags the vertical bar
-      - every time someone resizes the main window
-      - if we change tab and the window size has changed since the last load
+      - every time someone drags the vertical bar: shouldSetLeftOffset = true
+      - every time someone resizes the main window: shouldSetLeftOffset = false
+      - if we change tab and the window size has changed since the last load: shouldSetLeftOffset = false
   */
-  resizeVerticalSplitScreen(leftOffset: number, groupId: string) {
+  resizeVerticalSplitScreen(
+    leftOffset: number,
+    groupId: string,
+    shouldSetLeftOffset: boolean
+  ) {
     const [width, _] = this.mainWindow.getSize();
 
     const w1 = leftOffset;
@@ -184,8 +188,8 @@ class MainProcess {
     let group = this.groupMap[groupId];
 
     // resize all views in group accordingly
-    let vSeparator = group.views[0];
-    let leftView = group.views[1];
+    let vSeparator = group.views[1];
+    let leftView = group.views[0];
 
     leftView.x = 0 / width;
     leftView.y = 0;
@@ -198,7 +202,9 @@ class MainProcess {
     rightView.width = Math.round(w2) / width;
     rightView.height = 1;
 
-    vSeparator.leftOffset = leftView.width;
+    if (shouldSetLeftOffset) {
+      vSeparator.leftOffset = leftView.width;
+    }
 
     this.setBounds(vSeparator);
     this.setBounds(leftView);

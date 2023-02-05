@@ -79,8 +79,8 @@ const start = (): void => {
 
   ipcMain.on('resize-bar', (e, leftOffset) => {
     const groupString = mainProcess.selectedGroup;
-
-    mainProcess.resizeVerticalSplitScreen(leftOffset, groupString);
+    // here the position of ONLY one separator will change
+    mainProcess.resizeVerticalSplitScreen(leftOffset, groupString, true);
   });
 
   mainProcess.mainWindow.on('will-resize', function (_, newBounds, __) {
@@ -92,8 +92,19 @@ const start = (): void => {
     group.views.forEach((extendedView: ExtendedView) => {
       if (extendedView.id === 'vSeparator') {
         const leftOffsetAbsolute = newBounds.width * extendedView.leftOffset;
+        console.log(
+          'extendedView.leftOffset',
+          extendedView.leftOffset,
+          ', leftOffsetAbsolute:',
+          leftOffsetAbsolute
+        );
+
         extendedView.view.webContents.send('windowResize', leftOffsetAbsolute);
-        mainProcess.resizeVerticalSplitScreen(leftOffsetAbsolute, groupString);
+        mainProcess.resizeVerticalSplitScreen(
+          leftOffsetAbsolute,
+          groupString,
+          false
+        );
       }
     });
   });

@@ -150,10 +150,54 @@ const groups: { [key: string]: Group } = {
   },
 };
 
+const groups2: { [key: string]: Group } = {
+  'google-duckduckgo': {
+    id: 'google-duckduckgo',
+    short: 'gd',
+    extensions: ['google', 'duckduckgo'],
+    loadedHeight: 0,
+    loadedWidth: 0,
+    positioning: ['page', 'vSeparator', 'page'],
+    vSeparators: [
+      {
+        id: 'vSeparator',
+        width: 1,
+        height: 1,
+        x: 0,
+        y: 0,
+        loadedInitialURL: false,
+        leftOffset: 0.5,
+      },
+    ],
+    hSeparators: [],
+    pages: [
+      {
+        id: 'google',
+        width: 0.5,
+        height: 1,
+        x: 0,
+        y: 0,
+        loadedInitialURL: false,
+      },
+      {
+        id: 'duckduckgo',
+        width: 0.498,
+        height: 1,
+        x: 0.502,
+        y: 0,
+        loadedInitialURL: false,
+      },
+    ],
+  },
+};
+
 const idToUrl: { [keheight: string]: string } = {
-  google: 'https://google.com',
+  // google: 'https://google.com',
+  google: 'https://www.google.com/search?q=how+to+change+background+color',
   // google: 'https://brave.com',
-  duckduckgo: 'https://duckduckgo.com',
+  // duckduckgo: 'https://duckduckgo.com',
+  duckduckgo: 'https://duckduckgo.com/?q=how+to+do+x&t=h_&ia=web',
+  // duckduckgo: 'https://chat.openai.com',
   wolframalpha: 'https://wolframalpha.com',
   // chatgpt: 'https://chat.openai.com',
   chatgpt: 'https://microsoft.com',
@@ -165,6 +209,7 @@ const idToUrl: { [keheight: string]: string } = {
 export {
   extensions,
   groups,
+  groups2,
   idToUrl,
   Group,
   PageView,

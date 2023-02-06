@@ -25,15 +25,23 @@ const config: ForgeConfig = {
         entryPoints: [
           {
             html: './src/view/html/index.html',
-            js: './src/electron/renderer.ts',
+            js: './src/electron/renderer/renderer.ts',
             name: 'main_window',
             preload: {
               js: './src/electron/preload.ts',
             },
           },
           {
+            html: './src/view/html/search.html',
+            js: './src/electron/renderer/search.ts',
+            name: 'search_window',
+            preload: {
+              js: './src/electron/preload.ts',
+            },
+          },
+          {
             html: './src/view/html/vSeparator.html',
-            js: './src/electron/vSeparator.ts',
+            js: './src/electron/renderer/vSeparator.ts',
             name: 'vseparator_window',
             preload: {
               js: './src/electron/preload.ts',
@@ -41,7 +49,7 @@ const config: ForgeConfig = {
           },
           {
             html: './src/view/html/hSeparator.html',
-            js: './src/electron/hSeparator.ts',
+            js: './src/electron/renderer/hSeparator.ts',
             name: 'hseparator_window',
             preload: {
               js: './src/electron/preload.ts',

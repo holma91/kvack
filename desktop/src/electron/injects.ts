@@ -2,6 +2,29 @@ export const injects: { [key: string]: { js: string; css: string } } = {
   google: {
     js: ``,
     css: `
+    // #main, #appbar, .LGOjhe, .yuRUbf, .sfbg, .yg51vc {
+    //   background-color: #171717;
+    // }
+    
+    // .MjjYud > div {
+    //   background: #171717;
+    // }
+    
+    // .V3FYCf {
+    //   background: #171717;
+    // }
+
+
+    .o3j99.LLD4me.yr19Zb.LS8OJ {
+      background-color: #171717;
+    }
+    o3j99.ikrT4e.om7nvf {
+      background-color: #171717;
+    }
+    
+    o3j99.qarstb {
+      background-color: #171717;
+    }
 
       #gb, #SIvCob  {
         visibility: hidden;

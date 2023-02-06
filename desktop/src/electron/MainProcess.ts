@@ -10,9 +10,10 @@ import {
   SomeView,
 } from '../utils/utils';
 
-const HEADER_SIZE = 76;
+// const HEADER_SIZE = 76;
+const HEADER_SIZE = 94;
 const SIDEBAR_SIZE = 0;
-const VSEPARATOR_WIDTH_RELATIVE = 0.0025;
+const VSEPARATOR_WIDTH_RELATIVE = 0.002;
 
 declare const VSEPARATOR_WINDOW_WEBPACK_ENTRY: string;
 declare const VSEPARATOR_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
@@ -60,7 +61,7 @@ class MainProcess {
         preload,
       },
     });
-
+    // window.setPosition(25, 100); // use when frame: false
     window.loadURL(url);
     this.mainWindow = window;
 

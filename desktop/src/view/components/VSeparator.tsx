@@ -51,7 +51,7 @@ export default function VSeparator() {
   return (
     <div id="resizer" className="absolute z-10 text-center" ref={resizer}>
       <div
-        className="p-0 cursor-col-resize w-[50px] bg-blue-200 h-screen z-20 text-white hover:bg-blue-300"
+        className="p-0 cursor-col-resize w-[50px] bg-neutral-800 h-screen z-20 text-white hover:bg-blue-300"
         onMouseDown={dragMouseDown}
       ></div>
     </div>

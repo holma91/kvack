@@ -92,14 +92,12 @@ const start = (): void => {
 
     group.vSeparators.forEach((vSeparatorView) => {
       const leftOffsetAbsolute = newBounds.width * vSeparatorView.leftOffset;
-      let processId = vSeparatorView.view.webContents.getProcessId();
-
       vSeparatorView.view.webContents.send('windowResize', leftOffsetAbsolute);
-      mainProcess.resizeVerticalSplitScreen(
-        leftOffsetAbsolute,
+
+      let processId = vSeparatorView.view.webContents.getProcessId();
+      mainProcess.resizeVerticalSplitScreenFromWindowChange(
         groupString,
-        processId,
-        false
+        processId
       );
     });
   });

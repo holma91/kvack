@@ -15,7 +15,6 @@ export default function VSeparator() {
     pos4.current = e.clientY;
     document.onmouseup = closeDragElement;
 
-    // call a function whenever the cursor moves:
     document.onmousemove = elementDrag;
   };
 
@@ -27,13 +26,13 @@ export default function VSeparator() {
     pos3.current = e.clientX;
     pos4.current = e.clientY;
 
+    const currentWidth = window.innerWidth;
+
     const minMax = Math.max(
       40,
-      Math.min(resizer.current.offsetLeft - pos1.current, 1100)
+      Math.min(resizer.current.offsetLeft - pos1.current, currentWidth - 40)
     );
     resizer.current.style.left = minMax + 'px';
-
-    // ipcRenderer.send("resize-bar", minMax)
     api.resizeBar(minMax);
   };
 
@@ -50,13 +49,9 @@ export default function VSeparator() {
   }, []);
 
   return (
-    <div
-      id="resizer"
-      className="absolute z-10 bg-red-400 text-center"
-      ref={resizer}
-    >
+    <div id="resizer" className="absolute z-10 text-center" ref={resizer}>
       <div
-        className="p-0 cursor-move w-[50px] h-screen z-20 bg-red-400 text-white"
+        className="p-0 cursor-col-resize w-[50px] bg-blue-200 h-screen z-20 text-white hover:bg-blue-300"
         onMouseDown={dragMouseDown}
       ></div>
     </div>

@@ -52,46 +52,10 @@ type HSeparatorView = {
 type SomeView = PageView | VSeparatorView | HSeparatorView;
 
 const groups: { [key: string]: Group } = {
-  // google: {
-  //   id: 'google',
-  //   short: 'g',
-  //   extensions: ['google'],
-  //   separators: [],
-  //   loadedHeight: 0,
-  //   loadedWidth: 0,
-  //   views: [
-  //     {
-  //       id: 'google',
-  //       width: 1,
-  //       height: 1,
-  //       x: 0,
-  //       y: 0,
-  //       loadedInitialURL: false,
-  //     },
-  //   ],
-  // },
-  // duckduckgo: {
-  //   id: 'duckduckgo',
-  //   short: 'd',
-  //   extensions: ['duckduckgo'],
-  //   separators: [],
-  //   loadedHeight: 0,
-  //   loadedWidth: 0,
-  //   views: [
-  //     {
-  //       id: 'duckduckgo',
-  //       width: 1,
-  //       height: 1,
-  //       x: 0,
-  //       y: 0,
-  //       loadedInitialURL: false,
-  //     },
-  //   ],
-  // },
-  chatgpt: {
-    id: 'chatgpt',
-    short: 'c',
-    extensions: ['chatgpt'],
+  wikipedia: {
+    id: 'wikipedia',
+    short: 'w',
+    extensions: ['wikipedia'],
     loadedHeight: 0,
     loadedWidth: 0,
     vSeparators: [],
@@ -99,7 +63,7 @@ const groups: { [key: string]: Group } = {
     positioning: ['page'],
     pages: [
       {
-        id: 'chatgpt',
+        id: 'wikipedia',
         width: 1,
         height: 1,
         x: 0,
@@ -118,7 +82,7 @@ const groups: { [key: string]: Group } = {
     vSeparators: [
       {
         id: 'vSeparator',
-        width: 0.51, // and resize so it's always ~the same as it's left view
+        width: 1,
         height: 1,
         x: 0,
         y: 0,
@@ -138,9 +102,9 @@ const groups: { [key: string]: Group } = {
       },
       {
         id: 'duckduckgo',
-        width: 0.49,
+        width: 0.4975,
         height: 1,
-        x: 0.51,
+        x: 0.5025,
         y: 0,
         loadedInitialURL: false,
       },
@@ -149,25 +113,16 @@ const groups: { [key: string]: Group } = {
   'google-chatgpt': {
     id: 'google-chatgpt',
     short: 'gc',
-    extensions: ['google', 'chatgpt', 'duckduckgo'],
+    extensions: ['google', 'chatgpt'],
     loadedHeight: 0,
     loadedWidth: 0,
-    positioning: ['page', 'vSeparator', 'page', 'vSeparator', 'page'],
+    positioning: ['page', 'vSeparator', 'page'],
     vSeparators: [
       {
         id: 'vSeparator',
-        width: 0.31,
+        width: 1,
         height: 1,
         x: 0,
-        y: 0,
-        loadedInitialURL: false,
-        leftOffset: 0.3,
-      },
-      {
-        id: 'vSeparator',
-        width: 0.61,
-        height: 1,
-        x: 0.6,
         y: 0,
         loadedInitialURL: false,
         leftOffset: 0.6,
@@ -177,7 +132,7 @@ const groups: { [key: string]: Group } = {
     pages: [
       {
         id: 'google',
-        width: 0.3,
+        width: 0.6,
         height: 1,
         x: 0,
         y: 0,
@@ -185,61 +140,19 @@ const groups: { [key: string]: Group } = {
       },
       {
         id: 'chatgpt',
-        width: 0.29,
+        width: 0.3975,
         height: 1,
-        x: 0.31,
-        y: 0,
-        loadedInitialURL: false,
-      },
-      {
-        id: 'duckduckgo',
-        width: 0.39,
-        height: 1,
-        x: 0.61,
+        x: 0.6025,
         y: 0,
         loadedInitialURL: false,
       },
     ],
   },
-  // wikipedia: {
-  //   id: 'wikipedia',
-  //   short: 'w',
-  //   extensions: ['wikipedia', 'wikipedia'],
-  //   loadedHeight: 0,
-  //   loadedWidth: 0,
-  //   views: [
-  //     {
-  //       id: 'wikipedia',
-  //       width: 0.5,
-  //       height: 1,
-  //       x: 0,
-  //       y: 0,
-  //       loadedInitialURL: false,
-  //     },
-  //     {
-  //       id: 'vSeparator',
-  //       width: 1,
-  //       height: 1,
-  //       x: 0,
-  //       y: 0,
-  //       loadedInitialURL: false,
-  //       leftOffset: 0.5,
-  //     },
-  //     {
-  //       id: 'wikipedia',
-  //       width: 0.49,
-  //       height: 1,
-  //       x: 0.51,
-  //       y: 0,
-  //       loadedInitialURL: false,
-  //     },
-  //   ],
-  // },
 };
 
 const idToUrl: { [keheight: string]: string } = {
-  // google: 'https://google.com',
-  google: 'https://brave.com',
+  google: 'https://google.com',
+  // google: 'https://brave.com',
   duckduckgo: 'https://duckduckgo.com',
   wolframalpha: 'https://wolframalpha.com',
   // chatgpt: 'https://chat.openai.com',

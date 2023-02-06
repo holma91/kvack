@@ -1,5 +1,5 @@
 import { createRoot } from 'react-dom/client';
-import VSeparator from './components/VSeparator';
+import VSeparator from '../components/VSeparator';
 const container = document.getElementById('root');
 const root = createRoot(container);
 

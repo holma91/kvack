@@ -24,7 +24,7 @@ const config: ForgeConfig = {
         config: rendererConfig,
         entryPoints: [
           {
-            html: './src/view/index.html',
+            html: './src/view/html/index.html',
             js: './src/electron/renderer.ts',
             name: 'main_window',
             preload: {
@@ -32,7 +32,7 @@ const config: ForgeConfig = {
             },
           },
           {
-            html: './src/view/vSeparator.html',
+            html: './src/view/html/vSeparator.html',
             js: './src/electron/vSeparator.ts',
             name: 'vseparator_window',
             preload: {
@@ -40,7 +40,7 @@ const config: ForgeConfig = {
             },
           },
           {
-            html: './src/view/hSeparator.html',
+            html: './src/view/html/hSeparator.html',
             js: './src/electron/hSeparator.ts',
             name: 'hseparator_window',
             preload: {

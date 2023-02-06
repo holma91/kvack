@@ -1,5 +1,5 @@
 import { createRoot } from 'react-dom/client';
-import Home from './index';
+import Home from './entries/index';
 const container = document.getElementById('root');
 const root = createRoot(container);
 

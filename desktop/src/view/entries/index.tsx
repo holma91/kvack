@@ -1,7 +1,7 @@
 // import { ipcRenderer } from 'electron/renderer';
 import { useEffect, useState } from 'react';
 
-import { groups } from '../utils/utils';
+import { groups } from '../../utils/utils';
 
 const extensions = ['wikipedia', 'google-duckduckgo', 'google-chatgpt'];
 

@@ -14,6 +14,11 @@ const HEADER_SIZE = 76;
 const SIDEBAR_SIZE = 0;
 const VSEPARATOR_WIDTH_RELATIVE = 0.0025;
 
+declare const VSEPARATOR_WINDOW_WEBPACK_ENTRY: string;
+declare const VSEPARATOR_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
+declare const HSEPARATOR_WINDOW_WEBPACK_ENTRY: string;
+declare const HSEPARATOR_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
+
 const defaultViewWebPreferences = {
   nodeIntegration: false,
   nodeIntegrationInSubFrames: true,
@@ -44,14 +49,7 @@ class MainProcess {
   hSeparatorEntry: string;
   hSeparatorPreload: string;
 
-  constructor(
-    url: string,
-    preload: string,
-    vSeparatorEntry: string,
-    vSeparatorPreload: string,
-    hSeparatorEntry: string,
-    hSeparatorPreload: string
-  ) {
+  constructor(url: string, preload: string) {
     let window = new BrowserWindow({
       height: 800,
       width: 1450,
@@ -66,10 +64,10 @@ class MainProcess {
     window.loadURL(url);
     this.mainWindow = window;
 
-    this.vSeparatorEntry = vSeparatorEntry;
-    this.vSeparatorPreload = vSeparatorPreload;
-    this.hSeparatorEntry = hSeparatorEntry;
-    this.hSeparatorPreload = hSeparatorPreload;
+    this.vSeparatorEntry = VSEPARATOR_WINDOW_WEBPACK_ENTRY;
+    this.vSeparatorPreload = VSEPARATOR_WINDOW_PRELOAD_WEBPACK_ENTRY;
+    this.hSeparatorEntry = HSEPARATOR_WINDOW_WEBPACK_ENTRY;
+    this.hSeparatorPreload = HSEPARATOR_WINDOW_PRELOAD_WEBPACK_ENTRY;
   }
 
   createGroup(id: string) {

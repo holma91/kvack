@@ -70,15 +70,15 @@ type SomeView = PageView | VSeparatorView | HSeparatorView;
 
 const google: Extension = {
   id: 'google',
-  entryUrl: 'https://www.google.com/',
-  // entryUrl: 'https://www.google.com/search?q=something',
+  // entryUrl: 'https://www.google.com/',
+  entryUrl: 'https://www.google.com/search?q=something',
   preloadPath: 'google_results_window',
 };
 
 const duckduckgo: Extension = {
   id: 'duckduckgo',
-  entryUrl: 'https://duckduckgo.com/',
-  // entryUrl: 'https://duckduckgo.com/?q=something',
+  // entryUrl: 'https://duckduckgo.com/',
+  entryUrl: 'https://duckduckgo.com/?q=something',
   preloadPath: 'duckduckgo_results_window',
 };
 

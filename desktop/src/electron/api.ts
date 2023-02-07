@@ -1,6 +1,6 @@
 import { ipcRenderer } from 'electron';
 const api = {
-  setView: (viewId: string) => ipcRenderer.send('setView', viewId),
+  setGroup: (groupId: string) => ipcRenderer.send('setGroup', groupId),
   createView: () => ipcRenderer.send('createView'),
   resizeGroup: (
     screenX0: number,

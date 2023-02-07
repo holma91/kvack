@@ -1,22 +1,13 @@
 import {
   app,
   BrowserWindow,
-  BrowserView,
   ipcMain,
-  webContents,
   Menu,
   MenuItem,
   globalShortcut,
 } from 'electron';
-import path from 'path';
-import { groups2, groups3 } from '../utils/utils';
 import MainProcess from './MainProcess';
 import { defaultSettings } from '../utils/settings';
-
-declare const MAIN_WINDOW_WEBPACK_ENTRY: string; // http://localhost:3000/main_window
-declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string; // /Users/lapuerta/dev/kvack/desktop/.webpack/renderer/main_window/preload.js
-declare const SEARCH_WINDOW_WEBPACK_ENTRY: string;
-declare const SEARCH_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -31,15 +22,8 @@ const start = (): void => {
   for (const id of Object.keys(settings.groups)) {
     // load everything into the cache on startup
     mainProcess.createGroup(settings.groups[id]);
-    // console.log(mainProcess.groupMap);
-
     mainProcess.setGroup(settings.groups[id]);
-    // mainProcess.createGroup(id);
-    // mainProcess.setGroup(id);
   }
-  mainProcess.mainWindow.show();
-  // console.log(mainProcess.groupMap);
-  // mainProcess.mainWindow.webContents.openDevTools();
 
   const menu = new Menu();
   menu.append(
@@ -65,8 +49,9 @@ const start = (): void => {
   );
   Menu.setApplicationMenu(menu);
 
-  ipcMain.on('setView', (e: any, viewId: string) => {
-    // mainProcess.setGroup(viewId);
+  ipcMain.on('setGroup', (e: any, groupId: string) => {
+    const liveGroup = mainProcess.groupMap[groupId];
+    mainProcess.setGroup(liveGroup.group);
   });
 
   ipcMain.on('resize-bar', (e, leftOffset) => {

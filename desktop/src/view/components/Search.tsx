@@ -34,7 +34,7 @@ export default function Search() {
         let nextView =
           extensions[nextIndex >= extensions.length ? 0 : nextIndex];
 
-        api.setView(nextView);
+        api.setGroup(nextView);
         setCurrentView(nextView);
         inputRef.current.focus();
       }),
@@ -43,7 +43,7 @@ export default function Search() {
         let nextView =
           extensions[nextIndex < 0 ? extensions.length - 1 : nextIndex];
 
-        api.setView(nextView);
+        api.setGroup(nextView);
         setCurrentView(nextView);
         inputRef.current.focus();
       }),

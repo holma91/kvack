@@ -49,13 +49,11 @@ const defaultViewWebPreferences = {
   minimumFontSize: 6,
 };
 
-// 1 MainWindow have 1 BrowserWindow and multiple BrowserViews
 class MainProcess {
   mainWindow: BrowserWindow;
   selectedGroup: string = '';
   groupMap: { [key: string]: LiveGroup } = {};
   viewsByGroup: { [key: string]: SomeView[] } = {}; // because we need to know the order when resizing
-  // groupSettings: { [key: string]: LiveGroup } = {}; // ?
 
   constructor(settings: Settings) {
     let window = new BrowserWindow({
@@ -103,7 +101,6 @@ class MainProcess {
     ];
     let xOffsets = [0, widths[0] + VSEPARATOR_WIDTH_RELATIVE];
     let vSeparatorLeftOffset = widths[0];
-    console.log('vSeparatorLeftOffset:', vSeparatorLeftOffset);
 
     // widths[0] -= 0.2;
     // widths[1] -= 0.2;
@@ -118,8 +115,8 @@ class MainProcess {
           },
         });
         liveGroup.vSeparators[vSepCount] = {
-          id: 'vSeparator',
-          width: VSEPARATOR_WIDTH_RELATIVE,
+          id: group.layout[i],
+          width: 1,
           height: 1,
           x: 0,
           y: 0,
@@ -170,6 +167,7 @@ class MainProcess {
           processId: view.webContents.getProcessId(),
           view,
         };
+        // view.webContents.openDevTools();
         this.viewsByGroup[group.id].push(liveGroup.pages[pageCount]);
         pageCount++;
       }
@@ -192,7 +190,6 @@ class MainProcess {
 
     for (let i = 0; i < liveGroup.vSeparators.length; i++) {
       let vSeparatorView = liveGroup.vSeparators[i];
-      console.log('vSeparatorView:', vSeparatorView);
 
       if (i === 0) {
         this.mainWindow.setBrowserView(vSeparatorView.view);
@@ -201,22 +198,15 @@ class MainProcess {
       }
 
       let leftOffsetAbsolute = width * vSeparatorView.leftOffset;
-      console.log('leftOffsetAbsolute:', leftOffsetAbsolute);
 
       vSeparatorOffsets[i] = leftOffsetAbsolute;
-      console.log(
-        'VSEPARATOR_WINDOW_WEBPACK_ENTRY:',
-        VSEPARATOR_WINDOW_WEBPACK_ENTRY
-      );
 
       if (!vSeparatorView.loadedInitialURL) {
         vSeparatorView.view.webContents.loadURL(
           VSEPARATOR_WINDOW_WEBPACK_ENTRY
         );
-        vSeparatorView.view.webContents.openDevTools();
+
         vSeparatorView.view.webContents.on('did-finish-load', () => {
-          console.log('finished le load');
-          // problemo
           vSeparatorView.view.webContents.send(
             'windowResize',
             leftOffsetAbsolute
@@ -232,7 +222,6 @@ class MainProcess {
 
     for (let i = 0; i < liveGroup.pages.length; i++) {
       let pageView = liveGroup.pages[i];
-      console.log('pageView:', pageView);
 
       if (
         liveGroup.vSeparators.length === 0 &&

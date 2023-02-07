@@ -102,10 +102,6 @@ class MainProcess {
     let xOffsets = [0, widths[0] + VSEPARATOR_WIDTH_RELATIVE];
     let vSeparatorLeftOffset = widths[0];
 
-    // widths[0] -= 0.2;
-    // widths[1] -= 0.2;
-    // xOffsets[1] += 0.2;
-
     for (let i = 0; i < group.layout.length; i++) {
       if (group.layout[i] === 'vSeparator') {
         let view = new BrowserView({
@@ -125,6 +121,8 @@ class MainProcess {
           processId: view.webContents.getProcessId(),
           view,
         };
+        // view.webContents.openDevTools();
+        view.webContents.focus(); // sometimes necessary?
         this.viewsByGroup[group.id].push(liveGroup.vSeparators[vSepCount]);
         vSepCount++;
       } else if (group.layout[i] === 'hSeparator') {

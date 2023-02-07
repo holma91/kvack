@@ -215,8 +215,8 @@ const groups3: { [key: string]: Group } = {
 };
 
 const idToUrl: { [keheight: string]: string } = {
-  // google: 'https://google.com',
-  google: 'https://www.google.com/search?q=how+to+change+background+color',
+  google: 'https://google.com',
+  // google: 'https://www.google.com/search?q=how+to+change+background+color',
   // google: 'https://brave.com',
   // duckduckgo: 'https://duckduckgo.com',
   duckduckgo: 'https://duckduckgo.com/?q=how+to+do+x&t=h_&ia=web',

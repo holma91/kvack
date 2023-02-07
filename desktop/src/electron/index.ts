@@ -32,12 +32,6 @@ const start = (): void => {
     3
   );
 
-  // ActionProcess
-  // const secondaryProcess = new MainProcess(
-  //   MAIN_WINDOW_WEBPACK_ENTRY, // just change to another entry
-  //   MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY
-  // );
-
   // read the settings, load up all the extensions
   for (const id of Object.keys(groups3)) {
     // load everything into the cache on startup
@@ -89,6 +83,7 @@ const start = (): void => {
   ipcMain.on('searchInput', (e, input) => {
     console.log(e);
     console.log(input);
+    // now send this input to the google window
   });
 
   mainProcess.mainWindow.on('will-resize', function (_, newBounds, __) {

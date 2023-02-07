@@ -55,6 +55,12 @@ const config: ForgeConfig = {
               js: './src/electron/preload.ts',
             },
           },
+          {
+            name: 'google_window',
+            preload: {
+              js: './src/electron/preloads/google.ts',
+            },
+          },
         ],
       },
     }),

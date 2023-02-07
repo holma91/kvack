@@ -95,8 +95,14 @@ class MainProcess {
 
     for (let i = 0; i < group.positioning.length; i++) {
       let view = new BrowserView({
-        webPreferences: defaultViewWebPreferences,
+        webPreferences: {
+          ...defaultViewWebPreferences,
+          preload:
+            '/Users/lapuerta/dev/kvack/desktop/.webpack/renderer/google_window/preload.js',
+        },
       });
+
+      view.webContents.openDevTools();
 
       let processId = view.webContents.getProcessId();
 
@@ -174,7 +180,7 @@ class MainProcess {
       if (!pageView.loadedInitialURL) {
         pageView.view.webContents.loadURL(idToUrl[pageView.id]);
         pageView.view.webContents.on('did-finish-load', () => {
-          pageView.view.webContents.insertCSS(injects[pageView.id].css);
+          // pageView.view.webContents.insertCSS(injects[pageView.id].css);
         });
 
         pageView.loadedInitialURL = true;

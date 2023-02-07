@@ -11,6 +11,8 @@ export default function Search() {
     api.changeSearchInput(e.target.value);
   };
 
+  const google = '#202123';
+
   return (
     <div className="p-4 flex justify-center h-screen bg-[#171717] ">
       <div className="w-[700px]">

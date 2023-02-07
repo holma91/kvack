@@ -1,21 +1,31 @@
 import { BrowserWindow, BrowserView } from 'electron';
 import { injects } from './injects';
 import {
-  Group,
+  // LiveGroup,
   idToUrl,
+  groups3,
+  groups2,
+} from '../utils/utils';
+import {
+  Group,
+  Settings,
+  LiveGroup,
+  extensionsById,
   PageView,
   VSeparatorView,
   HSeparatorView,
   SomeView,
-  groups3,
-  groups2,
-} from '../utils/utils';
+} from '../utils/settings';
 
 // const HEADER_SIZE = 76;
 const HEADER_SIZE = 94;
 const SIDEBAR_SIZE = 0;
 const VSEPARATOR_WIDTH_RELATIVE = 0.002;
 
+declare const MAIN_WINDOW_WEBPACK_ENTRY: string; // http://localhost:3000/main_window
+declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string; // /Users/lapuerta/dev/kvack/desktop/.webpack/renderer/main_window/preload.js
+declare const SEARCH_WINDOW_WEBPACK_ENTRY: string;
+declare const SEARCH_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
 declare const VSEPARATOR_WINDOW_WEBPACK_ENTRY: string;
 declare const VSEPARATOR_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
 declare const HSEPARATOR_WINDOW_WEBPACK_ENTRY: string;
@@ -43,111 +53,146 @@ const defaultViewWebPreferences = {
 class MainProcess {
   mainWindow: BrowserWindow;
   selectedGroup: string = '';
-  groupMap: { [key: string]: Group } = {};
-  viewsByGroup: { [key: string]: SomeView[] } = {};
-  groupSettings: { [key: string]: Group } = {};
+  groupMap: { [key: string]: LiveGroup } = {};
+  viewsByGroup: { [key: string]: SomeView[] } = {}; // because we need to know the order when resizing
+  // groupSettings: { [key: string]: LiveGroup } = {}; // ?
 
-  constructor(url: string, preload: string, groupSettings: number) {
+  constructor(settings: Settings) {
     let window = new BrowserWindow({
-      height: 800,
-      width: 1450,
+      height: settings.windowHeight,
+      width: settings.windowWidth,
       frame: true,
       title: 'kvack',
       // type: 'panel',
-
       webPreferences: {
         preload:
           '/Users/lapuerta/dev/kvack/desktop/.webpack/renderer/main_window/preload.js',
       },
     });
 
-    window.loadURL(url);
+    window.loadURL(SEARCH_WINDOW_WEBPACK_ENTRY);
     this.mainWindow = window;
-
-    if (groupSettings === 3) {
-      this.groupSettings = groups3;
-    } else if (groupSettings === 2) {
-      this.groupSettings = groups2;
-    } else {
-      // this.groupSettings = groups;
-    }
+    // this.groupSettings = ?
   }
 
-  createGroup(id: string) {
-    const group = this.groupSettings[id];
-    this.viewsByGroup[id] = [];
+  createGroup(group: Group) {
+    // const group = this.groupSettings[id];
+    let liveGroup: LiveGroup = {
+      group: group,
+      loadedWidth: 0,
+      loadedHeight: 0,
+      vSeparators: [],
+      hSeparators: [],
+      pages: [],
+    };
+    this.viewsByGroup[group.id] = [];
 
     let pageCount = 0;
     let vSepCount = 0;
     let hSepCount = 0;
 
-    for (let i = 0; i < group.positioning.length; i++) {
-      // every view need a preload
-      // let view = new BrowserView({
-      //   webPreferences: {
-      //     ...defaultViewWebPreferences,
-      //     // preload: `/Users/lapuerta/dev/kvack/desktop/.webpack/renderer/${id}_results_window/preload.js`,
-      //   },
-      // });
+    let numberOfPages = group.positioning.length;
+    let numberOfVSeparators = group.layout.filter(
+      (type) => type === 'vSeparator'
+    ).length;
+    let amountToRemoveFromEach =
+      (numberOfVSeparators / numberOfPages) * VSEPARATOR_WIDTH_RELATIVE;
+    let widths = [
+      group.positioning[0] - amountToRemoveFromEach,
+      group.positioning[1] - amountToRemoveFromEach,
+    ];
+    let xOffsets = [0, widths[0] + VSEPARATOR_WIDTH_RELATIVE];
+    let vSeparatorLeftOffset = widths[0];
+    console.log('vSeparatorLeftOffset:', vSeparatorLeftOffset);
 
-      // view.webContents.openDevTools();
+    // widths[0] -= 0.2;
+    // widths[1] -= 0.2;
+    // xOffsets[1] += 0.2;
 
-      // let processId = view.webContents.getProcessId();
-
-      if (group.positioning[i] === 'page') {
+    for (let i = 0; i < group.layout.length; i++) {
+      if (group.layout[i] === 'vSeparator') {
         let view = new BrowserView({
           webPreferences: {
             ...defaultViewWebPreferences,
-            preload: `/Users/lapuerta/dev/kvack/desktop/.webpack/renderer/${group.pages[pageCount].preload}`,
-            // preload: `/Users/lapuerta/dev/kvack/desktop/.webpack/renderer/${id}_results_window/preload.js`,
+            preload: VSEPARATOR_WINDOW_PRELOAD_WEBPACK_ENTRY,
           },
         });
-        group.pages[pageCount].view = view;
-        group.pages[pageCount].processId = view.webContents.getProcessId();
-        this.viewsByGroup[id].push(group.pages[pageCount]);
-        pageCount++;
-        // view.webContents.openDevTools();
-      } else if (group.positioning[i] === 'vSeparator') {
-        let view = new BrowserView({
-          webPreferences: {
-            ...defaultViewWebPreferences,
-            preload: `/Users/lapuerta/dev/kvack/desktop/.webpack/renderer/${group.vSeparators[vSepCount].preload}`,
-          },
-        });
-        group.vSeparators[vSepCount].view = view;
-        group.vSeparators[vSepCount].processId =
-          view.webContents.getProcessId();
-        this.viewsByGroup[id].push(group.vSeparators[vSepCount]);
+        liveGroup.vSeparators[vSepCount] = {
+          id: 'vSeparator',
+          width: VSEPARATOR_WIDTH_RELATIVE,
+          height: 1,
+          x: 0,
+          y: 0,
+          loadedInitialURL: false,
+          leftOffset: vSeparatorLeftOffset,
+          processId: view.webContents.getProcessId(),
+          view,
+        };
+        this.viewsByGroup[group.id].push(liveGroup.vSeparators[vSepCount]);
         vSepCount++;
-      } else {
+      } else if (group.layout[i] === 'hSeparator') {
+        // need to change here when we get actual hSeparators
         let view = new BrowserView({
           webPreferences: {
             ...defaultViewWebPreferences,
-            preload: `/Users/lapuerta/dev/kvack/desktop/.webpack/renderer/${group.hSeparators[hSepCount].preload}`,
+            preload: HSEPARATOR_WINDOW_PRELOAD_WEBPACK_ENTRY,
           },
         });
-        group.hSeparators[hSepCount].view = view;
-        group.hSeparators[hSepCount].processId =
-          view.webContents.getProcessId();
-        this.viewsByGroup[id].push(group.hSeparators[hSepCount]);
+        liveGroup.hSeparators[hSepCount] = {
+          id: 'hSeparator',
+          width: VSEPARATOR_WIDTH_RELATIVE,
+          height: 1,
+          x: 0,
+          y: 0,
+          loadedInitialURL: false,
+          topOffset: vSeparatorLeftOffset,
+          processId: view.webContents.getProcessId(),
+          view,
+        };
+        this.viewsByGroup[group.id].push(liveGroup.hSeparators[hSepCount]);
         hSepCount++;
+      } else {
+        let extensionId = group.layout[i];
+        const extension = extensionsById[extensionId];
+        let view = new BrowserView({
+          webPreferences: {
+            ...defaultViewWebPreferences,
+            preload: `/Users/lapuerta/dev/kvack/desktop/.webpack/renderer/${extension.preloadPath}/preload.js`,
+          },
+        });
+        liveGroup.pages[pageCount] = {
+          id: group.layout[i], // is the extension id
+          width: widths[pageCount],
+          height: 1,
+          x: xOffsets[pageCount],
+          y: 0,
+          loadedInitialURL: false,
+          processId: view.webContents.getProcessId(),
+          view,
+        };
+        this.viewsByGroup[group.id].push(liveGroup.pages[pageCount]);
+        pageCount++;
       }
     }
 
-    this.groupMap[id] = group;
+    this.groupMap[group.id] = liveGroup;
   }
 
-  setGroup(id: string) {
-    let group = this.groupMap[id];
-    if (!group) return;
+  setGroup(group: Group) {
+    let liveGroup = this.groupMap[group.id];
+    if (!liveGroup) {
+      console.log('need to create group before setting group.');
+      return;
+    }
 
     const [width, height] = this.mainWindow.getSize();
 
-    let vSeparatorOffsets = group.vSeparators.map((_) => 0);
-    let hSeparatorOffsets = group.hSeparators.map((_) => 0);
+    let vSeparatorOffsets = liveGroup.vSeparators.map((_) => 0);
+    let hSeparatorOffsets = liveGroup.hSeparators.map((_) => 0);
 
-    for (let i = 0; i < group.vSeparators.length; i++) {
-      let vSeparatorView = group.vSeparators[i];
+    for (let i = 0; i < liveGroup.vSeparators.length; i++) {
+      let vSeparatorView = liveGroup.vSeparators[i];
+      console.log('vSeparatorView:', vSeparatorView);
 
       if (i === 0) {
         this.mainWindow.setBrowserView(vSeparatorView.view);
@@ -156,14 +201,22 @@ class MainProcess {
       }
 
       let leftOffsetAbsolute = width * vSeparatorView.leftOffset;
+      console.log('leftOffsetAbsolute:', leftOffsetAbsolute);
+
       vSeparatorOffsets[i] = leftOffsetAbsolute;
+      console.log(
+        'VSEPARATOR_WINDOW_WEBPACK_ENTRY:',
+        VSEPARATOR_WINDOW_WEBPACK_ENTRY
+      );
 
       if (!vSeparatorView.loadedInitialURL) {
         vSeparatorView.view.webContents.loadURL(
           VSEPARATOR_WINDOW_WEBPACK_ENTRY
         );
+        vSeparatorView.view.webContents.openDevTools();
         vSeparatorView.view.webContents.on('did-finish-load', () => {
-          vSeparatorView.view.webContents.insertCSS(injects['vSeparator'].css);
+          console.log('finished le load');
+          // problemo
           vSeparatorView.view.webContents.send(
             'windowResize',
             leftOffsetAbsolute
@@ -177,11 +230,13 @@ class MainProcess {
 
     // do the same for hSeparators
 
-    for (let i = 0; i < group.pages.length; i++) {
-      let pageView = group.pages[i];
+    for (let i = 0; i < liveGroup.pages.length; i++) {
+      let pageView = liveGroup.pages[i];
+      console.log('pageView:', pageView);
+
       if (
-        group.vSeparators.length === 0 &&
-        group.hSeparators.length === 0 &&
+        liveGroup.vSeparators.length === 0 &&
+        liveGroup.hSeparators.length === 0 &&
         i === 0
       ) {
         this.mainWindow.setBrowserView(pageView.view);
@@ -190,38 +245,42 @@ class MainProcess {
       }
 
       if (!pageView.loadedInitialURL) {
-        pageView.view.webContents.loadURL(idToUrl[pageView.id]);
-        pageView.view.webContents.on('did-finish-load', () => {
-          // pageView.view.webContents.insertCSS(injects[pageView.id].css);
-        });
-
+        const extension = extensionsById[pageView.id];
+        pageView.view.webContents.loadURL(extension.entryUrl);
         pageView.loadedInitialURL = true;
         this.setBounds(pageView);
       }
 
-      if (width !== group.loadedWidth || height !== group.loadedHeight) {
+      if (
+        width !== liveGroup.loadedWidth ||
+        height !== liveGroup.loadedHeight
+      ) {
         // will get here if window size has changed but the group was loaded earlier
-        if (group.vSeparators.length === 0 && group.hSeparators.length === 0) {
+        if (
+          liveGroup.vSeparators.length === 0 &&
+          liveGroup.hSeparators.length === 0
+        ) {
+          // look here closer
           this.setBounds(pageView);
         }
       }
     }
 
-    if (width !== group.loadedWidth || height !== group.loadedHeight) {
-      for (let i = 0; i < group.vSeparators.length; i++) {
-        let processId = group.vSeparators[i].processId;
-        this.resizeVerticalSplitScreenFromWindowChange(id, processId);
+    if (width !== liveGroup.loadedWidth || height !== liveGroup.loadedHeight) {
+      for (let i = 0; i < liveGroup.vSeparators.length; i++) {
+        let processId = liveGroup.vSeparators[i].processId;
+        this.resizeVerticalSplitScreenFromWindowChange(group.id, processId);
 
-        group.vSeparators[i].view.webContents.send(
+        liveGroup.vSeparators[i].view.webContents.send(
           'windowResize',
           vSeparatorOffsets[i]
         );
       }
     }
 
-    group.loadedHeight = height;
-    group.loadedWidth = width;
-    this.selectedGroup = id;
+    liveGroup.loadedHeight = height;
+    liveGroup.loadedWidth = width;
+    this.selectedGroup = group.id;
   }
 
   setBounds(extendedView: SomeView) {
@@ -261,9 +320,9 @@ class MainProcess {
       }
     }
 
-    let vSeparator: VSeparatorView = views[index];
-    let leftView: PageView = views[index - 1];
-    let rightView: PageView = views[index + 1];
+    let vSeparator = views[index] as VSeparatorView;
+    let leftView = views[index - 1] as PageView;
+    let rightView = views[index + 1] as PageView;
 
     this.setBounds(vSeparator);
     this.setBounds(leftView);
@@ -287,9 +346,9 @@ class MainProcess {
       }
     }
 
-    let vSeparator: VSeparatorView = views[index];
-    let leftView: PageView = views[index - 1];
-    let rightView: PageView = views[index + 1];
+    let vSeparator = views[index] as VSeparatorView;
+    let leftView = views[index - 1] as PageView;
+    let rightView = views[index + 1] as PageView;
 
     const w1 = leftOffset;
     const w2 = width - leftOffset;

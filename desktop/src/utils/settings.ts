@@ -1,5 +1,9 @@
+import { BrowserView } from 'electron';
+
 type Settings = {
   userId: string;
+  windowWidth: number;
+  windowHeight: number;
   downloadedExtensions: string[];
   groups: { [key: string]: Group };
 };
@@ -18,25 +22,75 @@ type Group = {
   positioning: number[];
 };
 
+type LiveGroup = {
+  group: Group;
+  loadedWidth: number;
+  loadedHeight: number;
+  vSeparators: VSeparatorView[];
+  hSeparators: HSeparatorView[];
+  pages: PageView[];
+};
+
+type PageView = {
+  id: string;
+  width: number;
+  height: number;
+  x: number;
+  y: number;
+  loadedInitialURL: boolean;
+  view: BrowserView;
+  processId: number;
+};
+
+type VSeparatorView = {
+  id: string;
+  width: number;
+  height: number;
+  x: number;
+  y: number;
+  loadedInitialURL: boolean;
+  view: BrowserView;
+  processId: number;
+  leftOffset: number;
+};
+
+type HSeparatorView = {
+  id: string;
+  width: number;
+  height: number;
+  x: number;
+  y: number;
+  loadedInitialURL: boolean;
+  view: BrowserView;
+  processId: number;
+  topOffset: number;
+};
+
+type SomeView = PageView | VSeparatorView | HSeparatorView;
+
 const google: Extension = {
   id: 'google',
-  entryUrl: 'https://google.com/',
-  preloadPath: 'google_window',
+  entryUrl: 'https://www.google.com/',
+  // entryUrl: 'https://www.google.com/search?q=something',
+  preloadPath: 'google_results_window',
 };
 
 const duckduckgo: Extension = {
   id: 'duckduckgo',
   entryUrl: 'https://duckduckgo.com/',
-  preloadPath: 'duckduckgo_window',
+  // entryUrl: 'https://duckduckgo.com/?q=something',
+  preloadPath: 'duckduckgo_results_window',
 };
 
-const extensionsById = {
+const extensionsById: { [key: string]: Extension } = {
   google,
   duckduckgo,
 };
 
 const defaultSettings: Settings = {
   userId: 'lapuerta',
+  windowWidth: 1450,
+  windowHeight: 800,
   downloadedExtensions: ['google', 'duckduckgo'],
   groups: {
     google: {
@@ -54,4 +108,16 @@ const defaultSettings: Settings = {
       positioning: [0.5, 0.5],
     },
   },
+};
+
+export {
+  defaultSettings,
+  Settings,
+  Group,
+  LiveGroup,
+  extensionsById,
+  PageView,
+  VSeparatorView,
+  HSeparatorView,
+  SomeView,
 };

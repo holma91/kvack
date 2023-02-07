@@ -1,7 +1,7 @@
 import { BrowserView } from 'electron';
 const extensions = ['google', 'duckduckgo', 'wolframalpha', 'chatgpt', 'bing'];
 
-type Group = {
+type LiveGroup = {
   id: string;
   short: string;
   extensions: string[];
@@ -54,7 +54,7 @@ type HSeparatorView = {
 
 type SomeView = PageView | VSeparatorView | HSeparatorView;
 
-const groups2: { [key: string]: Group } = {
+const groups2: { [key: string]: LiveGroup } = {
   google: {
     id: 'google',
     short: 'gd',
@@ -120,7 +120,7 @@ const groups2: { [key: string]: Group } = {
   },
 };
 
-const groups3: { [key: string]: Group } = {
+const groups3: { [key: string]: LiveGroup } = {
   google: {
     id: 'google',
     short: 'gd',
@@ -145,6 +145,7 @@ const groups3: { [key: string]: Group } = {
 };
 
 const idToUrl: { [keheight: string]: string } = {
+  google: 'https://google.com',
   googleSearch: 'https://google.com',
   googleResults:
     'https://www.google.com/search?q=how+to+change+background+color',
@@ -165,7 +166,7 @@ export {
   groups2,
   groups3,
   idToUrl,
-  Group,
+  LiveGroup,
   PageView,
   VSeparatorView,
   HSeparatorView,

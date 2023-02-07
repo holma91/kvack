@@ -44,6 +44,8 @@ export default function VSeparator() {
 
   useEffect(() => {
     api.onWindowResize((leftOffset: number) => {
+      console.log('resizing with leftOffset:', leftOffset);
+
       resizer.current.style.left = leftOffset + 'px';
     });
   }, []);

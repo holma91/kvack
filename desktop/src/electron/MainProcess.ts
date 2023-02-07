@@ -2,7 +2,6 @@ import { BrowserWindow, BrowserView } from 'electron';
 import { injects } from './injects';
 import {
   Group,
-  groups,
   idToUrl,
   PageView,
   VSeparatorView,
@@ -12,8 +11,8 @@ import {
   groups2,
 } from '../utils/utils';
 
-// const HEADER_SIZE = 76;
-const HEADER_SIZE = 94;
+const HEADER_SIZE = 76;
+// const HEADER_SIZE = 94;
 const SIDEBAR_SIZE = 0;
 const VSEPARATOR_WIDTH_RELATIVE = 0.002;
 
@@ -61,11 +60,13 @@ class MainProcess {
       frame: true,
       title: 'kvack',
       // type: 'panel',
+
       webPreferences: {
-        preload,
+        preload:
+          '/Users/lapuerta/dev/kvack/desktop/.webpack/renderer/main_window/preload.js',
       },
     });
-    // window.setPosition(25, 100); // use when frame: false
+
     window.loadURL(url);
     this.mainWindow = window;
 
@@ -79,7 +80,7 @@ class MainProcess {
     } else if (groupSettings === 2) {
       this.groupSettings = groups2;
     } else {
-      this.groupSettings = groups;
+      // this.groupSettings = groups;
     }
   }
 
@@ -94,31 +95,52 @@ class MainProcess {
     let hSepCount = 0;
 
     for (let i = 0; i < group.positioning.length; i++) {
-      let view = new BrowserView({
-        webPreferences: {
-          ...defaultViewWebPreferences,
-          preload:
-            '/Users/lapuerta/dev/kvack/desktop/.webpack/renderer/google_window/preload.js',
-        },
-      });
+      // every view need a preload
+      // let view = new BrowserView({
+      //   webPreferences: {
+      //     ...defaultViewWebPreferences,
+      //     // preload: `/Users/lapuerta/dev/kvack/desktop/.webpack/renderer/${id}_results_window/preload.js`,
+      //   },
+      // });
 
-      view.webContents.openDevTools();
+      // view.webContents.openDevTools();
 
-      let processId = view.webContents.getProcessId();
+      // let processId = view.webContents.getProcessId();
 
       if (group.positioning[i] === 'page') {
+        let view = new BrowserView({
+          webPreferences: {
+            ...defaultViewWebPreferences,
+            preload: `/Users/lapuerta/dev/kvack/desktop/.webpack/renderer/${group.pages[pageCount].preload}`,
+            // preload: `/Users/lapuerta/dev/kvack/desktop/.webpack/renderer/${id}_results_window/preload.js`,
+          },
+        });
         group.pages[pageCount].view = view;
-        group.pages[pageCount].processId = processId;
+        group.pages[pageCount].processId = view.webContents.getProcessId();
         this.viewsByGroup[id].push(group.pages[pageCount]);
         pageCount++;
       } else if (group.positioning[i] === 'vSeparator') {
+        let view = new BrowserView({
+          webPreferences: {
+            ...defaultViewWebPreferences,
+            preload: `/Users/lapuerta/dev/kvack/desktop/.webpack/renderer/${group.vSeparators[vSepCount].preload}`,
+          },
+        });
         group.vSeparators[vSepCount].view = view;
-        group.vSeparators[vSepCount].processId = processId;
+        group.vSeparators[vSepCount].processId =
+          view.webContents.getProcessId();
         this.viewsByGroup[id].push(group.vSeparators[vSepCount]);
         vSepCount++;
       } else {
+        let view = new BrowserView({
+          webPreferences: {
+            ...defaultViewWebPreferences,
+            preload: `/Users/lapuerta/dev/kvack/desktop/.webpack/renderer/${group.hSeparators[hSepCount].preload}`,
+          },
+        });
         group.hSeparators[hSepCount].view = view;
-        group.hSeparators[hSepCount].processId = processId;
+        group.hSeparators[hSepCount].processId =
+          view.webContents.getProcessId();
         this.viewsByGroup[id].push(group.hSeparators[hSepCount]);
         hSepCount++;
       }

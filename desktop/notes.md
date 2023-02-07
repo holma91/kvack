@@ -8,3 +8,7 @@ vSeparator.leftOffset should ONLY update when the bar is moved.
 
 - webContents.insertCSS / webContents.executeJavascript
 - in a preload script
+
+## search
+
+the google searchbar should be a BrowserView.

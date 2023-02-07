@@ -1,7 +1,7 @@
 // import { ipcRenderer } from 'electron/renderer';
 import { useEffect, useState } from 'react';
 
-import { groups } from '../../utils/utils';
+import { groups2 } from '../../utils/utils';
 
 const extensions = ['wikipedia', 'google-duckduckgo', 'google-chatgpt'];
 
@@ -41,7 +41,7 @@ export default function Home() {
     <div className="flex">
       <main id="header" className="flex-1 h-[76px] bg-gray-200 flex">
         {/* <h3 className="text-lg font-medium p-6">Extensions</h3> */}
-        {Object.keys(groups).map((name) => {
+        {Object.keys(groups2).map((name) => {
           return (
             <div
               id="tab"

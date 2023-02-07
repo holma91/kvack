@@ -56,9 +56,21 @@ const config: ForgeConfig = {
             },
           },
           {
-            name: 'google_window',
+            name: 'google_search_window',
             preload: {
-              js: './src/electron/preloads/google.ts',
+              js: './src/electron/preloads/googleSearch.ts',
+            },
+          },
+          {
+            name: 'google_results_window',
+            preload: {
+              js: './src/electron/preloads/googleResults.ts',
+            },
+          },
+          {
+            name: 'duckduckgo_results_window',
+            preload: {
+              js: './src/electron/preloads/duckduckgoResults.ts',
             },
           },
         ],

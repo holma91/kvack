@@ -11,8 +11,8 @@ import {
   groups2,
 } from '../utils/utils';
 
-const HEADER_SIZE = 76;
-// const HEADER_SIZE = 94;
+// const HEADER_SIZE = 76;
+const HEADER_SIZE = 94;
 const SIDEBAR_SIZE = 0;
 const VSEPARATOR_WIDTH_RELATIVE = 0.002;
 
@@ -119,6 +119,7 @@ class MainProcess {
         group.pages[pageCount].processId = view.webContents.getProcessId();
         this.viewsByGroup[id].push(group.pages[pageCount]);
         pageCount++;
+        // view.webContents.openDevTools();
       } else if (group.positioning[i] === 'vSeparator') {
         let view = new BrowserView({
           webPreferences: {

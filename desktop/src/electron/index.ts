@@ -27,8 +27,8 @@ if (require('electron-squirrel-startup')) {
 const start = (): void => {
   // MainProcess
   const mainProcess = new MainProcess(
-    MAIN_WINDOW_WEBPACK_ENTRY,
-    MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
+    SEARCH_WINDOW_WEBPACK_ENTRY,
+    SEARCH_WINDOW_PRELOAD_WEBPACK_ENTRY,
     2
   );
 

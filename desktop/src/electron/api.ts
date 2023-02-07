@@ -12,6 +12,8 @@ const api = {
 
   resizeBar: (minMax: any) => ipcRenderer.send('resize-bar', minMax),
 
+  changeSearchInput: (input: string) => ipcRenderer.send('searchInput', input),
+
   onWindowResize: (callback: any) => {
     ipcRenderer.on('windowResize', (event, message) => callback(message));
     return () => [ipcRenderer.removeAllListeners('windowResize')];

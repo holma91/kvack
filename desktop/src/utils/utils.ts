@@ -191,6 +191,29 @@ const groups2: { [key: string]: Group } = {
   },
 };
 
+const groups3: { [key: string]: Group } = {
+  google: {
+    id: 'google',
+    short: 'gd',
+    extensions: ['google'],
+    loadedHeight: 0,
+    loadedWidth: 0,
+    positioning: ['page'],
+    vSeparators: [],
+    hSeparators: [],
+    pages: [
+      {
+        id: 'google',
+        width: 1,
+        height: 1,
+        x: 0,
+        y: 0,
+        loadedInitialURL: false,
+      },
+    ],
+  },
+};
+
 const idToUrl: { [keheight: string]: string } = {
   // google: 'https://google.com',
   google: 'https://www.google.com/search?q=how+to+change+background+color',
@@ -210,6 +233,7 @@ export {
   extensions,
   groups,
   groups2,
+  groups3,
   idToUrl,
   Group,
   PageView,

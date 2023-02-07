@@ -8,6 +8,8 @@ import {
   VSeparatorView,
   HSeparatorView,
   SomeView,
+  groups3,
+  groups2,
 } from '../utils/utils';
 
 // const HEADER_SIZE = 76;
@@ -45,12 +47,14 @@ class MainProcess {
   groupMap: { [key: string]: Group } = {};
   viewsByGroup: { [key: string]: SomeView[] } = {};
 
+  groupSettings: { [key: string]: Group } = {};
+
   vSeparatorEntry: string;
   vSeparatorPreload: string;
   hSeparatorEntry: string;
   hSeparatorPreload: string;
 
-  constructor(url: string, preload: string) {
+  constructor(url: string, preload: string, groupSettings: number) {
     let window = new BrowserWindow({
       height: 800,
       width: 1450,
@@ -69,15 +73,26 @@ class MainProcess {
     this.vSeparatorPreload = VSEPARATOR_WINDOW_PRELOAD_WEBPACK_ENTRY;
     this.hSeparatorEntry = HSEPARATOR_WINDOW_WEBPACK_ENTRY;
     this.hSeparatorPreload = HSEPARATOR_WINDOW_PRELOAD_WEBPACK_ENTRY;
+
+    if (groupSettings === 3) {
+      this.groupSettings = groups3;
+    } else if (groupSettings === 2) {
+      this.groupSettings = groups2;
+    } else {
+      this.groupSettings = groups;
+    }
   }
 
   createGroup(id: string) {
-    const group = groups[id];
+    console.log(id);
+    const group = this.groupSettings[id];
+    console.log(group);
     this.viewsByGroup[id] = [];
 
     let pageCount = 0;
     let vSepCount = 0;
     let hSepCount = 0;
+
     for (let i = 0; i < group.positioning.length; i++) {
       let view = new BrowserView({
         webPreferences: defaultViewWebPreferences,

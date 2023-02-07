@@ -5,14 +5,16 @@ export default function Search() {
 
   const handleInputChange = (e: any) => {
     console.log(e.target.value);
-
     setInput(e.target.value);
+
+    // send to main process
+    api.changeSearchInput(e.target.value);
   };
 
   return (
-    <div className="p-4 flex justify-center h-screen bg-neutral-900">
+    <div className="p-4 flex justify-center h-screen bg-[#171717] ">
       <div className="w-[700px]">
-        <div className="relative mt-1 flex items-center w-fu ">
+        <div className="relative mt-1 flex items-center w-full ">
           <input
             value={input}
             onChange={handleInputChange}

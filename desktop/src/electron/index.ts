@@ -82,9 +82,10 @@ const start = (): void => {
   });
 
   ipcMain.on('searchInput', (e, input) => {
-    console.log(e);
-    console.log(input);
-    // now send this input to the google window
+    const views = mainProcess.viewsByGroup[mainProcess.selectedGroup];
+    for (const extendedView of views) {
+      extendedView.view.webContents.send('searchInput', input);
+    }
   });
 
   mainProcess.mainWindow.on('will-resize', function (_, newBounds, __) {

@@ -102,7 +102,7 @@ const groups3: { [key: string]: Group } = {
   google: {
     id: 'google',
     short: 'gd',
-    extensions: ['google'],
+    extensions: ['googleResults'],
     loadedHeight: 0,
     loadedWidth: 0,
     positioning: ['page'],
@@ -110,12 +110,13 @@ const groups3: { [key: string]: Group } = {
     hSeparators: [],
     pages: [
       {
-        id: 'google',
+        id: 'googleResults',
         width: 1,
         height: 1,
         x: 0,
         y: 0,
         loadedInitialURL: false,
+        preload: 'google_results_window/preload.js',
       },
     ],
   },

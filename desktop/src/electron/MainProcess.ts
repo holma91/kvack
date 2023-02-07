@@ -85,9 +85,7 @@ class MainProcess {
   }
 
   createGroup(id: string) {
-    console.log(id);
     const group = this.groupSettings[id];
-    console.log(group);
     this.viewsByGroup[id] = [];
 
     let pageCount = 0;
@@ -119,7 +117,7 @@ class MainProcess {
         group.pages[pageCount].processId = view.webContents.getProcessId();
         this.viewsByGroup[id].push(group.pages[pageCount]);
         pageCount++;
-        // view.webContents.openDevTools();
+        view.webContents.openDevTools();
       } else if (group.positioning[i] === 'vSeparator') {
         let view = new BrowserView({
           webPreferences: {

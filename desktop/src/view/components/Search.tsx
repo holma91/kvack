@@ -11,6 +11,13 @@ export default function Search() {
     api.changeSearchInput(e.target.value);
   };
 
+  const handleKeyDown = (e: any) => {
+    console.log(e.key);
+    if (e.key === 'Enter') {
+      api.changeSearchInput('Enter');
+    }
+  };
+
   const google = '#202123';
 
   return (
@@ -20,6 +27,7 @@ export default function Search() {
           <input
             value={input}
             onChange={handleInputChange}
+            onKeyDown={handleKeyDown}
             type="text"
             name="search"
             id="search"
@@ -27,7 +35,7 @@ export default function Search() {
           />
           <div className="absolute inset-y-0 right-0 flex py-2 pr-2">
             <kbd className="inline-flex items-center rounded border border-neutral-600 px-2 font-sans text-sm font-medium text-neutral-600">
-              ⌘K
+              dg
             </kbd>
           </div>
         </div>

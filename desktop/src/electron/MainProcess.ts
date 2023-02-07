@@ -117,7 +117,7 @@ class MainProcess {
         group.pages[pageCount].processId = view.webContents.getProcessId();
         this.viewsByGroup[id].push(group.pages[pageCount]);
         pageCount++;
-        view.webContents.openDevTools();
+        // view.webContents.openDevTools();
       } else if (group.positioning[i] === 'vSeparator') {
         let view = new BrowserView({
           webPreferences: {

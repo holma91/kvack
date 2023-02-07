@@ -55,6 +55,27 @@ type HSeparatorView = {
 type SomeView = PageView | VSeparatorView | HSeparatorView;
 
 const groups2: { [key: string]: Group } = {
+  google: {
+    id: 'google',
+    short: 'gd',
+    extensions: ['googleResults'],
+    loadedHeight: 0,
+    loadedWidth: 0,
+    positioning: ['page'],
+    vSeparators: [],
+    hSeparators: [],
+    pages: [
+      {
+        id: 'googleResults',
+        width: 1,
+        height: 1,
+        x: 0,
+        y: 0,
+        loadedInitialURL: false,
+        preload: 'google_results_window/preload.js',
+      },
+    ],
+  },
   'google-duckduckgo': {
     id: 'google-duckduckgo',
     short: 'gd',

@@ -62,9 +62,10 @@ const groups2: { [key: string]: Group } = {
     loadedHeight: 0,
     loadedWidth: 0,
     positioning: ['page'],
-    vSeparators: [],
-    hSeparators: [],
+    vSeparators: [], // computed
+    hSeparators: [], // computed
     pages: [
+      // computed
       {
         id: 'googleResults',
         width: 1,

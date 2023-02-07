@@ -45,13 +45,7 @@ class MainProcess {
   selectedGroup: string = '';
   groupMap: { [key: string]: Group } = {};
   viewsByGroup: { [key: string]: SomeView[] } = {};
-
   groupSettings: { [key: string]: Group } = {};
-
-  vSeparatorEntry: string;
-  vSeparatorPreload: string;
-  hSeparatorEntry: string;
-  hSeparatorPreload: string;
 
   constructor(url: string, preload: string, groupSettings: number) {
     let window = new BrowserWindow({
@@ -69,11 +63,6 @@ class MainProcess {
 
     window.loadURL(url);
     this.mainWindow = window;
-
-    this.vSeparatorEntry = VSEPARATOR_WINDOW_WEBPACK_ENTRY;
-    this.vSeparatorPreload = VSEPARATOR_WINDOW_PRELOAD_WEBPACK_ENTRY;
-    this.hSeparatorEntry = HSEPARATOR_WINDOW_WEBPACK_ENTRY;
-    this.hSeparatorPreload = HSEPARATOR_WINDOW_PRELOAD_WEBPACK_ENTRY;
 
     if (groupSettings === 3) {
       this.groupSettings = groups3;
@@ -170,7 +159,9 @@ class MainProcess {
       vSeparatorOffsets[i] = leftOffsetAbsolute;
 
       if (!vSeparatorView.loadedInitialURL) {
-        vSeparatorView.view.webContents.loadURL(this.vSeparatorEntry);
+        vSeparatorView.view.webContents.loadURL(
+          VSEPARATOR_WINDOW_WEBPACK_ENTRY
+        );
         vSeparatorView.view.webContents.on('did-finish-load', () => {
           vSeparatorView.view.webContents.insertCSS(injects['vSeparator'].css);
           vSeparatorView.view.webContents.send(

@@ -1,14 +1,12 @@
-// import { ipcRenderer } from 'electron/renderer';
 import { useEffect, useState } from 'react';
 
-import { groups2 } from '../../utils/utils';
-
-const extensions = ['wikipedia', 'google-duckduckgo', 'google-chatgpt'];
+import { defaultSettings } from '../../utils/settings';
+const extensions = ['wikipedia', 'google-duckduckgo'];
 
 export default function Home() {
-  const [currentView, setCurrentView] = useState('google-chatgpt');
+  const [currentView, setCurrentView] = useState('google-duckduckgo');
   const setView = (id: string) => {
-    api.setView(id);
+    api.setGroup(id);
     setCurrentView(id);
   };
 
@@ -19,7 +17,7 @@ export default function Home() {
         let nextView =
           extensions[nextIndex >= extensions.length ? 0 : nextIndex];
 
-        api.setView(nextView);
+        api.setGroup(nextView);
         setCurrentView(nextView);
       }),
       api.onPreviousTab(() => {
@@ -27,7 +25,7 @@ export default function Home() {
         let nextView =
           extensions[nextIndex < 0 ? extensions.length - 1 : nextIndex];
 
-        api.setView(nextView);
+        api.setGroup(nextView);
         setCurrentView(nextView);
       }),
     ];
@@ -41,7 +39,7 @@ export default function Home() {
     <div className="flex">
       <main id="header" className="flex-1 h-[76px] bg-gray-200 flex">
         {/* <h3 className="text-lg font-medium p-6">Extensions</h3> */}
-        {Object.keys(groups2).map((name) => {
+        {Object.keys(defaultSettings.groups).map((name) => {
           return (
             <div
               id="tab"

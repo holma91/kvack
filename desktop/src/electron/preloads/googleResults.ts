@@ -1,8 +1,12 @@
 const { contextBridge, webFrame } = require('electron');
 import { ipcRenderer } from 'electron';
 import api from '../api';
+import { getRelevantApi } from '../utils/helper';
 
-contextBridge.exposeInMainWorld('api', api);
+const functionNames: string[] = [];
+const relevantApi = getRelevantApi(api, functionNames);
+
+contextBridge.exposeInMainWorld('api', relevantApi);
 
 const css = `
   #main {

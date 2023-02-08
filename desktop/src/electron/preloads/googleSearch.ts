@@ -1,9 +1,16 @@
 const { contextBridge, webFrame } = require('electron');
 import api from '../api';
+import { getRelevantApi } from '../utils/helper';
 
-contextBridge.exposeInMainWorld('api', api);
-// console.log('goolybib');
-// webFrame.executeJavaScript("console.log('ayooo')");
+const functionNames = [
+  'changeSearchInput',
+  'onNextTab',
+  'onPreviousTab',
+  'setGroup',
+];
+const relevantApi = getRelevantApi(api, functionNames);
+
+contextBridge.exposeInMainWorld('api', relevantApi); // api.search
 
 const css = `
 

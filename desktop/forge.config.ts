@@ -28,7 +28,7 @@ const config: ForgeConfig = {
             js: './src/electron/renderer/renderer.ts',
             name: 'main_window',
             preload: {
-              js: './src/electron/preload.ts',
+              js: './src/electron/preloads/search.ts', // temporarily
             },
           },
           {
@@ -36,7 +36,7 @@ const config: ForgeConfig = {
             js: './src/electron/renderer/search.ts',
             name: 'search_window',
             preload: {
-              js: './src/electron/preload.ts',
+              js: './src/electron/preloads/search.ts',
             },
           },
           {
@@ -44,7 +44,7 @@ const config: ForgeConfig = {
             js: './src/electron/renderer/vSeparator.ts',
             name: 'vseparator_window',
             preload: {
-              js: './src/electron/preload.ts',
+              js: './src/electron/preloads/vSeparator.ts',
             },
           },
           {
@@ -52,7 +52,7 @@ const config: ForgeConfig = {
             js: './src/electron/renderer/hSeparator.ts',
             name: 'hseparator_window',
             preload: {
-              js: './src/electron/preload.ts',
+              js: './src/electron/preloads/hSeparator.ts',
             },
           },
           {

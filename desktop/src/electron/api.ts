@@ -1,24 +1,7 @@
 import { ipcRenderer } from 'electron';
-const api = {
-  setGroup: (groupId: string) => ipcRenderer.send('setGroup', groupId),
-  createView: () => ipcRenderer.send('createView'),
-  resizeGroup: (
-    screenX0: number,
-    screenX1: number,
-    t0: number,
-    t1: number,
-    clientX: number
-  ) => ipcRenderer.send('resizeGroup', screenX0, screenX1, t0, t1, clientX),
 
-  resizeBar: (minMax: any) => ipcRenderer.send('resize-bar', minMax),
-
+const api: { [key: string]: any } = {
   changeSearchInput: (input: string) => ipcRenderer.send('searchInput', input),
-
-  onWindowResize: (callback: any) => {
-    ipcRenderer.on('windowResize', (event, message) => callback(message));
-    return () => [ipcRenderer.removeAllListeners('windowResize')];
-  },
-
   onNextTab: (callback: any) => {
     ipcRenderer.on('nextTab', callback);
     return () => {
@@ -30,6 +13,12 @@ const api = {
     return () => {
       ipcRenderer.removeAllListeners('previousTab');
     };
+  },
+  setGroup: (groupId: string) => ipcRenderer.send('setGroup', groupId),
+  resizeBar: (minMax: any) => ipcRenderer.send('resize-bar', minMax),
+  onWindowResize: (callback: any) => {
+    ipcRenderer.on('windowResize', (event, message) => callback(message));
+    return () => [ipcRenderer.removeAllListeners('windowResize')];
   },
 };
 

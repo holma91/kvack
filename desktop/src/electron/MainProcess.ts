@@ -1,11 +1,4 @@
 import { BrowserWindow, BrowserView } from 'electron';
-import { injects } from './injects';
-import {
-  // LiveGroup,
-  idToUrl,
-  groups3,
-  groups2,
-} from '../utils/utils';
 import {
   Group,
   Settings,
@@ -121,7 +114,6 @@ class MainProcess {
           processId: view.webContents.getProcessId(),
           view,
         };
-        // view.webContents.openDevTools();
         view.webContents.focus(); // sometimes necessary?
         this.viewsByGroup[group.id].push(liveGroup.vSeparators[vSepCount]);
         vSepCount++;
@@ -155,6 +147,7 @@ class MainProcess {
             preload: `/Users/lapuerta/dev/kvack/desktop/.webpack/renderer/${extension.preloadPath}/preload.js`,
           },
         });
+
         liveGroup.pages[pageCount] = {
           id: group.layout[i], // is the extension id
           width: widths[pageCount],

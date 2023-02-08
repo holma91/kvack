@@ -1,17 +1,18 @@
 import { useEffect, useRef, useState } from 'react';
 
 const defaultExtensions = ['google', 'google-duckduckgo', 'wolframalpha'];
-const otherExtensions = ['google', 'chatgpt'];
+const otherExtensions = ['google', 'chatgpt', 'google-chatgpt'];
 const shortcuts: { [key: string]: string } = {
   google: 'g',
   'google-duckduckgo': 'gd',
   wolframalpha: 'w',
   chatgpt: 'c',
+  'google-chatgpt': 'gc',
 };
 
 export default function Search() {
   const [input, setInput] = useState('');
-  const [currentGroup, setCurrentGroup] = useState('chatgpt');
+  const [currentGroup, setCurrentGroup] = useState('google-chatgpt');
 
   const handleInputChange = (e: any) => {
     setInput(e.target.value);

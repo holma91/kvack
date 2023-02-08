@@ -144,6 +144,13 @@ const otherSettings: Settings = {
       layout: ['chatgpt'],
       positioning: [1],
     },
+    'google-chatgpt': {
+      id: 'google-chatgpt',
+      shortId: 'gc',
+      extensions: ['google', 'chatgpt'],
+      layout: ['google', 'vSeparator', 'chatgpt'],
+      positioning: [0.5, 0.5],
+    },
   },
 };
 

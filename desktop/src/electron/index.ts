@@ -75,6 +75,8 @@ const start = (): void => {
   ipcMain.on('searchInput', (e, input) => {
     const views = mainProcess.viewsByGroup[mainProcess.selectedGroup];
     for (const extendedView of views) {
+      console.log(extendedView);
+
       extendedView.view.webContents.send('searchInput', input);
     }
   });

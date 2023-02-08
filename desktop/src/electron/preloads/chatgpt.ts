@@ -18,16 +18,23 @@ const css = `
 webFrame.insertCSS(css);
 
 window.addEventListener('DOMContentLoaded', () => {
-  const searchInput: any = document.querySelector(
+  let searchInput: any = document.querySelector(
     '.m-0.w-full.resize-none.border-0.bg-transparent.p-0.pl-2.pr-7'
   );
-  const searchButton: any = document.querySelector(
+  let searchButton: any = document.querySelector(
     '.absolute.p-1.rounded-md.text-gray-500'
   );
 
   ipcRenderer.on('searchInput', (_event, value) => {
+    // necessary to add this when chatgpt is small enough (prob because of that weird react minified error?)
+    searchInput = document.querySelector(
+      '.m-0.w-full.resize-none.border-0.bg-transparent.p-0.pl-2.pr-7'
+    );
+    searchButton = document.querySelector(
+      '.absolute.p-1.rounded-md.text-gray-500'
+    );
+
     if (value === 'Enter') {
-      // search
       searchButton.click();
     } else {
       searchInput.value = value;

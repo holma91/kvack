@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
-const defaultExtensions = ['google', 'google-duckduckgo', 'wolframalpha'];
+const defaultExtensions = ['google', 'google-duckduckgo'];
 const otherExtensions = ['google', 'chatgpt', 'google-chatgpt'];
 const shortcuts: { [key: string]: string } = {
   google: 'g',
@@ -27,7 +27,7 @@ export default function Search() {
   };
 
   const inputRef = useRef(null);
-  const extensions = otherExtensions;
+  const extensions = defaultExtensions;
 
   useEffect(() => {
     inputRef.current.focus();

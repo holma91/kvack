@@ -15,7 +15,7 @@ if (require('electron-squirrel-startup')) {
 }
 
 const start = (): void => {
-  const settings = otherSettings;
+  const settings = defaultSettings;
   const mainProcess = new MainProcess(settings);
 
   // read the settings, load up all the groups
@@ -82,6 +82,8 @@ const start = (): void => {
   });
 
   mainProcess.mainWindow.on('will-resize', function (_, newBounds, __) {
+    console.log('rs');
+
     const groupString = mainProcess.selectedGroup;
     const group = mainProcess.groupMap[groupString];
 
@@ -95,6 +97,10 @@ const start = (): void => {
         processId
       );
     });
+  });
+
+  mainProcess.mainWindow.on('enter-full-screen', function () {
+    console.log('fs');
   });
 };
 

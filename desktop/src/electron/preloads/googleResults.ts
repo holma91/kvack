@@ -8,6 +8,8 @@ const relevantApi = getRelevantApi(api, functionNames);
 
 contextBridge.exposeInMainWorld('api', relevantApi);
 
+// get active user settings here
+
 const css = `
   #main {
     background-color: #171717 !important;

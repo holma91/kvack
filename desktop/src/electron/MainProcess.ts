@@ -158,7 +158,7 @@ class MainProcess {
           processId: view.webContents.getProcessId(),
           view,
         };
-        // view.webContents.openDevTools();
+        view.webContents.openDevTools();
         this.viewsByGroup[group.id].push(liveGroup.pages[pageCount]);
         pageCount++;
       }

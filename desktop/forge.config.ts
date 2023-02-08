@@ -73,6 +73,12 @@ const config: ForgeConfig = {
               js: './src/electron/preloads/duckduckgoResults.ts',
             },
           },
+          {
+            name: 'wolframalpha_window',
+            preload: {
+              js: './src/electron/preloads/wolframalpha.ts',
+            },
+          },
         ],
       },
     }),

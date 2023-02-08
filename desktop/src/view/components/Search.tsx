@@ -1,14 +1,16 @@
 import { useEffect, useRef, useState } from 'react';
 
-const extensions = ['google', 'google-duckduckgo'];
+const defaultExtensions = ['google', 'google-duckduckgo', 'wolframalpha'];
+const otherExtensions = ['google', 'wolframalpha'];
 const shortcuts: { [key: string]: string } = {
   google: 'g',
   'google-duckduckgo': 'gd',
+  wolframalpha: 'w',
 };
 
 export default function Search() {
   const [input, setInput] = useState('');
-  const [currentGroup, setCurrentGroup] = useState('google-duckduckgo');
+  const [currentGroup, setCurrentGroup] = useState('wolframalpha');
 
   const handleInputChange = (e: any) => {
     setInput(e.target.value);
@@ -23,6 +25,7 @@ export default function Search() {
   };
 
   const inputRef = useRef(null);
+  const extensions = otherExtensions;
 
   useEffect(() => {
     const listeners = [

@@ -82,9 +82,16 @@ const duckduckgo: Extension = {
   preloadPath: 'duckduckgo_results_window',
 };
 
+const wolframalpha: Extension = {
+  id: 'wolframalpha',
+  entryUrl: 'https://wolframalpha.com/',
+  preloadPath: 'wolframalpha_window',
+};
+
 const extensionsById: { [key: string]: Extension } = {
   google,
   duckduckgo,
+  wolframalpha,
 };
 
 const defaultSettings: Settings = {
@@ -110,8 +117,32 @@ const defaultSettings: Settings = {
   },
 };
 
+const otherSettings: Settings = {
+  userId: 'holma91',
+  windowWidth: 1450,
+  windowHeight: 800,
+  downloadedExtensions: ['google', 'wolframalpha'],
+  groups: {
+    google: {
+      id: 'google',
+      shortId: 'g',
+      extensions: ['google'],
+      layout: ['google'],
+      positioning: [1],
+    },
+    wolframalpha: {
+      id: 'wolframalpha',
+      shortId: 'w',
+      extensions: ['wolframalpha'],
+      layout: ['wolframalpha'],
+      positioning: [1],
+    },
+  },
+};
+
 export {
   defaultSettings,
+  otherSettings,
   Settings,
   Group,
   LiveGroup,

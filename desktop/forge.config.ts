@@ -79,6 +79,12 @@ const config: ForgeConfig = {
               js: './src/electron/preloads/wolframalpha.ts',
             },
           },
+          {
+            name: 'chatgpt_window',
+            preload: {
+              js: './src/electron/preloads/chatgpt.ts',
+            },
+          },
         ],
       },
     }),

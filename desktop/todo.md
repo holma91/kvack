@@ -1,6 +1,7 @@
 ## TODO
 
 - add wolfram alpha
+- add chatgpt
 
 STEPS:
 

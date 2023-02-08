@@ -47,6 +47,11 @@ const start = (): void => {
       ],
     })
   );
+  menu.append(
+    new MenuItem({
+      role: 'editMenu',
+    })
+  );
   Menu.setApplicationMenu(menu);
 
   ipcMain.on('setGroup', (e: any, groupId: string) => {

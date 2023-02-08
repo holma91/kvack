@@ -1,16 +1,17 @@
 import { useEffect, useRef, useState } from 'react';
 
 const defaultExtensions = ['google', 'google-duckduckgo', 'wolframalpha'];
-const otherExtensions = ['google', 'wolframalpha'];
+const otherExtensions = ['google', 'chatgpt'];
 const shortcuts: { [key: string]: string } = {
   google: 'g',
   'google-duckduckgo': 'gd',
   wolframalpha: 'w',
+  chatgpt: 'c',
 };
 
 export default function Search() {
   const [input, setInput] = useState('');
-  const [currentGroup, setCurrentGroup] = useState('wolframalpha');
+  const [currentGroup, setCurrentGroup] = useState('chatgpt');
 
   const handleInputChange = (e: any) => {
     setInput(e.target.value);
@@ -28,6 +29,8 @@ export default function Search() {
   const extensions = otherExtensions;
 
   useEffect(() => {
+    inputRef.current.focus();
+
     const listeners = [
       api.onNextTab(() => {
         const nextIndex = extensions.indexOf(currentGroup) + 1;

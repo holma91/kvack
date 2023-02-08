@@ -88,10 +88,17 @@ const wolframalpha: Extension = {
   preloadPath: 'wolframalpha_window',
 };
 
+const chatgpt: Extension = {
+  id: 'chatgpt',
+  entryUrl: 'https://chat.openai.com/',
+  preloadPath: 'chatgpt_window',
+};
+
 const extensionsById: { [key: string]: Extension } = {
   google,
   duckduckgo,
   wolframalpha,
+  chatgpt,
 };
 
 const defaultSettings: Settings = {
@@ -121,7 +128,7 @@ const otherSettings: Settings = {
   userId: 'holma91',
   windowWidth: 1450,
   windowHeight: 800,
-  downloadedExtensions: ['google', 'wolframalpha'],
+  downloadedExtensions: ['google', 'chatgpt'],
   groups: {
     google: {
       id: 'google',
@@ -130,11 +137,11 @@ const otherSettings: Settings = {
       layout: ['google'],
       positioning: [1],
     },
-    wolframalpha: {
-      id: 'wolframalpha',
-      shortId: 'w',
-      extensions: ['wolframalpha'],
-      layout: ['wolframalpha'],
+    chatgpt: {
+      id: 'chatgpt',
+      shortId: 'c',
+      extensions: ['chatgpt'],
+      layout: ['chatgpt'],
       positioning: [1],
     },
   },

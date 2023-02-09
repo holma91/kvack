@@ -112,7 +112,7 @@ const groups: { [key: string]: Group }[] = [
       shortId: 'g',
       extensionSettings: {
         google: {
-          inserts: { styles: false, ads: true, recommended: true },
+          inserts: { styles: true, ads: true, recommended: true },
         },
       },
       layout: ['google'],

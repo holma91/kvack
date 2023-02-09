@@ -1,28 +1,18 @@
 const { contextBridge, webFrame } = require('electron');
 import { ipcRenderer } from 'electron';
+import { settings } from '../../../utils/settings';
 import api from '../../api';
-import { getRelevantApi } from '../../utils/helper';
+import { getCSSInserts, getRelevantApi } from '../../utils/helper';
 
 const functionNames: string[] = [];
 const relevantApi = getRelevantApi(api, functionNames);
 
 contextBridge.exposeInMainWorld('api', relevantApi);
-
-const css = `
-  /* ad after question */
-  ._2Bem > a:first-child {
-    display: none;
-  }
-
-  /* sidebar ad after question */
-  ._2uru > a:first-child {
-    display: none;
-  }
-
-  body::-webkit-scrollbar {
-    display: none;
-  }
-`;
+const extensionId = 'wolframalpha';
+const selectedGroup = 'wolframalpha'; // need to get this from the main process somehow
+const config = settings.groups[selectedGroup].extensionSettings[extensionId];
+const css = getCSSInserts(extensionId, config);
+webFrame.insertCSS(css);
 
 webFrame.insertCSS(css);
 

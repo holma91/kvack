@@ -1,23 +1,18 @@
 const { contextBridge, webFrame } = require('electron');
 import { ipcRenderer } from 'electron';
+import { settings } from '../../../utils/settings';
 import api from '../../api';
-import { getRelevantApi } from '../../utils/helper';
+import { getCSSInserts, getRelevantApi } from '../../utils/helper';
 
 const functionNames: string[] = [];
 const relevantApi = getRelevantApi(api, functionNames);
 
 contextBridge.exposeInMainWorld('api', relevantApi);
 
-const css = `
-  .site-wrapper.js-site-wrapper {
-    background-color: #171717;
-  }
-  
-  body::-webkit-scrollbar {
-    display: none;
-  }
-`;
-
+const extensionId = 'duckduckgo';
+const selectedGroup = 'google-duckduckgo'; // need to get this from the main process somehow
+const config = settings.groups[selectedGroup].extensionSettings[extensionId];
+const css = getCSSInserts(extensionId, config);
 webFrame.insertCSS(css);
 
 window.addEventListener('DOMContentLoaded', () => {

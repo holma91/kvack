@@ -1,54 +1,17 @@
 const { contextBridge, webFrame } = require('electron');
 import { ipcRenderer } from 'electron';
+import { settings } from '../../../utils/settings';
 import api from '../../api';
-import { getRelevantApi } from '../../utils/helper';
+import { getCSSInserts, getRelevantApi } from '../../utils/helper';
 
 const functionNames: string[] = [];
 const relevantApi = getRelevantApi(api, functionNames);
 contextBridge.exposeInMainWorld('api', relevantApi);
 
-const css = `
-  /* header */
-  .sticky.top-0.z-10.flex.items-center.border-b.bg-gray-800.pl-1.pt-1.text-gray-200 {
-    background-color: #171717;
-  }
-  
-  /* main part */
-  .text-gray-800.w-full.px-6 {
-    background-color: #171717;
-  }
-  
-  /*  main sides ish */
-  .flex.flex-col.items-center.text-sm.h-full {
-    background-color: #171717;
-  }
-  
-  /* weird bottom of main part */
-  .w-full.h-32.flex-shrink-0 {
-    background-color: #171717;
-  }
-
-  /* bottom */
-  .absolute.bottom-0.left-0.w-full.border-t.bg-white {
-    background-color: #171717;
-  }
-  
-  /* text from user */
-  .w-full.border-b.text-gray-800.group {
-    background-color: #171717;
-    
-  }
-  
-  /* text from gpt */
-  .text-base.gap-4.m-auto.p-4.flex {
-    background-color: #171717;
-  }
-
-  body::-webkit-scrollbar {
-    display: none;
-  }
-`;
-
+const extensionId = 'chatgpt';
+const selectedGroup = 'google-chatgpt'; // need to get this from the main process somehow
+const config = settings.groups[selectedGroup].extensionSettings[extensionId];
+const css = getCSSInserts(extensionId, config);
 webFrame.insertCSS(css);
 
 window.addEventListener('DOMContentLoaded', () => {

@@ -1,7 +1,7 @@
 const { contextBridge, webFrame } = require('electron');
 import { ipcRenderer } from 'electron';
-import api from '../api';
-import { getRelevantApi } from '../utils/helper';
+import api from '../../api';
+import { getRelevantApi } from '../../utils/helper';
 
 const functionNames: string[] = [];
 const relevantApi = getRelevantApi(api, functionNames);
@@ -9,6 +9,8 @@ const relevantApi = getRelevantApi(api, functionNames);
 contextBridge.exposeInMainWorld('api', relevantApi);
 
 // get active user settings here
+// and url
+console.log(window.location);
 
 const css = `
   #main {
@@ -47,6 +49,7 @@ const css = `
   }
 `;
 
+// insert different stuff depending on the location
 webFrame.insertCSS(css);
 
 window.addEventListener('DOMContentLoaded', () => {

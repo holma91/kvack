@@ -1,6 +1,6 @@
 const { contextBridge, webFrame } = require('electron');
-import api from '../api';
-import { getRelevantApi } from '../utils/helper';
+import api from '../../api';
+import { getRelevantApi } from '../../utils/helper';
 
 const functionNames = [
   'changeSearchInput',

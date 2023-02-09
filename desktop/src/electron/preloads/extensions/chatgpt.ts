@@ -1,7 +1,7 @@
 const { contextBridge, webFrame } = require('electron');
 import { ipcRenderer } from 'electron';
-import api from '../api';
-import { getRelevantApi } from '../utils/helper';
+import api from '../../api';
+import { getRelevantApi } from '../../utils/helper';
 
 const functionNames: string[] = [];
 const relevantApi = getRelevantApi(api, functionNames);

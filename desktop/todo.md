@@ -1,9 +1,4 @@
-## TODO
-
-- add wolfram alpha
-- add chatgpt
-
-STEPS:
+STEPS when adding a integration:
 
 1. create extension and add to extensions map
 2. create a group including the extension
@@ -12,3 +7,8 @@ STEPS:
 5. create preload file
 6. add necessary things to Search.tsx
 7. study the html/css and add stuff to the preload (css and js)
+
+## TODO
+
+- rename shit
+- add extension preferences

@@ -58,31 +58,31 @@ const config: ForgeConfig = {
           {
             name: 'google_search_window',
             preload: {
-              js: './src/electron/preloads/googleSearch.ts',
+              js: './src/electron/preloads/extensions/googleSearch.ts',
             },
           },
           {
-            name: 'google_results_window',
+            name: 'google_window',
             preload: {
-              js: './src/electron/preloads/googleResults.ts',
+              js: './src/electron/preloads/extensions/google.ts',
             },
           },
           {
-            name: 'duckduckgo_results_window',
+            name: 'duckduckgo_window',
             preload: {
-              js: './src/electron/preloads/duckduckgoResults.ts',
+              js: './src/electron/preloads/extensions/duckduckgo.ts',
             },
           },
           {
             name: 'wolframalpha_window',
             preload: {
-              js: './src/electron/preloads/wolframalpha.ts',
+              js: './src/electron/preloads/extensions/wolframalpha.ts',
             },
           },
           {
             name: 'chatgpt_window',
             preload: {
-              js: './src/electron/preloads/chatgpt.ts',
+              js: './src/electron/preloads/extensions/chatgpt.ts',
             },
           },
         ],

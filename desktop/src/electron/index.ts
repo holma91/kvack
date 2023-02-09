@@ -55,8 +55,6 @@ const start = (): void => {
   Menu.setApplicationMenu(menu);
 
   ipcMain.on('setGroup', (e: any, groupId: string) => {
-    console.log('gid:', groupId);
-
     const liveGroup = mainProcess.groupMap[groupId];
     mainProcess.setGroup(liveGroup.group);
   });
@@ -75,15 +73,11 @@ const start = (): void => {
   ipcMain.on('searchInput', (e, input) => {
     const views = mainProcess.viewsByGroup[mainProcess.selectedGroup];
     for (const extendedView of views) {
-      console.log(extendedView);
-
       extendedView.view.webContents.send('searchInput', input);
     }
   });
 
   mainProcess.mainWindow.on('will-resize', function (_, newBounds, __) {
-    console.log('rs');
-
     const groupString = mainProcess.selectedGroup;
     const group = mainProcess.groupMap[groupString];
 

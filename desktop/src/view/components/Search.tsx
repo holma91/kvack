@@ -12,7 +12,7 @@ const shortcuts: { [key: string]: string } = {
 
 export default function Search() {
   const [input, setInput] = useState('');
-  const [currentGroup, setCurrentGroup] = useState('google-chatgpt');
+  const [currentGroup, setCurrentGroup] = useState('google-duckduckgo');
 
   const handleInputChange = (e: any) => {
     setInput(e.target.value);

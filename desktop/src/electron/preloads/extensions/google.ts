@@ -2,55 +2,72 @@ const { contextBridge, webFrame } = require('electron');
 import { ipcRenderer } from 'electron';
 import api from '../../api';
 import { getRelevantApi } from '../../utils/helper';
-
+import { settings } from '../../../utils/settings';
 const functionNames: string[] = [];
 const relevantApi = getRelevantApi(api, functionNames);
 
 contextBridge.exposeInMainWorld('api', relevantApi);
 
-// get active user settings here
-// and url
-console.log(window.location);
+const extensionId = 'google';
+const selectedGroup = 'google'; // need to get this from the main process somehow
+const config = settings.groups[selectedGroup].extensionSettings[extensionId];
 
-const css = `
-  #main {
-    background-color: #171717 !important;
-  }
+const inserts = {
+  styles: `
+    #main {
+      background-color: #171717 !important;
+    }
 
-  .V3FYCf {
-    background-color: #171717 !important;
-  }
-  
-  .kvH3mc.BToiNc.UK95Uc {
-    background-color: #171717 !important;
-  }
+    .V3FYCf {
+      background-color: #171717 !important;
+    }
+    
+    .kvH3mc.BToiNc.UK95Uc {
+      background-color: #171717 !important;
+    }
 
-  .GLI8Bc.UK95Uc {
-    background-color: #171717 !important;
-  }
-  
-  /* allt, bilder etc */
-  #pTwnEc {
-    background-color: #171717 !important;
-  }
+    .GLI8Bc.UK95Uc {
+      background-color: #171717 !important;
+    }
+    
+    /* allt, bilder etc */
+    #pTwnEc {
+      background-color: #171717 !important;
+    }
 
-  /* results */
-  #appbar {
-    background-color: #171717 !important;
-  }
-  
-  /* header ish */
-  .sfbg {
-    background-color: #171717 !important;
-  }
+    /* results */
+    #appbar {
+      background-color: #171717 !important;
+    }
+    
+    /* header ish */
+    .sfbg {
+      background-color: #171717 !important;
+    }
 
-  body::-webkit-scrollbar {
-    display: none;
-  }
-`;
+    body::-webkit-scrollbar {
+      display: none;
+    }
+  `,
+  ads: ``,
+  recommended: `
+    body::-webkit-scrollbar {
+      display: none;
+    }
+  `,
+};
 
-// insert different stuff depending on the location
-webFrame.insertCSS(css);
+// do different stuff depending on the config
+// todo: do different stuff depending on the url
+if (config.inserts.recommended) {
+  webFrame.insertCSS(inserts.recommended);
+}
+if (config.inserts.styles) {
+  webFrame.insertCSS(inserts.styles);
+}
+if (config.inserts.ads) {
+  webFrame.insertCSS(inserts.ads);
+}
 
 window.addEventListener('DOMContentLoaded', () => {
   const searchInput: any = document.querySelector('input[name="q"]');

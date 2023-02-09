@@ -17,7 +17,11 @@ type Extension = {
 type Group = {
   id: string;
   shortId: string;
-  extensions: string[];
+  extensionSettings: {
+    [key: string]: {
+      inserts: { styles: boolean; ads: boolean; recommended: boolean };
+    };
+  };
   layout: string[];
   positioning: number[];
 };
@@ -101,62 +105,84 @@ const extensionsById: { [key: string]: Extension } = {
   chatgpt,
 };
 
-const defaultSettings: Settings = {
-  userId: 'lapuerta',
-  windowWidth: 1450,
-  windowHeight: 800,
-  downloadedExtensions: ['google', 'duckduckgo'],
-  groups: {
+const groups: { [key: string]: Group }[] = [
+  {
     google: {
       id: 'google',
       shortId: 'g',
-      extensions: ['google'],
+      extensionSettings: {
+        google: {
+          inserts: { styles: false, ads: true, recommended: true },
+        },
+      },
       layout: ['google'],
       positioning: [1],
     },
     'google-duckduckgo': {
       id: 'google-duckduckgo',
       shortId: 'gd',
-      extensions: ['google', 'duckduckgo'],
+      extensionSettings: {
+        google: {
+          inserts: { styles: true, ads: true, recommended: true },
+        },
+        duckduckgo: {
+          inserts: { styles: true, ads: true, recommended: true },
+        },
+      },
       layout: ['google', 'vSeparator', 'duckduckgo'],
       positioning: [0.5, 0.5],
     },
   },
-};
-
-const otherSettings: Settings = {
-  userId: 'holma91',
-  windowWidth: 1450,
-  windowHeight: 800,
-  downloadedExtensions: ['google', 'chatgpt'],
-  groups: {
+  {
     google: {
       id: 'google',
       shortId: 'g',
-      extensions: ['google'],
+      extensionSettings: {
+        google: {
+          inserts: { styles: true, ads: true, recommended: true },
+        },
+      },
       layout: ['google'],
       positioning: [1],
     },
     chatgpt: {
       id: 'chatgpt',
       shortId: 'c',
-      extensions: ['chatgpt'],
+      extensionSettings: {
+        chatgpt: {
+          inserts: { styles: true, ads: true, recommended: true },
+        },
+      },
       layout: ['chatgpt'],
       positioning: [1],
     },
     'google-chatgpt': {
       id: 'google-chatgpt',
       shortId: 'gc',
-      extensions: ['google', 'chatgpt'],
+      extensionSettings: {
+        google: {
+          inserts: { styles: true, ads: true, recommended: true },
+        },
+        chatgpt: {
+          inserts: { styles: true, ads: true, recommended: true },
+        },
+      },
       layout: ['google', 'vSeparator', 'chatgpt'],
       positioning: [0.5, 0.5],
     },
   },
+];
+
+const settings: Settings = {
+  userId: 'lapuerta',
+  windowWidth: 1450,
+  windowHeight: 800,
+  downloadedExtensions: ['google', 'duckduckgo', 'chatgpt'],
+  groups: groups[0],
 };
 
 export {
-  defaultSettings,
-  otherSettings,
+  settings,
   Settings,
   Group,
   LiveGroup,

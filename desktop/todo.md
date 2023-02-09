@@ -10,5 +10,5 @@ STEPS when adding a integration:
 
 ## TODO
 
-- rename shit
-- add extension preferences
+- add extension insert preferences
+  - theme, ads

@@ -7,7 +7,7 @@ import {
   globalShortcut,
 } from 'electron';
 import MainProcess from './MainProcess';
-import { defaultSettings, otherSettings } from '../utils/settings';
+import { settings } from '../utils/settings';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -15,7 +15,6 @@ if (require('electron-squirrel-startup')) {
 }
 
 const start = (): void => {
-  const settings = defaultSettings;
   const mainProcess = new MainProcess(settings);
 
   // read the settings, load up all the groups

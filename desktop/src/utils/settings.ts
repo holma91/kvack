@@ -30,6 +30,7 @@ type LiveGroup = {
   group: Group;
   loadedWidth: number;
   loadedHeight: number;
+  loadedSidebarToggleCount: number;
   vSeparators: VSeparatorView[];
   hSeparators: HSeparatorView[];
   pages: PageView[];

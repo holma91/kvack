@@ -48,6 +48,7 @@ class MainProcess {
   groupMap: { [key: string]: LiveGroup } = {};
   viewsByGroup: { [key: string]: SomeView[] } = {}; // because we need to know the order when resizing
   showSidebar: boolean = true;
+  sidebarToggleCount = 0;
 
   constructor(settings: Settings) {
     let window = new BrowserWindow({
@@ -74,6 +75,7 @@ class MainProcess {
       group: group,
       loadedWidth: 0,
       loadedHeight: 0,
+      loadedSidebarToggleCount: this.sidebarToggleCount,
       vSeparators: [],
       hSeparators: [],
       pages: [],
@@ -191,10 +193,9 @@ class MainProcess {
       }
 
       const computedSidebarWidth = this.showSidebar ? SIDEBAR_SIZE : 0;
-      const appOffsetX = SIDEBAR_SIZE;
+      const appOffsetX = computedSidebarWidth;
       const appSpaceX = width - appOffsetX;
       let leftOffsetAbsolute = appSpaceX * vSeparatorView.leftOffset;
-      // let leftOffsetAbsolute = width * vSeparatorView.leftOffset;
 
       vSeparatorOffsets[i] = leftOffsetAbsolute;
 
@@ -240,7 +241,8 @@ class MainProcess {
       // check for "loaded sidebar preference here"
       if (
         width !== liveGroup.loadedWidth ||
-        height !== liveGroup.loadedHeight
+        height !== liveGroup.loadedHeight ||
+        this.sidebarToggleCount !== liveGroup.loadedSidebarToggleCount
       ) {
         // will get here if window size has changed but the group was loaded earlier
         if (
@@ -253,7 +255,11 @@ class MainProcess {
       }
     }
 
-    if (width !== liveGroup.loadedWidth || height !== liveGroup.loadedHeight) {
+    if (
+      width !== liveGroup.loadedWidth ||
+      height !== liveGroup.loadedHeight ||
+      this.sidebarToggleCount !== liveGroup.loadedSidebarToggleCount
+    ) {
       for (let i = 0; i < liveGroup.vSeparators.length; i++) {
         let processId = liveGroup.vSeparators[i].processId;
         this.resizeVerticalSplitScreenFromWindowChange(group.id, processId);
@@ -267,6 +273,7 @@ class MainProcess {
 
     liveGroup.loadedHeight = height;
     liveGroup.loadedWidth = width;
+    liveGroup.loadedSidebarToggleCount = this.sidebarToggleCount;
     this.selectedGroup = group.id;
   }
 

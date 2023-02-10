@@ -55,8 +55,8 @@ const start = (): void => {
           accelerator: 'Cmd+B',
           click: () => {
             console.log('ayo');
+            mainProcess.sidebarToggleCount += 1;
             mainProcess.showSidebar = !mainProcess.showSidebar;
-            const groupString = mainProcess.selectedGroup;
             // const views = mainProcess.viewsByGroup[groupString];
             // should go through all views, not just current group's views
             for (let views of Object.values(mainProcess.viewsByGroup)) {

@@ -9,11 +9,11 @@ import {
   HSeparatorView,
   SomeView,
 } from '../utils/settings';
-
-// const HEADER_SIZE = 76;
-const HEADER_SIZE = 94;
-const SIDEBAR_SIZE = 100;
-const VSEPARATOR_WIDTH_RELATIVE = 0.002;
+import {
+  HEADER_SIZE,
+  SIDEBAR_SIZE,
+  VSEPARATOR_WIDTH_RELATIVE,
+} from '../constants';
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string; // http://localhost:3000/main_window
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string; // /Users/lapuerta/dev/kvack/desktop/.webpack/renderer/main_window/preload.js
@@ -65,7 +65,6 @@ class MainProcess {
 
     window.loadURL(SEARCH_WINDOW_WEBPACK_ENTRY);
     this.mainWindow = window;
-    // this.groupSettings = ?
   }
 
   createGroup(group: Group) {
@@ -190,7 +189,10 @@ class MainProcess {
         this.mainWindow.addBrowserView(vSeparatorView.view);
       }
 
-      let leftOffsetAbsolute = width * vSeparatorView.leftOffset;
+      const appOffsetX = SIDEBAR_SIZE;
+      const appSpaceX = width - appOffsetX;
+      let leftOffsetAbsolute = appSpaceX * vSeparatorView.leftOffset;
+      // let leftOffsetAbsolute = width * vSeparatorView.leftOffset;
 
       vSeparatorOffsets[i] = leftOffsetAbsolute;
 
@@ -320,7 +322,7 @@ class MainProcess {
     groupId: string,
     processId: number
   ) {
-    const [width, _] = this.mainWindow.getSize();
+    let [width, _] = this.mainWindow.getSize();
 
     let views = this.viewsByGroup[groupId];
 
@@ -335,6 +337,10 @@ class MainProcess {
     let vSeparator = views[index] as VSeparatorView;
     let leftView = views[index - 1] as PageView;
     let rightView = views[index + 1] as PageView;
+
+    const appOffsetX = SIDEBAR_SIZE;
+    const appSpaceX = width - appOffsetX;
+    width = appSpaceX;
 
     const w1 = leftOffset;
     const w2 = width - leftOffset;

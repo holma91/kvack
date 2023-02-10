@@ -7,6 +7,11 @@ import {
   globalShortcut,
 } from 'electron';
 import MainProcess from './MainProcess';
+import {
+  HEADER_SIZE,
+  SIDEBAR_SIZE,
+  VSEPARATOR_WIDTH_RELATIVE,
+} from '../constants';
 import { settings } from '../utils/settings';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -83,9 +88,11 @@ const start = (): void => {
   mainProcess.mainWindow.on('will-resize', function (_, newBounds, __) {
     const groupString = mainProcess.selectedGroup;
     const group = mainProcess.groupMap[groupString];
+    const appOffsetX = SIDEBAR_SIZE;
+    const appSpaceX = newBounds.width - appOffsetX;
 
     group.vSeparators.forEach((vSeparatorView) => {
-      const leftOffsetAbsolute = newBounds.width * vSeparatorView.leftOffset;
+      const leftOffsetAbsolute = appSpaceX * vSeparatorView.leftOffset;
       vSeparatorView.view.webContents.send('windowResize', leftOffsetAbsolute);
 
       let processId = vSeparatorView.view.webContents.getProcessId();

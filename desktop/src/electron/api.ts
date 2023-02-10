@@ -14,6 +14,18 @@ const api: { [key: string]: any } = {
       ipcRenderer.removeAllListeners('previousTab');
     };
   },
+  onShowSidebar: (callback: any) => {
+    ipcRenderer.on('showSidebar', callback);
+    return () => {
+      ipcRenderer.removeAllListeners('showSidebar');
+    };
+  },
+  onHideSidebar: (callback: any) => {
+    ipcRenderer.on('hideSidebar', callback);
+    return () => {
+      ipcRenderer.removeAllListeners('hideSidebar');
+    };
+  },
   setGroup: (groupId: string) => ipcRenderer.send('setGroup', groupId),
   resizeBar: (minMax: any) => ipcRenderer.send('resize-bar', minMax),
   onWindowResize: (callback: any) => {

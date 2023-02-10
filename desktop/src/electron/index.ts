@@ -54,7 +54,12 @@ const start = (): void => {
           label: 'Show/Hide Sidebar',
           accelerator: 'Cmd+B',
           click: () => {
-            console.log('ayo');
+            if (mainProcess.showSidebar) {
+              mainProcess.mainWindow.webContents.send('hideSidebar');
+            } else {
+              mainProcess.mainWindow.webContents.send('showSidebar');
+            }
+
             mainProcess.sidebarToggleCount += 1;
             mainProcess.showSidebar = !mainProcess.showSidebar;
             // const views = mainProcess.viewsByGroup[groupString];

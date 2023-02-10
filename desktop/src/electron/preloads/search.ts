@@ -6,6 +6,8 @@ const functionNames = [
   'changeSearchInput',
   'onNextTab',
   'onPreviousTab',
+  'onShowSidebar',
+  'onHideSidebar',
   'setGroup',
 ];
 const relevantApi = getRelevantApi(api, functionNames);

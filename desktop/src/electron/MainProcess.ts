@@ -56,7 +56,7 @@ class MainProcess {
       y: 75,
       // frame: false, // use -webkit-app-region: drag;
       title: 'kvack',
-      type: 'panel',
+      // type: 'panel',
       webPreferences: {
         preload:
           '/Users/lapuerta/dev/kvack/desktop/.webpack/renderer/main_window/preload.js',

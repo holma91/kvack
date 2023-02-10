@@ -5,7 +5,9 @@ import {
   Menu,
   MenuItem,
   globalShortcut,
+  session,
 } from 'electron';
+import path from 'path';
 import MainProcess from './MainProcess';
 import {
   HEADER_SIZE,

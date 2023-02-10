@@ -14,7 +14,7 @@ import {
   SIDEBAR_SIZE,
   VSEPARATOR_WIDTH_RELATIVE,
 } from '../constants';
-import { settings } from '../utils/settings';
+import { settings, VSeparatorView } from '../utils/settings';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -22,10 +22,6 @@ if (require('electron-squirrel-startup')) {
 }
 
 const start = (): void => {
-  globalShortcut.register('Alt+CommandOrControl+K', () => {
-    console.log('Electron loves global shortcuts!');
-  });
-
   const mainProcess = new MainProcess(settings);
 
   // read the settings, load up all the groups
@@ -52,6 +48,38 @@ const start = (): void => {
           accelerator: 'Ctrl+Shift+Tab',
           click: () => {
             mainProcess.mainWindow.webContents.send('previousTab');
+          },
+        },
+        {
+          label: 'Show/Hide Sidebar',
+          accelerator: 'Cmd+B',
+          click: () => {
+            console.log('ayo');
+            mainProcess.showSidebar = !mainProcess.showSidebar;
+            const groupString = mainProcess.selectedGroup;
+            // const views = mainProcess.viewsByGroup[groupString];
+            // should go through all views, not just current group's views
+            for (let views of Object.values(mainProcess.viewsByGroup)) {
+              for (let view of views) {
+                console.log(view);
+                mainProcess.setBounds(view);
+                if (view.id === 'vSeparator') {
+                  const separatorView = view as VSeparatorView;
+                  const [width, _] = mainProcess.mainWindow.getSize();
+                  const computedSidebarWidth = mainProcess.showSidebar
+                    ? SIDEBAR_SIZE
+                    : 0;
+                  const appOffsetX = computedSidebarWidth;
+                  const appSpaceX = width - appOffsetX;
+                  const leftOffsetAbsolute =
+                    appSpaceX * separatorView.leftOffset;
+                  separatorView.view.webContents.send(
+                    'windowResize',
+                    leftOffsetAbsolute
+                  );
+                }
+              }
+            }
           },
         },
       ],
@@ -90,7 +118,8 @@ const start = (): void => {
   mainProcess.mainWindow.on('will-resize', function (_, newBounds, __) {
     const groupString = mainProcess.selectedGroup;
     const group = mainProcess.groupMap[groupString];
-    const appOffsetX = SIDEBAR_SIZE;
+    const computedSidebarWidth = mainProcess.showSidebar ? SIDEBAR_SIZE : 0;
+    const appOffsetX = computedSidebarWidth;
     const appSpaceX = newBounds.width - appOffsetX;
 
     group.vSeparators.forEach((vSeparatorView) => {
@@ -110,12 +139,10 @@ const start = (): void => {
   });
 
   globalShortcut.register('Esc', () => {
-    console.log('escetit!');
     mainProcess.mainWindow.hide();
   });
 
   globalShortcut.register('Cmd+M', () => {
-    console.log('show!');
     if (mainProcess.mainWindow.isFocused()) {
       mainProcess.mainWindow.hide();
     } else {

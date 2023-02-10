@@ -47,13 +47,14 @@ class MainProcess {
   selectedGroup: string = '';
   groupMap: { [key: string]: LiveGroup } = {};
   viewsByGroup: { [key: string]: SomeView[] } = {}; // because we need to know the order when resizing
+  showSidebar: boolean = true;
 
   constructor(settings: Settings) {
     let window = new BrowserWindow({
       height: settings.windowHeight,
       width: settings.windowWidth,
-      x: 30,
-      y: 75,
+      // x: 30,
+      // y: 75,
       // frame: false, // use -webkit-app-region: drag;
       title: 'kvack',
       // type: 'panel',
@@ -189,6 +190,7 @@ class MainProcess {
         this.mainWindow.addBrowserView(vSeparatorView.view);
       }
 
+      const computedSidebarWidth = this.showSidebar ? SIDEBAR_SIZE : 0;
       const appOffsetX = SIDEBAR_SIZE;
       const appSpaceX = width - appOffsetX;
       let leftOffsetAbsolute = appSpaceX * vSeparatorView.leftOffset;
@@ -235,6 +237,7 @@ class MainProcess {
         this.setBounds(pageView);
       }
 
+      // check for "loaded sidebar preference here"
       if (
         width !== liveGroup.loadedWidth ||
         height !== liveGroup.loadedHeight
@@ -272,10 +275,12 @@ class MainProcess {
     const [_, contentHeight] = this.mainWindow.getContentSize();
     const topFrame = height - contentHeight;
 
+    const computedSidebarWidth = this.showSidebar ? SIDEBAR_SIZE : 0;
+
     const appOffsetY = HEADER_SIZE + topFrame;
     const appSpaceY = height - appOffsetY;
 
-    const appOffsetX = SIDEBAR_SIZE;
+    const appOffsetX = computedSidebarWidth;
     const appSpaceX = width - appOffsetX;
 
     // bounds values MUST be positive integers
@@ -338,7 +343,8 @@ class MainProcess {
     let leftView = views[index - 1] as PageView;
     let rightView = views[index + 1] as PageView;
 
-    const appOffsetX = SIDEBAR_SIZE;
+    const computedSidebarWidth = this.showSidebar ? SIDEBAR_SIZE : 0;
+    const appOffsetX = computedSidebarWidth;
     const appSpaceX = width - appOffsetX;
     width = appSpaceX;
 

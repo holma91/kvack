@@ -15,6 +15,10 @@ if (require('electron-squirrel-startup')) {
 }
 
 const start = (): void => {
+  globalShortcut.register('Alt+CommandOrControl+K', () => {
+    console.log('Electron loves global shortcuts!');
+  });
+
   const mainProcess = new MainProcess(settings);
 
   // read the settings, load up all the groups
@@ -95,15 +99,26 @@ const start = (): void => {
   mainProcess.mainWindow.on('enter-full-screen', function () {
     console.log('fs');
   });
+
+  globalShortcut.register('Esc', () => {
+    console.log('escetit!');
+    mainProcess.mainWindow.hide();
+  });
+
+  globalShortcut.register('Cmd+M', () => {
+    console.log('show!');
+    if (mainProcess.mainWindow.isFocused()) {
+      mainProcess.mainWindow.hide();
+    } else {
+      mainProcess.mainWindow.show();
+    }
+  });
 };
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
-  globalShortcut.register('Alt+CommandOrControl+K', () => {
-    console.log('Electron loves global shortcuts!');
-  });
   start();
 });
 

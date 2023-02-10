@@ -12,7 +12,7 @@ import {
 
 // const HEADER_SIZE = 76;
 const HEADER_SIZE = 94;
-const SIDEBAR_SIZE = 0;
+const SIDEBAR_SIZE = 100;
 const VSEPARATOR_WIDTH_RELATIVE = 0.002;
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string; // http://localhost:3000/main_window
@@ -52,9 +52,11 @@ class MainProcess {
     let window = new BrowserWindow({
       height: settings.windowHeight,
       width: settings.windowWidth,
-      frame: true,
+      x: 30,
+      y: 75,
+      // frame: false, // use -webkit-app-region: drag;
       title: 'kvack',
-      // type: 'panel',
+      type: 'panel',
       webPreferences: {
         preload:
           '/Users/lapuerta/dev/kvack/desktop/.webpack/renderer/main_window/preload.js',
@@ -158,7 +160,7 @@ class MainProcess {
           processId: view.webContents.getProcessId(),
           view,
         };
-        view.webContents.openDevTools();
+        // view.webContents.openDevTools();
         this.viewsByGroup[group.id].push(liveGroup.pages[pageCount]);
         pageCount++;
       }
@@ -271,11 +273,15 @@ class MainProcess {
     const appOffsetY = HEADER_SIZE + topFrame;
     const appSpaceY = height - appOffsetY;
 
+    const appOffsetX = SIDEBAR_SIZE;
+    const appSpaceX = width - appOffsetX;
+
     // bounds values MUST be positive integers
     let bounds = {
-      x: Math.round(width * extendedView.x),
+      // x: Math.round(width * extendedView.x),
+      x: Math.round(appOffsetX + appSpaceX * extendedView.x),
       y: Math.round(appOffsetY + appSpaceY * extendedView.y),
-      width: Math.round(width * extendedView.width),
+      width: Math.round(appSpaceX * extendedView.width),
       height: Math.round(appSpaceY * extendedView.height),
     };
 

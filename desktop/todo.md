@@ -12,3 +12,7 @@ STEPS when adding a integration:
 
 - add extension insert preferences
   - theme, ads
+
+## how screen is shown
+
+type: panel -> decent

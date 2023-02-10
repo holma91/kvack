@@ -91,6 +91,17 @@ export const cssInserts: {
       .text-base.gap-4.m-auto.p-4.flex {
         background-color: #171717;
       }
+      
+      /* where no text is yet */
+      .w-full.h-32.flex-shrink-0,
+      .react-scroll-to-bottom--css-daeix-1n7m0yu,
+      .react-scroll-to-bottom--css-zvats-1n7m0yu {
+        background-color: #171717;
+      }
+      
+      .flex-1.overflow-hidden * {
+        background-color: #171717;
+      }
     `,
     ads: ``,
     recommended: `

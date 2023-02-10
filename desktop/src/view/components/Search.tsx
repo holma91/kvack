@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { searchqueries } from '../utils/searchqueries';
-const defaultExtensions = ['google', 'google-duckduckgo'];
+const defaultExtensions = ['google', 'google-duckduckgo', 'google-chatgpt'];
 const otherExtensions = ['google', 'chatgpt', 'google-chatgpt'];
 const shortcuts: { [key: string]: string } = {
   google: 'g',
@@ -21,11 +21,12 @@ const groupToImages: { [key: string]: string[] } = {
   google: [groupToImage['g']],
   'google-duckduckgo': [groupToImage['g'], groupToImage['d']],
   chatgpt: [groupToImage['c']],
+  'google-chatgpt': [groupToImage['g'], groupToImage['c']],
 };
 
 export default function Search() {
   const [input, setInput] = useState('');
-  const [currentGroup, setCurrentGroup] = useState('google-duckduckgo');
+  const [currentGroup, setCurrentGroup] = useState('google-chatgpt');
   const [showSidebar, setShowSidebar] = useState(true);
 
   const handleInputChange = (e: any) => {

@@ -162,7 +162,9 @@ class MainProcess {
           processId: view.webContents.getProcessId(),
           view,
         };
-        // view.webContents.openDevTools();
+        if (group.layout[i] === 'chatgpt') {
+          view.webContents.openDevTools();
+        }
         this.viewsByGroup[group.id].push(liveGroup.pages[pageCount]);
         pageCount++;
       }

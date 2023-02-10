@@ -133,6 +133,20 @@ const groups: { [key: string]: Group }[] = [
       layout: ['google', 'vSeparator', 'duckduckgo'],
       positioning: [0.5, 0.5],
     },
+    'google-chatgpt': {
+      id: 'google-chatgpt',
+      shortId: 'gc',
+      extensionSettings: {
+        google: {
+          inserts: { styles: true, ads: true, recommended: true },
+        },
+        chatgpt: {
+          inserts: { styles: true, ads: true, recommended: true },
+        },
+      },
+      layout: ['google', 'vSeparator', 'chatgpt'],
+      positioning: [0.5, 0.5],
+    },
   },
   {
     google: {

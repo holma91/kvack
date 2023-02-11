@@ -121,6 +121,11 @@ const start = (): void => {
   });
 
   ipcMain.on('searchInput', (e, input) => {
+    // selectedGroup should just be the latest typed bang?
+    // always check the bangs
+    // assert that the currently viewed group is the group specified by the bangs
+    // find group by bangs
+    // send input to the views in the group
     const views = mainProcess.viewsByGroup[mainProcess.selectedGroup];
     for (const extendedView of views) {
       extendedView.view.webContents.send('searchInput', input);
@@ -149,10 +154,6 @@ const start = (): void => {
   mainProcess.mainWindow.on('enter-full-screen', function () {
     console.log('fs');
   });
-
-  // globalShortcut.register('Esc', () => {
-  //   mainProcess.mainWindow.hide();
-  // });
 
   globalShortcut.register('Cmd+M', () => {
     if (mainProcess.mainWindow.isFocused()) {

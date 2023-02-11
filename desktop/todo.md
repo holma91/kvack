@@ -10,9 +10,18 @@ STEPS when adding a integration:
 
 ## TODO
 
-- add extension insert preferences
-  - theme, ads
+Create bang support.
 
-## how screen is shown
+from user POV:
 
-type: panel -> decent
+- cmd+m to show app
+- !g to get google
+  - fe sends !g to main who saves it
+  - main change group to the one specified by the bang
+- "how to do x" in google search
+  - fe sends "how to do x" to main
+  - main has saved !g, and know that it's a google search
+
+## Bug lists
+
+- when focus is not on mainWindow and tabbing, the focus doesn't land on the input bar in the new tab

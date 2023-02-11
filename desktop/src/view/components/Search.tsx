@@ -116,7 +116,9 @@ export default function Search() {
           </div>
         </div>
       )}
-      <div className="p-4  flex h-screen flex-1 ">
+      <div
+        className={'p-4  flex h-screen flex-1 ' + (showSidebar ? 'pl-0' : '')}
+      >
         <div className="w-full">
           <div className="relative mt-1 flex items-center w-full ">
             <input

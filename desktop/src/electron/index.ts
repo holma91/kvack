@@ -87,6 +87,13 @@ const start = (): void => {
             }
           },
         },
+        {
+          label: 'Hide App',
+          accelerator: 'Esc',
+          click: () => {
+            mainProcess.mainWindow.hide();
+          },
+        },
       ],
     })
   );
@@ -143,9 +150,9 @@ const start = (): void => {
     console.log('fs');
   });
 
-  globalShortcut.register('Esc', () => {
-    mainProcess.mainWindow.hide();
-  });
+  // globalShortcut.register('Esc', () => {
+  //   mainProcess.mainWindow.hide();
+  // });
 
   globalShortcut.register('Cmd+M', () => {
     if (mainProcess.mainWindow.isFocused()) {

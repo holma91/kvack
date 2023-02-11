@@ -113,7 +113,7 @@ const groups: { [key: string]: Group }[] = [
       shortId: 'g',
       extensionSettings: {
         google: {
-          inserts: { styles: true, ads: true, recommended: true },
+          inserts: { styles: false, ads: true, recommended: true },
         },
       },
       layout: ['google'],
@@ -124,10 +124,10 @@ const groups: { [key: string]: Group }[] = [
       shortId: 'gd',
       extensionSettings: {
         google: {
-          inserts: { styles: true, ads: true, recommended: true },
+          inserts: { styles: false, ads: true, recommended: true },
         },
         duckduckgo: {
-          inserts: { styles: true, ads: true, recommended: true },
+          inserts: { styles: false, ads: true, recommended: true },
         },
       },
       layout: ['google', 'vSeparator', 'duckduckgo'],
@@ -138,10 +138,10 @@ const groups: { [key: string]: Group }[] = [
       shortId: 'gc',
       extensionSettings: {
         google: {
-          inserts: { styles: true, ads: true, recommended: true },
+          inserts: { styles: false, ads: true, recommended: true },
         },
         chatgpt: {
-          inserts: { styles: true, ads: true, recommended: true },
+          inserts: { styles: false, ads: true, recommended: true },
         },
       },
       layout: ['google', 'vSeparator', 'chatgpt'],

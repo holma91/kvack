@@ -27,7 +27,7 @@ const groupToImages: { [key: string]: string[] } = {
 export default function Search() {
   const [input, setInput] = useState('');
   const [currentGroup, setCurrentGroup] = useState('google-chatgpt');
-  const [showSidebar, setShowSidebar] = useState(true);
+  const [showSidebar, setShowSidebar] = useState(false);
 
   const handleInputChange = (e: any) => {
     setInput(e.target.value);

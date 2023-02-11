@@ -47,7 +47,7 @@ class MainProcess {
   selectedGroup: string = '';
   groupMap: { [key: string]: LiveGroup } = {};
   viewsByGroup: { [key: string]: SomeView[] } = {}; // because we need to know the order when resizing
-  showSidebar: boolean = true;
+  showSidebar: boolean = false;
   sidebarToggleCount = 0;
 
   constructor(settings: Settings) {
@@ -163,7 +163,7 @@ class MainProcess {
           view,
         };
         if (group.layout[i] === 'chatgpt') {
-          view.webContents.openDevTools();
+          // view.webContents.openDevTools();
         }
         this.viewsByGroup[group.id].push(liveGroup.pages[pageCount]);
         pageCount++;

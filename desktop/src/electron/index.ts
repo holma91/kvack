@@ -37,15 +37,26 @@ const start = (): void => {
       label: 'Tab',
       submenu: [
         {
+          label: 'Next Group',
+          accelerator: 'Ctrl+S',
+          click: () => {
+            mainProcess.mainWindow.webContents.send('nextGroup');
+          },
+        },
+        {
           label: 'Select Next Tab',
           accelerator: 'Ctrl+Tab',
           click: () => {
             let group = mainProcess.groupMap[mainProcess.selectedGroup];
+            if (group.tabs.length === 1) return;
             group.selectedTab = (group.selectedTab + 1) % group.tabs.length;
             let nextTab = group.tabs[group.selectedTab];
             mainProcess.setTab(nextTab);
 
-            // mainProcess.mainWindow.webContents.send('nextTab');
+            mainProcess.mainWindow.webContents.send(
+              'nextTab',
+              group.selectedTab
+            );
           },
         },
         {

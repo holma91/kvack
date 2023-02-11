@@ -2,6 +2,12 @@ import { ipcRenderer } from 'electron';
 
 const api: { [key: string]: any } = {
   changeSearchInput: (input: string) => ipcRenderer.send('searchInput', input),
+  onNextGroup: (callback: any) => {
+    ipcRenderer.on('nextGroup', callback);
+    return () => {
+      ipcRenderer.removeAllListeners('nextGroup');
+    };
+  },
   onNextTab: (callback: any) => {
     ipcRenderer.on('nextTab', callback);
     return () => {

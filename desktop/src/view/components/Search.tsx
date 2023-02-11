@@ -24,9 +24,17 @@ const groupToImages: { [key: string]: string[] } = {
   'google-chatgpt': [groupToImage['g'], groupToImage['c']],
 };
 
+const groupToHaveTabs: { [key: string]: boolean } = {
+  google: false,
+  'google-duckduckgo': true,
+  chatgpt: false,
+  'google-chatgpt': false,
+};
+
 export default function Search() {
   const [input, setInput] = useState('');
-  const [currentGroup, setCurrentGroup] = useState('google-chatgpt');
+  const [currentGroup, setCurrentGroup] = useState('google-duckduckgo');
+  const [currentTab, setCurrentTab] = useState(1);
   const [showSidebar, setShowSidebar] = useState(false);
 
   const handleInputChange = (e: any) => {
@@ -48,7 +56,11 @@ export default function Search() {
     inputRef.current.focus();
 
     const listeners = [
-      api.onNextTab(() => {
+      api.onNextTab((_: any, newSelectedTab: number) => {
+        // alert(newSelectedTab);
+        setCurrentTab(newSelectedTab);
+      }),
+      api.onNextGroup(() => {
         const nextIndex = extensions.indexOf(currentGroup) + 1;
         let nextGroup =
           extensions[nextIndex >= extensions.length ? 0 : nextIndex];
@@ -136,12 +148,15 @@ export default function Search() {
                 ⌘K
               </kbd>
               <div className="flex items-center gap-2 border-l-2 border-neutral-700 mr-2 p-1 pl-4">
-                {groupToImages[currentGroup].map((image) => {
+                {groupToImages[currentGroup].map((image, i) => {
                   let style = '';
                   if (image === '/assets/images/ddg.png') {
                     style = 'w-[30px] h-[30px]';
                   } else {
                     style = 'w-[22px] h-[22px]';
+                  }
+                  if (i !== currentTab && groupToHaveTabs[currentGroup]) {
+                    style += ' grayscale';
                   }
                   return <img src={image} className={style}></img>;
                 })}

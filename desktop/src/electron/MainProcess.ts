@@ -183,7 +183,6 @@ class MainProcess {
         }
       }
     }
-    console.log(`${liveGroup.group.id} tabs:`, liveGroup.tabs);
 
     this.groupMap[group.id] = liveGroup;
   }
@@ -193,7 +192,6 @@ class MainProcess {
       if (views[i].id === 'vSeparator') {
       } else if (views[i].id === 'hSeparator') {
       } else {
-        console.log('setting this view:', views[i]);
         this.mainWindow.setBrowserView(views[i].view);
         const extension = extensionsById[views[i].id];
         if (!views[i].loadedInitialURL) {

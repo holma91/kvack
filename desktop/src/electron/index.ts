@@ -38,9 +38,16 @@ const start = (): void => {
       submenu: [
         {
           label: 'Next Group',
-          accelerator: 'Ctrl+S',
+          accelerator: 'CmdOrCtrl+]',
           click: () => {
             mainProcess.mainWindow.webContents.send('nextGroup');
+          },
+        },
+        {
+          label: 'Previous Group',
+          accelerator: 'CmdOrCtrl+[',
+          click: () => {
+            mainProcess.mainWindow.webContents.send('previousGroup');
           },
         },
         {
@@ -63,14 +70,25 @@ const start = (): void => {
           label: 'Select Previous Tab',
           accelerator: 'Ctrl+Shift+Tab',
           click: () => {
-            // mainProcess.mainWindow.webContents.send('previousTab');
-            // tabbing should be between the tabs in liveGroup
-            // mainProcess.setGroup
+            let group = mainProcess.groupMap[mainProcess.selectedGroup];
+            if (group.tabs.length === 1) return;
+            group.selectedTab =
+              group.selectedTab < 1
+                ? group.tabs.length - 1
+                : group.selectedTab - 1;
+
+            let previousTab = group.tabs[group.selectedTab];
+            mainProcess.setTab(previousTab);
+
+            mainProcess.mainWindow.webContents.send(
+              'previousTab',
+              group.selectedTab
+            );
           },
         },
         {
           label: 'Show/Hide Sidebar',
-          accelerator: 'Cmd+B',
+          accelerator: 'CmdOrCtrl+B',
           click: () => {
             if (mainProcess.showSidebar) {
               mainProcess.mainWindow.webContents.send('hideSidebar');
@@ -143,6 +161,7 @@ const start = (): void => {
     // assert that the currently viewed group is the group specified by the bangs
     // find group by bangs
     // send input to the views in the group
+    // mainProcess.mainWindow.webContents.send('nextGroup');
     const views = mainProcess.viewsByGroup[mainProcess.selectedGroup];
     for (const extendedView of views) {
       extendedView.view.webContents.send('searchInput', input);

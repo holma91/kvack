@@ -8,6 +8,12 @@ const api: { [key: string]: any } = {
       ipcRenderer.removeAllListeners('nextGroup');
     };
   },
+  onPreviousGroup: (callback: any) => {
+    ipcRenderer.on('previousGroup', callback);
+    return () => {
+      ipcRenderer.removeAllListeners('previousGroup');
+    };
+  },
   onNextTab: (callback: any) => {
     ipcRenderer.on('nextTab', callback);
     return () => {

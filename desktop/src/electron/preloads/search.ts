@@ -5,6 +5,7 @@ import { getRelevantApi } from '../utils/helper';
 const functionNames = [
   'changeSearchInput',
   'onNextGroup',
+  'onPreviousGroup',
   'onPreviousTab',
   'onShowSidebar',
   'onHideSidebar',

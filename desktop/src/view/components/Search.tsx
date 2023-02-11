@@ -56,10 +56,6 @@ export default function Search() {
     inputRef.current.focus();
 
     const listeners = [
-      api.onNextTab((_: any, newSelectedTab: number) => {
-        // alert(newSelectedTab);
-        setCurrentTab(newSelectedTab);
-      }),
       api.onNextGroup(() => {
         const nextIndex = extensions.indexOf(currentGroup) + 1;
         let nextGroup =
@@ -68,14 +64,27 @@ export default function Search() {
         setCurrentGroup(nextGroup);
         inputRef.current.focus();
       }),
-      api.onPreviousTab(() => {
+      api.onPreviousGroup(() => {
         const nextIndex = extensions.indexOf(currentGroup) - 1;
         let nextGroup =
-          extensions[nextIndex < 0 ? extensions.length - 1 : nextIndex];
-
+          extensions[nextIndex >= 0 ? nextIndex : extensions.length - 1];
         api.setGroup(nextGroup);
         setCurrentGroup(nextGroup);
         inputRef.current.focus();
+      }),
+      api.onNextTab((_: any, newSelectedTab: number) => {
+        // alert(newSelectedTab);
+        setCurrentTab(newSelectedTab);
+      }),
+      api.onPreviousTab((_: any, newSelectedTab: number) => {
+        setCurrentTab(newSelectedTab);
+        // const nextIndex = extensions.indexOf(currentGroup) - 1;
+        // let nextGroup =
+        //   extensions[nextIndex < 0 ? extensions.length - 1 : nextIndex];
+
+        // api.setGroup(nextGroup);
+        // setCurrentGroup(nextGroup);
+        // inputRef.current.focus();
       }),
       api.onShowSidebar(() => {
         setShowSidebar(true);

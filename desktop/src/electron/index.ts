@@ -40,14 +40,21 @@ const start = (): void => {
           label: 'Select Next Tab',
           accelerator: 'Ctrl+Tab',
           click: () => {
-            mainProcess.mainWindow.webContents.send('nextTab');
+            let group = mainProcess.groupMap[mainProcess.selectedGroup];
+            group.selectedTab = (group.selectedTab + 1) % group.tabs.length;
+            let nextTab = group.tabs[group.selectedTab];
+            mainProcess.setTab(nextTab);
+
+            // mainProcess.mainWindow.webContents.send('nextTab');
           },
         },
         {
           label: 'Select Previous Tab',
           accelerator: 'Ctrl+Shift+Tab',
           click: () => {
-            mainProcess.mainWindow.webContents.send('previousTab');
+            // mainProcess.mainWindow.webContents.send('previousTab');
+            // tabbing should be between the tabs in liveGroup
+            // mainProcess.setGroup
           },
         },
         {

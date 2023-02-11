@@ -22,8 +22,8 @@ type Group = {
       inserts: { styles: boolean; ads: boolean; recommended: boolean };
     };
   };
-  layout: string[];
-  positioning: number[];
+  layout: string[][];
+  positioning: number[][];
 };
 
 type LiveGroup = {
@@ -34,6 +34,8 @@ type LiveGroup = {
   vSeparators: VSeparatorView[];
   hSeparators: HSeparatorView[];
   pages: PageView[];
+  tabs: SomeView[][];
+  selectedTab: number;
 };
 
 type PageView = {
@@ -116,22 +118,8 @@ const groups: { [key: string]: Group }[] = [
           inserts: { styles: false, ads: true, recommended: true },
         },
       },
-      layout: ['google'],
-      positioning: [1],
-    },
-    'google-duckduckgo': {
-      id: 'google-duckduckgo',
-      shortId: 'gd',
-      extensionSettings: {
-        google: {
-          inserts: { styles: false, ads: true, recommended: true },
-        },
-        duckduckgo: {
-          inserts: { styles: false, ads: true, recommended: true },
-        },
-      },
-      layout: ['google', 'vSeparator', 'duckduckgo'],
-      positioning: [0.5, 0.5],
+      layout: [['google']],
+      positioning: [[1]],
     },
     'google-chatgpt': {
       id: 'google-chatgpt',
@@ -144,10 +132,27 @@ const groups: { [key: string]: Group }[] = [
           inserts: { styles: false, ads: true, recommended: true },
         },
       },
-      layout: ['google', 'vSeparator', 'chatgpt'],
-      positioning: [0.5, 0.5],
+      layout: [['google', 'vSeparator', 'chatgpt']],
+      positioning: [[0.5, 0.5]],
+    },
+    'google-duckduckgo': {
+      id: 'google-duckduckgo',
+      shortId: 'gd',
+      extensionSettings: {
+        google: {
+          inserts: { styles: false, ads: true, recommended: true },
+        },
+        duckduckgo: {
+          inserts: { styles: false, ads: true, recommended: true },
+        },
+      },
+      // layout: [['google', 'vSeparator', 'duckduckgo']],
+      // positioning: [[0.5, 0.5]],
+      layout: [['google'], ['duckduckgo']],
+      positioning: [[1], [1]],
     },
   },
+  /*
   {
     google: {
       id: 'google',
@@ -186,6 +191,7 @@ const groups: { [key: string]: Group }[] = [
       positioning: [0.5, 0.5],
     },
   },
+  */
 ];
 
 const settings: Settings = {

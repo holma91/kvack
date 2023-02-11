@@ -79,98 +79,130 @@ class MainProcess {
       vSeparators: [],
       hSeparators: [],
       pages: [],
+      tabs: [], // length = group.layout.length
+      selectedTab: Math.max(group.layout.length - 1, 0),
     };
     this.viewsByGroup[group.id] = [];
 
-    let pageCount = 0;
-    let vSepCount = 0;
-    let hSepCount = 0;
+    for (let h = 0; h < group.layout.length; h++) {
+      let pageCount = 0;
+      let vSepCount = 0;
+      let hSepCount = 0;
+      liveGroup.tabs[h] = [];
 
-    let numberOfPages = group.positioning.length;
-    let numberOfVSeparators = group.layout.filter(
-      (type) => type === 'vSeparator'
-    ).length;
-    let amountToRemoveFromEach =
-      (numberOfVSeparators / numberOfPages) * VSEPARATOR_WIDTH_RELATIVE;
-    let widths = [
-      group.positioning[0] - amountToRemoveFromEach,
-      group.positioning[1] - amountToRemoveFromEach,
-    ];
-    let xOffsets = [0, widths[0] + VSEPARATOR_WIDTH_RELATIVE];
-    let vSeparatorLeftOffset = widths[0];
+      let numberOfPages = group.positioning[h].length; // number of tabs
+      let numberOfVSeparators = group.layout[h].filter(
+        (type) => type === 'vSeparator'
+      ).length;
 
-    for (let i = 0; i < group.layout.length; i++) {
-      if (group.layout[i] === 'vSeparator') {
-        let view = new BrowserView({
-          webPreferences: {
-            ...defaultViewWebPreferences,
-            preload: VSEPARATOR_WINDOW_PRELOAD_WEBPACK_ENTRY,
-          },
-        });
-        liveGroup.vSeparators[vSepCount] = {
-          id: group.layout[i],
-          width: 1,
-          height: 1,
-          x: 0,
-          y: 0,
-          loadedInitialURL: false,
-          leftOffset: vSeparatorLeftOffset,
-          processId: view.webContents.getProcessId(),
-          view,
-        };
-        view.webContents.focus(); // sometimes necessary?
-        this.viewsByGroup[group.id].push(liveGroup.vSeparators[vSepCount]);
-        vSepCount++;
-      } else if (group.layout[i] === 'hSeparator') {
-        // need to change here when we get actual hSeparators
-        let view = new BrowserView({
-          webPreferences: {
-            ...defaultViewWebPreferences,
-            preload: HSEPARATOR_WINDOW_PRELOAD_WEBPACK_ENTRY,
-          },
-        });
-        liveGroup.hSeparators[hSepCount] = {
-          id: 'hSeparator',
-          width: VSEPARATOR_WIDTH_RELATIVE,
-          height: 1,
-          x: 0,
-          y: 0,
-          loadedInitialURL: false,
-          topOffset: vSeparatorLeftOffset,
-          processId: view.webContents.getProcessId(),
-          view,
-        };
-        this.viewsByGroup[group.id].push(liveGroup.hSeparators[hSepCount]);
-        hSepCount++;
-      } else {
-        let extensionId = group.layout[i];
-        const extension = extensionsById[extensionId];
-        let view = new BrowserView({
-          webPreferences: {
-            ...defaultViewWebPreferences,
-            preload: `/Users/lapuerta/dev/kvack/desktop/.webpack/renderer/${extension.preloadPath}/preload.js`,
-          },
-        });
+      let amountToRemoveFromEach =
+        (numberOfVSeparators / numberOfPages) * VSEPARATOR_WIDTH_RELATIVE;
 
-        liveGroup.pages[pageCount] = {
-          id: group.layout[i], // is the extension id
-          width: widths[pageCount],
-          height: 1,
-          x: xOffsets[pageCount],
-          y: 0,
-          loadedInitialURL: false,
-          processId: view.webContents.getProcessId(),
-          view,
-        };
-        if (group.layout[i] === 'google') {
-          // view.webContents.openDevTools();
+      let widths: number[] = [];
+      group.positioning[h].forEach((pos, i) => {
+        widths[i] = pos - amountToRemoveFromEach;
+      });
+      // let widths = [
+      //   group.positioning[h][0] - amountToRemoveFromEach,
+      //   group.positioning[h][1] - amountToRemoveFromEach,
+      // ];
+      let xOffsets = [0, widths[0] + VSEPARATOR_WIDTH_RELATIVE]; // ?
+      let vSeparatorLeftOffset = widths[0];
+
+      for (let i = 0; i < group.layout[h].length; i++) {
+        if (group.layout[h][i] === 'vSeparator') {
+          let view = new BrowserView({
+            webPreferences: {
+              ...defaultViewWebPreferences,
+              preload: VSEPARATOR_WINDOW_PRELOAD_WEBPACK_ENTRY,
+            },
+          });
+          liveGroup.vSeparators[vSepCount] = {
+            id: group.layout[h][i],
+            width: 1,
+            height: 1,
+            x: 0,
+            y: 0,
+            loadedInitialURL: false,
+            leftOffset: vSeparatorLeftOffset,
+            processId: view.webContents.getProcessId(),
+            view,
+          };
+          view.webContents.focus(); // sometimes necessary?
+          this.viewsByGroup[group.id].push(liveGroup.vSeparators[vSepCount]);
+          liveGroup.tabs[h].push(liveGroup.vSeparators[vSepCount]);
+          vSepCount++;
+        } else if (group.layout[h][i] === 'hSeparator') {
+          // need to change here when we get actual hSeparators
+          let view = new BrowserView({
+            webPreferences: {
+              ...defaultViewWebPreferences,
+              preload: HSEPARATOR_WINDOW_PRELOAD_WEBPACK_ENTRY,
+            },
+          });
+          liveGroup.hSeparators[hSepCount] = {
+            id: 'hSeparator',
+            width: VSEPARATOR_WIDTH_RELATIVE,
+            height: 1,
+            x: 0,
+            y: 0,
+            loadedInitialURL: false,
+            topOffset: vSeparatorLeftOffset,
+            processId: view.webContents.getProcessId(),
+            view,
+          };
+          this.viewsByGroup[group.id].push(liveGroup.hSeparators[hSepCount]);
+          hSepCount++;
+        } else {
+          let extensionId = group.layout[h][i];
+          const extension = extensionsById[extensionId];
+          let view = new BrowserView({
+            webPreferences: {
+              ...defaultViewWebPreferences,
+              preload: `/Users/lapuerta/dev/kvack/desktop/.webpack/renderer/${extension.preloadPath}/preload.js`,
+            },
+          });
+
+          liveGroup.pages[pageCount] = {
+            id: group.layout[h][i], // is the extension id
+            width: widths[pageCount],
+            height: 1,
+            x: xOffsets[pageCount],
+            y: 0,
+            loadedInitialURL: false,
+            processId: view.webContents.getProcessId(),
+            view,
+          };
+          if (group.layout[h][i] === 'google') {
+            // view.webContents.openDevTools();
+          }
+          this.viewsByGroup[group.id].push(liveGroup.pages[pageCount]);
+          liveGroup.tabs[h].push(liveGroup.pages[pageCount]);
+
+          pageCount++;
         }
-        this.viewsByGroup[group.id].push(liveGroup.pages[pageCount]);
-        pageCount++;
       }
     }
+    console.log(`${liveGroup.group.id} tabs:`, liveGroup.tabs);
 
     this.groupMap[group.id] = liveGroup;
+  }
+
+  setTab(views: SomeView[]) {
+    for (let i = 0; i < views.length; i++) {
+      if (views[i].id === 'vSeparator') {
+      } else if (views[i].id === 'hSeparator') {
+      } else {
+        console.log('setting this view:', views[i]);
+        this.mainWindow.setBrowserView(views[i].view);
+        const extension = extensionsById[views[i].id];
+        if (!views[i].loadedInitialURL) {
+          views[i].view.webContents.loadURL(extension.entryUrl);
+          views[i].loadedInitialURL = true;
+        }
+        this.setBounds(views[i]);
+      }
+    }
   }
 
   setGroup(group: Group) {

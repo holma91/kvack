@@ -66,7 +66,6 @@ const start = (): void => {
             // should go through all views, not just current group's views
             for (let views of Object.values(mainProcess.viewsByGroup)) {
               for (let view of views) {
-                console.log(view);
                 mainProcess.setBounds(view);
                 if (view.id === 'vSeparator') {
                   const separatorView = view as VSeparatorView;

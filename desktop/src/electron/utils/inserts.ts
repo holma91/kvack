@@ -130,4 +130,12 @@ export const cssInserts: {
       }
     `,
   },
+  twitter: {
+    styles: `
+    `,
+    ads: `
+    `,
+    recommended: `
+    `,
+  },
 };

@@ -85,6 +85,12 @@ const config: ForgeConfig = {
               js: './src/electron/preloads/extensions/chatgpt.ts',
             },
           },
+          {
+            name: 'twitter_window',
+            preload: {
+              js: './src/electron/preloads/extensions/twitter.ts',
+            },
+          },
         ],
       },
     }),

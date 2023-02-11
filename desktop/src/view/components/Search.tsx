@@ -1,6 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import { searchqueries } from '../utils/searchqueries';
-const defaultExtensions = ['google', 'google-duckduckgo', 'google-chatgpt'];
+const defaultExtensions = [
+  'google',
+  'google-duckduckgo',
+  'google-chatgpt',
+  'twitter',
+];
 const otherExtensions = ['google', 'chatgpt', 'google-chatgpt'];
 const shortcuts: { [key: string]: string } = {
   google: 'g',
@@ -8,13 +13,16 @@ const shortcuts: { [key: string]: string } = {
   wolframalpha: 'w',
   chatgpt: 'c',
   'google-chatgpt': 'gc',
+  twitter: 't',
 };
 
 const groupToImage: { [key: string]: string } = {
   g: '/assets/images/google.png',
   d: '/assets/images/ddg.png',
   c: '/assets/images/openaipink.png',
-  w: '/assets/images/openaipink.png',
+  w: '/assets/images/wikipedia.png',
+  s: '/assets/images/stackoverflow.png',
+  t: '/assets/images/twitter.png',
 };
 
 const groupToImages: { [key: string]: string[] } = {
@@ -22,6 +30,7 @@ const groupToImages: { [key: string]: string[] } = {
   'google-duckduckgo': [groupToImage['g'], groupToImage['d']],
   chatgpt: [groupToImage['c']],
   'google-chatgpt': [groupToImage['g'], groupToImage['c']],
+  twitter: [groupToImage['t']],
 };
 
 const groupToHaveTabs: { [key: string]: boolean } = {
@@ -29,11 +38,12 @@ const groupToHaveTabs: { [key: string]: boolean } = {
   'google-duckduckgo': true,
   chatgpt: false,
   'google-chatgpt': false,
+  twitter: false,
 };
 
 export default function Search() {
   const [input, setInput] = useState('');
-  const [currentGroup, setCurrentGroup] = useState('google-duckduckgo');
+  const [currentGroup, setCurrentGroup] = useState('twitter');
   const [currentTab, setCurrentTab] = useState(1);
   const [showSidebar, setShowSidebar] = useState(false);
 
@@ -73,18 +83,10 @@ export default function Search() {
         inputRef.current.focus();
       }),
       api.onNextTab((_: any, newSelectedTab: number) => {
-        // alert(newSelectedTab);
         setCurrentTab(newSelectedTab);
       }),
       api.onPreviousTab((_: any, newSelectedTab: number) => {
         setCurrentTab(newSelectedTab);
-        // const nextIndex = extensions.indexOf(currentGroup) - 1;
-        // let nextGroup =
-        //   extensions[nextIndex < 0 ? extensions.length - 1 : nextIndex];
-
-        // api.setGroup(nextGroup);
-        // setCurrentGroup(nextGroup);
-        // inputRef.current.focus();
       }),
       api.onShowSidebar(() => {
         setShowSidebar(true);
@@ -117,7 +119,6 @@ export default function Search() {
             })}
           </div>
           <div className="p-5 pt-0">
-            {/* <p className=" text-neutral-300 text-2xl">History</p> */}
             <div className="w-full">
               <div className="relative mt-1 flex items-center w-full ">
                 <input

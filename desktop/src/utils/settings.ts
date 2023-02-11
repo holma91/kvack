@@ -101,11 +101,18 @@ const chatgpt: Extension = {
   preloadPath: 'chatgpt_window',
 };
 
+const twitter: Extension = {
+  id: 'twitter',
+  entryUrl: 'https://twitter.com/explore',
+  preloadPath: 'twitter_window',
+};
+
 const extensionsById: { [key: string]: Extension } = {
   google,
   duckduckgo,
   wolframalpha,
   chatgpt,
+  twitter,
 };
 
 const groups: { [key: string]: Group }[] = [
@@ -146,10 +153,19 @@ const groups: { [key: string]: Group }[] = [
           inserts: { styles: false, ads: true, recommended: true },
         },
       },
-      // layout: [['google', 'vSeparator', 'duckduckgo']],
-      // positioning: [[0.5, 0.5]],
       layout: [['google'], ['duckduckgo']],
       positioning: [[1], [1]],
+    },
+    twitter: {
+      id: 'twitter',
+      shortId: 't',
+      extensionSettings: {
+        twitter: {
+          inserts: { styles: false, ads: true, recommended: true },
+        },
+      },
+      layout: [['twitter']],
+      positioning: [[1]],
     },
   },
   /*
@@ -198,7 +214,7 @@ const settings: Settings = {
   userId: 'lapuerta',
   windowWidth: 1450,
   windowHeight: 800,
-  downloadedExtensions: ['google', 'duckduckgo', 'chatgpt'],
+  downloadedExtensions: ['google', 'duckduckgo', 'chatgpt', 'twitter'],
   groups: groups[0],
 };
 

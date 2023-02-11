@@ -54,9 +54,9 @@ class MainProcess {
     let window = new BrowserWindow({
       height: settings.windowHeight,
       width: settings.windowWidth,
-      // x: 30,
-      // y: 75,
-      // frame: false, // use -webkit-app-region: drag;
+      x: 30,
+      y: 75,
+      frame: false, // use -webkit-app-region: drag;
       title: 'kvack',
       // type: 'panel',
       webPreferences: {
@@ -173,7 +173,7 @@ class MainProcess {
             processId: view.webContents.getProcessId(),
             view,
           };
-          if (group.layout[h][i] === 'google') {
+          if (group.layout[h][i] === 'twitter') {
             // view.webContents.openDevTools();
           }
           this.viewsByGroup[group.id].push(liveGroup.pages[pageCount]);

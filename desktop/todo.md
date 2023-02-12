@@ -8,7 +8,7 @@ STEPS when adding a integration:
 6. add necessary things to Search.tsx
 7. study the html/css and add stuff to the preload (css and js)
 
-## TODO before MVP
+## TODO
 
 ## Bug lists
 

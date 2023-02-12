@@ -47,7 +47,7 @@ class MainProcess {
   selectedGroup: string = '';
   groupMap: { [key: string]: LiveGroup } = {};
   viewsByGroup: { [key: string]: SomeView[] } = {}; // because we need to know the order when resizing
-  showSidebar: boolean = false;
+  showSidebar: boolean = true;
   sidebarToggleCount = 0;
 
   constructor(settings: Settings) {

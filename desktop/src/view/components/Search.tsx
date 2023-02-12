@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { FaLock, FaExternalLinkAlt, FaRegCopy } from 'react-icons/fa';
 import { searchqueries } from '../utils/searchqueries';
 const defaultExtensions = [
   'google',
@@ -45,7 +46,7 @@ export default function Search() {
   const [input, setInput] = useState('');
   const [currentGroup, setCurrentGroup] = useState('twitter');
   const [currentTab, setCurrentTab] = useState(1);
-  const [showSidebar, setShowSidebar] = useState(false);
+  const [showSidebar, setShowSidebar] = useState(true);
 
   const handleInputChange = (e: any) => {
     setInput(e.target.value);
@@ -101,10 +102,45 @@ export default function Search() {
     };
   }, [currentGroup, setCurrentGroup]);
 
+  const tabs = [];
+  const groups = [];
+
   return (
     <div className="flex bg-[#171717]">
       {showSidebar && (
-        <div className="w-[275px] flex flex-col gap-2 text-neutral-500 h-screen">
+        <div className="w-[275px] flex flex-col gap-2 text-neutral-500 h-screen pt-1">
+          <div className="pl-4 pt-4 flex gap-3 flex-wrap">
+            <div className="flex gap-2 p-3 rounded-md bg-[#1e2022] cursor-pointer hover:bg-[#34373A]">
+              <img src={groupToImage['g']} className="w-[18px] h-[18px]"></img>
+            </div>
+            <div className="flex gap-2 p-3 rounded-md bg-[#1e2022] cursor-pointer hover:bg-[#34373A]">
+              <img src={groupToImage['c']} className="w-[18px] h-[18px]"></img>
+            </div>
+            <div className="flex gap-2 p-3 rounded-md bg-[#1e2022] cursor-pointer hover:bg-[#34373A]">
+              <img src={groupToImage['g']} className="w-[18px] h-[18px]"></img>
+              <img src={groupToImage['c']} className="w-[18px] h-[18px]"></img>
+            </div>
+            <div className="flex gap-2 p-3 rounded-md bg-[#1e2022] cursor-pointer hover:bg-[#34373A]">
+              <img src={groupToImage['g']} className="w-[18px] h-[18px]"></img>
+            </div>
+            <div className="flex gap-2 p-3 rounded-md bg-[#1e2022] cursor-pointer hover:bg-[#34373A]">
+              <img src={groupToImage['t']} className="w-[18px] h-[18px]"></img>
+              <img src={groupToImage['w']} className="w-[18px] h-[18px]"></img>
+              <img src={groupToImage['s']} className="w-[18px] h-[18px]"></img>
+            </div>
+          </div>
+          <div className="pl-4 pr-4 pt-2">
+            <div className="flex gap-2 p-2 pl-3 pr-3 rounded-md bg-[#1e2022] cursor-pointer hover:bg-[#34373A] justify-between items-center">
+              <div className="flex gap-2 items-center text-sm">
+                <FaLock className="w-3 h-3" />
+                google.com/?q=hello
+              </div>
+              <div className="flex gap-2 items-center text-sm">
+                <FaRegCopy className="w-3 h-3" />
+                <FaExternalLinkAlt className="w-3 h-3" />
+              </div>
+            </div>
+          </div>
           <div className="h-[90%] overflow-auto scrollbar-hide p-3">
             {searchqueries.map((query) => {
               return (
@@ -126,7 +162,7 @@ export default function Search() {
                   type="text"
                   name="search"
                   id="search"
-                  className="block w-full rounded-lg border-gray-400 p-3 shadow-sm  sm:text-lg bg-neutral-800 text-neutral-500 outline-none"
+                  className="block w-full rounded-lg border-gray-400 p-3 shadow-sm  sm:text-lg bg-[#1e2022] text-neutral-500 outline-none"
                 />
                 <div className="absolute inset-y-0 right-0 flex py-2 pr-2">
                   <kbd className="inline-flex items-center rounded border border-neutral-600 px-2 font-sans text-sm font-medium text-neutral-600">
@@ -151,7 +187,7 @@ export default function Search() {
               type="text"
               name="search"
               id="search"
-              className="block w-full rounded-lg border-gray-400 p-3 shadow-sm  sm:text-lg bg-neutral-800 text-neutral-400 outline-none"
+              className="block w-full rounded-lg border-gray-400 p-3 shadow-sm  sm:text-lg bg-[#1e2022] text-neutral-400 outline-none"
             />
             <div className="absolute inset-y-0 right-0 flex gap-4 py-2 pr-2 items-center">
               <kbd className="inline-flex items-center rounded border border-neutral-600 p-2 font-sans text-sm font-medium text-neutral-600">

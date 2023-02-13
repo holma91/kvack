@@ -1,14 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { FaLock, FaExternalLinkAlt, FaRegCopy } from 'react-icons/fa';
 import { searchqueries } from '../utils/searchqueries';
-const defaultExtensions = [
-  'google',
-  'google-duckduckgo',
-  'google-chatgpt',
-  'twitter',
-  'chatgpt',
-];
-const otherExtensions = ['google', 'chatgpt', 'google-chatgpt'];
+
 const shortcuts: { [key: string]: string } = {
   google: 'g',
   'google-duckduckgo': 'gd',
@@ -55,14 +48,12 @@ export default function Search() {
   };
 
   const handleKeyDown = (e: any) => {
-    console.log(e.key);
     if (e.key === 'Enter') {
       api.changeSearchInput('Enter');
     }
   };
 
   const inputRef = useRef(null);
-  const extensions = defaultExtensions;
 
   useEffect(() => {
     inputRef.current.focus();
@@ -75,18 +66,22 @@ export default function Search() {
       api.onSelectedTabChange((_: any, newSelectedTab: number) => {
         setCurrentTab(newSelectedTab);
       }),
-      api.onShowSidebar(() => {
-        setShowSidebar(true);
-      }),
-      api.onHideSidebar(() => {
-        setShowSidebar(false);
+      api.onShowSidebarChange((_: any, newShowSidebarValue: boolean) => {
+        setShowSidebar(newShowSidebarValue);
       }),
     ];
 
     return () => {
       listeners.forEach((removeListener: () => void) => removeListener());
     };
-  }, [currentGroup, setCurrentGroup]);
+  }, [
+    currentGroup,
+    setCurrentGroup,
+    currentTab,
+    setCurrentTab,
+    showSidebar,
+    setShowSidebar,
+  ]);
 
   const tabs = [];
   const groups = [];

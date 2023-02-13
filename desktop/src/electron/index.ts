@@ -120,10 +120,14 @@ const start = (): void => {
           accelerator: 'CmdOrCtrl+B',
           click: () => {
             if (mainProcess.showSidebar) {
-              mainProcess.mainWindow.webContents.send('hideSidebar');
+              // mainProcess.mainWindow.webContents.send('hideSidebar');
             } else {
-              mainProcess.mainWindow.webContents.send('showSidebar');
+              // mainProcess.mainWindow.webContents.send('showSidebar');
             }
+            mainProcess.mainWindow.webContents.send(
+              'showSidebarChange',
+              !mainProcess.showSidebar
+            );
 
             mainProcess.sidebarToggleCount += 1;
             mainProcess.showSidebar = !mainProcess.showSidebar;

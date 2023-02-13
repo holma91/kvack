@@ -10,16 +10,10 @@ const api: { [key: string]: any } = {
     ipcRenderer.on('selectedTabChange', callback);
     return () => [ipcRenderer.removeAllListeners('selectedTabChange')];
   },
-  onShowSidebar: (callback: any) => {
-    ipcRenderer.on('showSidebar', callback);
+  onShowSidebarChange: (callback: any) => {
+    ipcRenderer.on('showSidebarChange', callback);
     return () => {
-      ipcRenderer.removeAllListeners('showSidebar');
-    };
-  },
-  onHideSidebar: (callback: any) => {
-    ipcRenderer.on('hideSidebar', callback);
-    return () => {
-      ipcRenderer.removeAllListeners('hideSidebar');
+      ipcRenderer.removeAllListeners('showSidebarChange');
     };
   },
   setGroup: (groupId: string) => ipcRenderer.send('setGroup', groupId),

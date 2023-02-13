@@ -4,12 +4,11 @@ import { getRelevantApi } from '../utils/helper';
 
 const functionNames = [
   'changeSearchInput',
-  'onPreviousTab',
   'onShowSidebar',
   'onHideSidebar',
   'setGroup',
-  'onNextTab',
   'onSelectedGroupChange',
+  'onSelectedTabChange',
 ];
 const relevantApi = getRelevantApi(api, functionNames);
 

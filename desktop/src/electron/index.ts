@@ -84,12 +84,13 @@ const start = (): void => {
           click: () => {
             let group = mainProcess.groupMap[mainProcess.selectedGroup];
             if (group.tabs.length === 1) return;
+
             group.selectedTab = (group.selectedTab + 1) % group.tabs.length;
             let nextTab = group.tabs[group.selectedTab];
             mainProcess.setTab(nextTab);
 
             mainProcess.mainWindow.webContents.send(
-              'nextTab',
+              'selectedTabChange',
               group.selectedTab
             );
           },
@@ -109,7 +110,7 @@ const start = (): void => {
             mainProcess.setTab(previousTab);
 
             mainProcess.mainWindow.webContents.send(
-              'previousTab',
+              'selectedTabChange',
               group.selectedTab
             );
           },
@@ -168,8 +169,9 @@ const start = (): void => {
   Menu.setApplicationMenu(menu);
 
   ipcMain.on('setGroup', (e: any, groupId: string) => {
-    const liveGroup = mainProcess.groupMap[groupId];
-    mainProcess.setGroup(liveGroup.group);
+    // will be helpful later when user can click on group in sidebar
+    // const liveGroup = mainProcess.groupMap[groupId];
+    // mainProcess.setGroup(liveGroup.group);
   });
 
   ipcMain.on('resize-bar', (e, leftOffset) => {

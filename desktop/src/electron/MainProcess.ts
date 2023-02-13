@@ -80,7 +80,7 @@ class MainProcess {
       hSeparators: [],
       pages: [],
       tabs: [], // length = group.layout.length
-      selectedTab: Math.max(group.layout.length - 1, 0),
+      selectedTab: 0,
     };
     this.viewsByGroup[group.id] = [];
 

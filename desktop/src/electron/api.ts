@@ -6,17 +6,9 @@ const api: { [key: string]: any } = {
     ipcRenderer.on('selectedGroupChange', callback);
     return () => [ipcRenderer.removeAllListeners('selectedGroupChange')];
   },
-  onNextTab: (callback: any) => {
-    ipcRenderer.on('nextTab', callback);
-    return () => {
-      ipcRenderer.removeAllListeners('nextTab');
-    };
-  },
-  onPreviousTab: (callback: any) => {
-    ipcRenderer.on('previousTab', callback);
-    return () => {
-      ipcRenderer.removeAllListeners('previousTab');
-    };
+  onSelectedTabChange: (callback: any) => {
+    ipcRenderer.on('selectedTabChange', callback);
+    return () => [ipcRenderer.removeAllListeners('selectedTabChange')];
   },
   onShowSidebar: (callback: any) => {
     ipcRenderer.on('showSidebar', callback);

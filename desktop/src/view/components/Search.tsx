@@ -46,9 +46,8 @@ const groupToHaveTabs: { [key: string]: boolean } = {
 export default function Search() {
   const [input, setInput] = useState('');
   const [currentGroup, setCurrentGroup] = useState('chatgpt');
-  const [currentTab, setCurrentTab] = useState(1);
+  const [currentTab, setCurrentTab] = useState(0);
   const [showSidebar, setShowSidebar] = useState(true);
-  const [selectedGroup, setCurrentSelectedGroup] = useState('chatgpt');
 
   const handleInputChange = (e: any) => {
     setInput(e.target.value);
@@ -70,15 +69,10 @@ export default function Search() {
 
     const listeners = [
       api.onSelectedGroupChange((_: any, newSelectedGroup: string) => {
-        alert(newSelectedGroup);
-        setCurrentSelectedGroup(newSelectedGroup);
         setCurrentGroup(newSelectedGroup);
         inputRef.current.focus();
       }),
-      api.onNextTab((_: any, newSelectedTab: number) => {
-        setCurrentTab(newSelectedTab);
-      }),
-      api.onPreviousTab((_: any, newSelectedTab: number) => {
+      api.onSelectedTabChange((_: any, newSelectedTab: number) => {
         setCurrentTab(newSelectedTab);
       }),
       api.onShowSidebar(() => {

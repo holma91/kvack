@@ -16,6 +16,10 @@ const api: { [key: string]: any } = {
       ipcRenderer.removeAllListeners('showSidebarChange');
     };
   },
+  onGroupsChange: (callback: any) => {
+    ipcRenderer.on('groupsChange', callback);
+    return () => [ipcRenderer.removeAllListeners('groupsChange')];
+  },
   setGroup: (groupId: string) => ipcRenderer.send('setGroup', groupId),
   resizeBar: (minMax: any) => ipcRenderer.send('resize-bar', minMax),
   onWindowResize: (callback: any) => {

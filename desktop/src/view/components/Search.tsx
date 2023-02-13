@@ -12,20 +12,20 @@ const shortcuts: { [key: string]: string } = {
 };
 
 const groupToImage: { [key: string]: string } = {
-  g: '/assets/images/google.png',
-  d: '/assets/images/ddg.png',
-  c: '/assets/images/openaipink.png',
-  w: '/assets/images/wikipedia.png',
-  s: '/assets/images/stackoverflow.png',
-  t: '/assets/images/twitter.png',
+  google: '/assets/images/google.png',
+  duckduckgo: '/assets/images/ddg.png',
+  chatgpt: '/assets/images/openaipink.png',
+  wikipedia: '/assets/images/wikipedia.png',
+  stackoverflow: '/assets/images/stackoverflow.png',
+  twitter: '/assets/images/twitter.png',
 };
 
 const groupToImages: { [key: string]: string[] } = {
-  google: [groupToImage['g']],
-  'google-duckduckgo': [groupToImage['g'], groupToImage['d']],
-  chatgpt: [groupToImage['c']],
-  'google-chatgpt': [groupToImage['g'], groupToImage['c']],
-  twitter: [groupToImage['t']],
+  google: [groupToImage['google']],
+  'google-duckduckgo': [groupToImage['google'], groupToImage['duckduckgo']],
+  chatgpt: [groupToImage['chatgpt']],
+  'google-chatgpt': [groupToImage['google'], groupToImage['chatgpt']],
+  twitter: [groupToImage['twitter']],
 };
 
 const groupToHaveTabs: { [key: string]: boolean } = {
@@ -41,6 +41,7 @@ export default function Search() {
   const [currentGroup, setCurrentGroup] = useState('chatgpt');
   const [currentTab, setCurrentTab] = useState(0);
   const [showSidebar, setShowSidebar] = useState(true);
+  const [groups, setGroups] = useState([]);
 
   const handleInputChange = (e: any) => {
     setInput(e.target.value);
@@ -58,7 +59,12 @@ export default function Search() {
   useEffect(() => {
     inputRef.current.focus();
 
+    // catch the config here
+
     const listeners = [
+      api.onGroupsChange((_: any, newGroups: string[]) => {
+        setGroups(newGroups);
+      }),
       api.onSelectedGroupChange((_: any, newSelectedGroup: string) => {
         setCurrentGroup(newSelectedGroup);
         inputRef.current.focus();
@@ -84,34 +90,39 @@ export default function Search() {
   ]);
 
   const tabs = [];
-  const groups = [];
+  // const groups = [];
 
   return (
     <div className="flex bg-[#171717]">
       {showSidebar && (
         <div className="w-[275px] flex flex-col gap-2 text-neutral-500 h-screen pt-1">
-          <div className="pl-4 pt-4 flex gap-3 flex-wrap">
-            <div className="flex gap-2 p-3 rounded-md bg-[#1e2022] cursor-pointer hover:bg-[#34373A]">
-              <img src={groupToImage['g']} className="w-[18px] h-[18px]"></img>
-            </div>
-            <div className="flex gap-2 p-3 rounded-md bg-[#1e2022] cursor-pointer hover:bg-[#34373A]">
-              <img src={groupToImage['c']} className="w-[18px] h-[18px]"></img>
-            </div>
-            <div className="flex gap-2 p-3 rounded-md bg-[#1e2022] cursor-pointer hover:bg-[#34373A]">
-              <img src={groupToImage['g']} className="w-[18px] h-[18px]"></img>
-              <img src={groupToImage['c']} className="w-[18px] h-[18px]"></img>
-            </div>
-            <div className="flex gap-2 p-3 rounded-md bg-[#1e2022] cursor-pointer hover:bg-[#34373A]">
-              <img src={groupToImage['g']} className="w-[18px] h-[18px]"></img>
-            </div>
-            <div className="flex gap-2 p-3 rounded-md bg-[#1e2022] cursor-pointer hover:bg-[#34373A]">
-              <img src={groupToImage['t']} className="w-[18px] h-[18px]"></img>
-              <img src={groupToImage['w']} className="w-[18px] h-[18px]"></img>
-              <img src={groupToImage['s']} className="w-[18px] h-[18px]"></img>
-            </div>
+          <div className="pl-4 pt-4 pr-1 flex gap-3 flex-wrap">
+            {groups.map((group) => {
+              const extensions = group.split('-');
+              let style =
+                'flex gap-2 p-3 rounded-md cursor-pointer hover:bg-[#34373A]';
+              if (group === currentGroup) {
+                style += ' bg-[#34373A]';
+              } else {
+                style += ' bg-[#1e2022]';
+              }
+              return (
+                <div className={style}>
+                  {extensions.map((extension: string) => {
+                    return (
+                      <img
+                        src={groupToImage[extension]}
+                        className="w-[18px] h-[18px]"
+                      ></img>
+                    );
+                  })}
+                </div>
+              );
+            })}
           </div>
           <div className="pl-4 pr-4 pt-2">
             <div className="flex gap-2 p-2 pl-3 pr-3 rounded-md bg-[#1e2022] cursor-pointer hover:bg-[#34373A] justify-between items-center">
+              {/* here we need to get all the urls from the selected group */}
               <div className="flex gap-2 items-center text-sm">
                 <FaLock className="w-3 h-3" />
                 google.com/?q=hello

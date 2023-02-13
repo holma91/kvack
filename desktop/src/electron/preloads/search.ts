@@ -8,6 +8,7 @@ const functionNames = [
   'onSelectedGroupChange',
   'onSelectedTabChange',
   'onShowSidebarChange',
+  'onGroupsChange',
 ];
 const relevantApi = getRelevantApi(api, functionNames);
 

@@ -66,6 +66,9 @@ class MainProcess {
     });
 
     window.loadURL(SEARCH_WINDOW_WEBPACK_ENTRY);
+    window.webContents.on('did-finish-load', () => {
+      window.webContents.send('groupsChange', Object.keys(settings.groups));
+    });
     this.mainWindow = window;
   }
 

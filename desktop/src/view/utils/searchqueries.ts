@@ -1,58 +1,58 @@
 export const searchqueries: { group: string; query: string }[] = [
   {
-    group: 'd',
+    group: 'duckduckgo',
     query: 'who is the player in the NHL right now',
   },
   {
-    group: 'w',
+    group: 'wikipedia',
     query: 'what is the population of france?',
   },
   {
-    group: 'g',
+    group: 'google',
     query: 'how to set the width of a browserview in electron',
   },
   {
-    group: 'c',
+    group: 'chatgpt',
     query: 'how to learn thermodynamics in a week',
   },
   {
-    group: 'w',
+    group: 'wikipedia',
     query: 'differentiate 4 sinxy with respect to x',
   },
   {
-    group: 'g',
+    group: 'google',
     query: 'what is the best browser in 2023',
   },
   {
-    group: 'g',
+    group: 'google',
     query: 'how to bootstrap a react js application',
   },
   {
-    group: 'd',
+    group: 'duckduckgo',
     query: 'what is the difference between google and duckduckgo',
   },
   {
-    group: 'c',
+    group: 'chatgpt',
     query: 'how can I in the most simple way become a musician',
   },
   {
-    group: 'c',
+    group: 'chatgpt',
     query: 'what is the largest number that you know of',
   },
   {
-    group: 'g',
+    group: 'google',
     query: 'where does the Avalanche in the nhl play',
   },
   {
-    group: 'w',
+    group: 'wikipedia',
     query: 'differentiate 2xyz + 4z * z^5 * z^7 with respect to z',
   },
   {
-    group: 'd',
+    group: 'duckduckgo',
     query: 'what is the best search engine to use',
   },
   {
-    group: 'g',
+    group: 'google',
     query: 'who created vercel and next js',
   },
 ];

@@ -10,7 +10,17 @@ STEPS when adding a integration:
 
 ## TODO
 
+share stuff between main and preload.
+
+every time the selectedGroup value change, send the new value to the renderer.
+
+FROM NOW ON:
+
+- ALL STATE IN MAIN. -> renderer.
+
 ## Bug lists
 
 - when focus is not on mainWindow and tabbing, the focus doesn't land on the input bar in the new tab
 - shortcuts including the arrow keys when input field is focused
+
+### Context isolation

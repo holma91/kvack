@@ -6,6 +6,7 @@ const defaultExtensions = [
   'google-duckduckgo',
   'google-chatgpt',
   'twitter',
+  'chatgpt',
 ];
 const otherExtensions = ['google', 'chatgpt', 'google-chatgpt'];
 const shortcuts: { [key: string]: string } = {
@@ -44,9 +45,10 @@ const groupToHaveTabs: { [key: string]: boolean } = {
 
 export default function Search() {
   const [input, setInput] = useState('');
-  const [currentGroup, setCurrentGroup] = useState('twitter');
+  const [currentGroup, setCurrentGroup] = useState('chatgpt');
   const [currentTab, setCurrentTab] = useState(1);
   const [showSidebar, setShowSidebar] = useState(true);
+  const [selectedGroup, setCurrentSelectedGroup] = useState('chatgpt');
 
   const handleInputChange = (e: any) => {
     setInput(e.target.value);
@@ -67,20 +69,10 @@ export default function Search() {
     inputRef.current.focus();
 
     const listeners = [
-      api.onNextGroup(() => {
-        const nextIndex = extensions.indexOf(currentGroup) + 1;
-        let nextGroup =
-          extensions[nextIndex >= extensions.length ? 0 : nextIndex];
-        api.setGroup(nextGroup);
-        setCurrentGroup(nextGroup);
-        inputRef.current.focus();
-      }),
-      api.onPreviousGroup(() => {
-        const nextIndex = extensions.indexOf(currentGroup) - 1;
-        let nextGroup =
-          extensions[nextIndex >= 0 ? nextIndex : extensions.length - 1];
-        api.setGroup(nextGroup);
-        setCurrentGroup(nextGroup);
+      api.onSelectedGroupChange((_: any, newSelectedGroup: string) => {
+        alert(newSelectedGroup);
+        setCurrentSelectedGroup(newSelectedGroup);
+        setCurrentGroup(newSelectedGroup);
         inputRef.current.focus();
       }),
       api.onNextTab((_: any, newSelectedTab: number) => {

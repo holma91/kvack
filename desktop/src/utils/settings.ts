@@ -167,6 +167,17 @@ const groups: { [key: string]: Group }[] = [
       layout: [['twitter']],
       positioning: [[1]],
     },
+    chatgpt: {
+      id: 'chatgpt',
+      shortId: 'c',
+      extensionSettings: {
+        twitter: {
+          inserts: { styles: false, ads: true, recommended: true },
+        },
+      },
+      layout: [['chatgpt']],
+      positioning: [[1]],
+    },
   },
   /*
   {

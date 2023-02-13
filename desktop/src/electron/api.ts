@@ -2,17 +2,9 @@ import { ipcRenderer } from 'electron';
 
 const api: { [key: string]: any } = {
   changeSearchInput: (input: string) => ipcRenderer.send('searchInput', input),
-  onNextGroup: (callback: any) => {
-    ipcRenderer.on('nextGroup', callback);
-    return () => {
-      ipcRenderer.removeAllListeners('nextGroup');
-    };
-  },
-  onPreviousGroup: (callback: any) => {
-    ipcRenderer.on('previousGroup', callback);
-    return () => {
-      ipcRenderer.removeAllListeners('previousGroup');
-    };
+  onSelectedGroupChange: (callback: any) => {
+    ipcRenderer.on('selectedGroupChange', callback);
+    return () => [ipcRenderer.removeAllListeners('selectedGroupChange')];
   },
   onNextTab: (callback: any) => {
     ipcRenderer.on('nextTab', callback);

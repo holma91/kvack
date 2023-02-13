@@ -40,14 +40,42 @@ const start = (): void => {
           label: 'Next Group',
           accelerator: 'CmdOrCtrl+]',
           click: () => {
-            mainProcess.mainWindow.webContents.send('nextGroup');
+            let groupsInOrder = Object.keys(settings.groups); // change to map later to 100% guarantee order
+            let indexOfNextGroup =
+              groupsInOrder.indexOf(mainProcess.selectedGroup) + 1;
+            let nextGroupId =
+              groupsInOrder[
+                indexOfNextGroup >= groupsInOrder.length ? 0 : indexOfNextGroup
+              ];
+
+            const nextLiveGroup = mainProcess.groupMap[nextGroupId];
+            mainProcess.setGroup(nextLiveGroup.group);
+
+            mainProcess.mainWindow.webContents.send(
+              'selectedGroupChange',
+              mainProcess.selectedGroup
+            );
           },
         },
         {
           label: 'Previous Group',
           accelerator: 'CmdOrCtrl+[',
           click: () => {
-            mainProcess.mainWindow.webContents.send('previousGroup');
+            let groupsInOrder = Object.keys(settings.groups); // change to map later to 100% guarantee order
+            let indexOfNextGroup =
+              groupsInOrder.indexOf(mainProcess.selectedGroup) - 1;
+            let nextGroupId =
+              groupsInOrder[
+                indexOfNextGroup >= 0
+                  ? indexOfNextGroup
+                  : groupsInOrder.length - 1
+              ];
+            const nextLiveGroup = mainProcess.groupMap[nextGroupId];
+            mainProcess.setGroup(nextLiveGroup.group);
+            mainProcess.mainWindow.webContents.send(
+              'selectedGroupChange',
+              mainProcess.selectedGroup
+            );
           },
         },
         {

@@ -16,6 +16,10 @@ const api: { [key: string]: any } = {
       ipcRenderer.removeAllListeners('showSidebarChange');
     };
   },
+  onUrlChange: (callback: any) => {
+    ipcRenderer.on('urlChange', callback);
+    return () => [ipcRenderer.removeAllListeners('urlChange')];
+  },
   onGroupsChange: (callback: any) => {
     ipcRenderer.on('groupsChange', callback);
     return () => [ipcRenderer.removeAllListeners('groupsChange')];

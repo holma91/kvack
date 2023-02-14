@@ -47,6 +47,7 @@ type PageView = {
   loadedInitialURL: boolean;
   view: BrowserView;
   processId: number;
+  // keep track of url here?
 };
 
 type VSeparatorView = {

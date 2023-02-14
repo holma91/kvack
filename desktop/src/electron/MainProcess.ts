@@ -175,6 +175,7 @@ class MainProcess {
             loadedInitialURL: false,
             processId: view.webContents.getProcessId(),
             view,
+            // entryUrl: extension.entryUrl?
           };
           if (group.layout[h][i] === 'twitter') {
             // view.webContents.openDevTools();
@@ -190,6 +191,18 @@ class MainProcess {
     this.groupMap[group.id] = liveGroup;
   }
 
+  loadURL(view: SomeView, url: string) {
+    view.view.webContents.loadURL(url);
+    view.loadedInitialURL = true;
+
+    view.view.webContents.on('did-navigate', (event, url) => {
+      console.log('did-navigate:', url);
+    });
+    view.view.webContents.on('did-navigate-in-page', (event, url) => {
+      console.log('did-navigate-in-page:', url);
+    });
+  }
+
   setTab(views: SomeView[]) {
     for (let i = 0; i < views.length; i++) {
       if (views[i].id === 'vSeparator') {
@@ -198,8 +211,7 @@ class MainProcess {
         this.mainWindow.setBrowserView(views[i].view);
         const extension = extensionsById[views[i].id];
         if (!views[i].loadedInitialURL) {
-          views[i].view.webContents.loadURL(extension.entryUrl);
-          views[i].loadedInitialURL = true;
+          this.loadURL(views[i], extension.entryUrl);
         }
         this.setBounds(views[i]);
       }
@@ -235,9 +247,7 @@ class MainProcess {
       vSeparatorOffsets[i] = leftOffsetAbsolute;
 
       if (!vSeparatorView.loadedInitialURL) {
-        vSeparatorView.view.webContents.loadURL(
-          VSEPARATOR_WINDOW_WEBPACK_ENTRY
-        );
+        this.loadURL(vSeparatorView, VSEPARATOR_WINDOW_WEBPACK_ENTRY);
 
         vSeparatorView.view.webContents.on('did-finish-load', () => {
           vSeparatorView.view.webContents.send(
@@ -268,7 +278,15 @@ class MainProcess {
 
       if (!pageView.loadedInitialURL) {
         const extension = extensionsById[pageView.id];
-        pageView.view.webContents.loadURL(extension.entryUrl);
+        this.loadURL(pageView, extension.entryUrl);
+        if (pageView.id === 'google') {
+          // pageView.view.webContents.openDevTools();
+          pageView.view.webContents.on('did-navigate-in-page', (event, url) => {
+            // so here we can keep track of the url
+            // - change it on the view, and send it to the sidebar
+            // console.log(`Navigated to ${url}`);
+          });
+        }
         pageView.loadedInitialURL = true;
         this.setBounds(pageView);
       }

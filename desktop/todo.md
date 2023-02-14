@@ -14,9 +14,15 @@ share stuff between main and preload.
 
 every time the selectedGroup value change, send the new value to the renderer.
 
-FROM NOW ON:
+how to keep track of the current url for every view?
+every extendedView keeps track of their current url.
 
-- ALL STATE IN MAIN. -> renderer.
+- start with entryUrl
+- listen to did-navigate event on every browserview
+  with this in mind, the view will always know the current url
+  we have the extensions in order in the pages array
+
+how to send the url to the renderer?
 
 ## Bug lists
 

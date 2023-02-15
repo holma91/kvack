@@ -70,6 +70,8 @@ class MainProcess {
       window.webContents.send('groupsChange', Object.keys(settings.groups));
     });
     this.mainWindow = window;
+
+    window.webContents.openDevTools({ mode: 'detach' });
   }
 
   createGroup(group: Group) {
@@ -175,7 +177,7 @@ class MainProcess {
             loadedInitialURL: false,
             processId: view.webContents.getProcessId(),
             view,
-            // entryUrl: extension.entryUrl?
+            // url: extension.entryUrl
           };
           if (group.layout[h][i] === 'twitter') {
             // view.webContents.openDevTools();
@@ -195,11 +197,14 @@ class MainProcess {
     view.view.webContents.loadURL(url);
     view.loadedInitialURL = true;
 
+    let processId = view.view.webContents.getProcessId();
     view.view.webContents.on('did-navigate', (event, url) => {
       console.log('did-navigate:', url);
+      this.mainWindow.webContents.send('urlChange', url, processId);
     });
     view.view.webContents.on('did-navigate-in-page', (event, url) => {
       console.log('did-navigate-in-page:', url);
+      this.mainWindow.webContents.send('urlChange', url, processId);
     });
   }
 
@@ -256,7 +261,7 @@ class MainProcess {
           );
         });
 
-        vSeparatorView.loadedInitialURL = true;
+        vSeparatorView.loadedInitialURL = true; // change
         this.setBounds(vSeparatorView);
       }
     }
@@ -328,6 +333,28 @@ class MainProcess {
     liveGroup.loadedWidth = width;
     liveGroup.loadedSidebarToggleCount = this.sidebarToggleCount;
     this.selectedGroup = group.id;
+
+    let tabIds = liveGroup.tabs
+      .map((outer) =>
+        outer
+          .filter((tab) => tab.id !== 'vSeparator')
+          .map((tab) => tab.processId)
+      )
+      .flat();
+    console.log(tabIds);
+    this.mainWindow.webContents.on('did-finish-load', () => {
+      this.mainWindow.webContents.send(
+        'selectedGroupChange',
+        this.selectedGroup,
+        tabIds
+      );
+    });
+    // when it's not the initial load
+    this.mainWindow.webContents.send(
+      'selectedGroupChange',
+      this.selectedGroup,
+      tabIds
+    );
   }
 
   setBounds(extendedView: SomeView) {

@@ -50,11 +50,6 @@ const start = (): void => {
 
             const nextLiveGroup = mainProcess.groupMap[nextGroupId];
             mainProcess.setGroup(nextLiveGroup.group);
-
-            mainProcess.mainWindow.webContents.send(
-              'selectedGroupChange',
-              mainProcess.selectedGroup
-            );
           },
         },
         {
@@ -72,10 +67,6 @@ const start = (): void => {
               ];
             const nextLiveGroup = mainProcess.groupMap[nextGroupId];
             mainProcess.setGroup(nextLiveGroup.group);
-            mainProcess.mainWindow.webContents.send(
-              'selectedGroupChange',
-              mainProcess.selectedGroup
-            );
           },
         },
         {

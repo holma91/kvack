@@ -48,7 +48,10 @@ export default function Search() {
     'chatgpt',
     'twitter',
   ]);
-  const [tabs, setTabs] = useState(['chat.openai.com', 'chat.openai.com']);
+  const [activeTabIds, setActiveTabIds] = useState<number[]>([]);
+  const [tabsByProcessId, setTabsByProcessId] = useState<{
+    [key: string]: string;
+  }>({});
 
   const handleInputChange = (e: any) => {
     setInput(e.target.value);
@@ -70,17 +73,23 @@ export default function Search() {
       api.onGroupsChange((_: any, newGroups: string[]) => {
         setGroups(newGroups);
       }),
-      api.onSelectedGroupChange((_: any, newSelectedGroup: string) => {
-        setCurrentGroup(newSelectedGroup);
-        inputRef.current.focus();
+      api.onSelectedGroupChange(
+        (_: any, newSelectedGroup: string, tabIds: number[]) => {
+          console.log('onSelectedGroupChange');
+          setCurrentGroup(newSelectedGroup);
+          setActiveTabIds(tabIds);
+          inputRef.current.focus();
 
-        // we need to change the tab urls here, need to be in order
-      }),
+          // we need to change the tab urls here, need to be in order
+        }
+      ),
       api.onUrlChange((_: any, newUrl: string, tabId: number) => {
-        // change what's in the tabs array, here at only the active tab
-        let tabsNew = [...tabs];
-        tabsNew[tabId] = newUrl;
-        setTabs(tabsNew);
+        setTabsByProcessId((prevTabsByProcessId) => {
+          return {
+            ...prevTabsByProcessId,
+            [tabId]: newUrl,
+          };
+        });
       }),
       api.onSelectedTabChange((_: any, newSelectedTab: number) => {
         setCurrentTab(newSelectedTab);
@@ -100,7 +109,11 @@ export default function Search() {
     setCurrentTab,
     showSidebar,
     setShowSidebar,
+    tabsByProcessId,
+    setTabsByProcessId,
   ]);
+
+  console.log('tabsByProcessId outside', tabsByProcessId);
 
   return (
     <div className="flex bg-[#171717]">
@@ -131,15 +144,15 @@ export default function Search() {
             })}
           </div>
           <div className="pl-4 pr-4 pt-2 flex flex-col gap-3">
-            {tabs.map((tab) => {
+            {activeTabIds.map((tabId) => {
               return (
                 <div
-                  key={tab}
+                  key={tabId}
                   className="flex gap-2 p-2 pl-3 pr-3 rounded-md bg-[#1e2022] cursor-pointer hover:bg-[#34373A] justify-between items-center"
                 >
-                  <div className="flex gap-2 items-center text-sm">
+                  <div className="overflow-hidden flex gap-2 items-center text-sm">
                     <FaLock className="w-3 h-3" />
-                    {tab}
+                    <p className="overflow-hidden">{tabsByProcessId[tabId]}</p>
                   </div>
                   <div className="flex gap-2 items-center text-sm">
                     <FaRegCopy className="w-3 h-3" />

@@ -47,6 +47,7 @@ type PageView = {
   loadedInitialURL: boolean;
   view: BrowserView;
   processId: number;
+  // url: string;
   // keep track of url here?
 };
 

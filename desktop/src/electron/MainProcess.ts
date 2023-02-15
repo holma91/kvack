@@ -199,11 +199,11 @@ class MainProcess {
 
     let processId = view.view.webContents.getProcessId();
     view.view.webContents.on('did-navigate', (event, url) => {
-      console.log('did-navigate:', url);
+      console.log('processId:', processId, 'did-navigate:', url);
       this.mainWindow.webContents.send('urlChange', url, processId);
     });
     view.view.webContents.on('did-navigate-in-page', (event, url) => {
-      console.log('did-navigate-in-page:', url);
+      console.log('processId:', processId, 'did-navigate-in-page:', url);
       this.mainWindow.webContents.send('urlChange', url, processId);
     });
   }

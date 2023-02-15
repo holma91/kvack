@@ -45,8 +45,8 @@ export default function Search() {
     'google',
     'google-chatgpt',
     'google-duckduckgo',
-    'chatgpt',
     'twitter',
+    'chatgpt',
   ]);
   const [activeTabIds, setActiveTabIds] = useState<number[]>([]);
   const [tabsByProcessId, setTabsByProcessId] = useState<{
@@ -77,13 +77,13 @@ export default function Search() {
         (_: any, newSelectedGroup: string, tabIds: number[]) => {
           console.log('onSelectedGroupChange');
           setCurrentGroup(newSelectedGroup);
+          console.log('incoming tabIds', tabIds);
           setActiveTabIds(tabIds);
           inputRef.current.focus();
-
-          // we need to change the tab urls here, need to be in order
         }
       ),
       api.onUrlChange((_: any, newUrl: string, tabId: number) => {
+        console.log(newUrl);
         setTabsByProcessId((prevTabsByProcessId) => {
           return {
             ...prevTabsByProcessId,
@@ -111,9 +111,21 @@ export default function Search() {
     setShowSidebar,
     tabsByProcessId,
     setTabsByProcessId,
+    activeTabIds,
+    setActiveTabIds,
   ]);
 
-  console.log('tabsByProcessId outside', tabsByProcessId);
+  const formatUrl = (url: string) => {
+    if (url) {
+      url = url.replace('https://', '');
+      url = url.replace('http://', '');
+      url = url.replace('www.', '');
+      if (url.length > 20) {
+        url = url.substring(0, 20) + '..';
+      }
+    }
+    return url;
+  };
 
   return (
     <div className="flex bg-[#171717]">
@@ -152,7 +164,9 @@ export default function Search() {
                 >
                   <div className="overflow-hidden flex gap-2 items-center text-sm">
                     <FaLock className="w-3 h-3" />
-                    <p className="overflow-hidden">{tabsByProcessId[tabId]}</p>
+                    <p className="overflow-hidden">
+                      {formatUrl(tabsByProcessId[tabId])}
+                    </p>
                   </div>
                   <div className="flex gap-2 items-center text-sm">
                     <FaRegCopy className="w-3 h-3" />

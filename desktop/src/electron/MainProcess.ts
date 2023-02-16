@@ -70,6 +70,7 @@ class MainProcess {
       window.webContents.send('groupsChange', Object.keys(settings.groups));
     });
     this.mainWindow = window;
+    this.mainWindow.webContents.setMaxListeners(30);
 
     window.webContents.openDevTools({ mode: 'detach' });
   }
@@ -199,11 +200,11 @@ class MainProcess {
 
     let processId = view.view.webContents.getProcessId();
     view.view.webContents.on('did-navigate', (event, url) => {
-      console.log('processId:', processId, 'did-navigate:', url);
+      // console.log('processId:', processId, 'did-navigate:', url);
       this.mainWindow.webContents.send('urlChange', url, processId);
     });
     view.view.webContents.on('did-navigate-in-page', (event, url) => {
-      console.log('processId:', processId, 'did-navigate-in-page:', url);
+      // console.log('processId:', processId, 'did-navigate-in-page:', url);
       this.mainWindow.webContents.send('urlChange', url, processId);
     });
   }
@@ -332,7 +333,6 @@ class MainProcess {
     liveGroup.loadedHeight = height;
     liveGroup.loadedWidth = width;
     liveGroup.loadedSidebarToggleCount = this.sidebarToggleCount;
-    this.selectedGroup = group.id;
 
     let tabIds = liveGroup.tabs
       .map((outer) =>
@@ -341,20 +341,15 @@ class MainProcess {
           .map((tab) => tab.processId)
       )
       .flat();
-    console.log(tabIds);
+    // console.log(tabIds);
+
     this.mainWindow.webContents.on('did-finish-load', () => {
-      this.mainWindow.webContents.send(
-        'selectedGroupChange',
-        this.selectedGroup,
-        tabIds
-      );
+      this.mainWindow.webContents.send('selectedGroupChange', group.id, tabIds);
     });
     // when it's not the initial load
-    this.mainWindow.webContents.send(
-      'selectedGroupChange',
-      this.selectedGroup,
-      tabIds
-    );
+    this.mainWindow.webContents.send('selectedGroupChange', group.id, tabIds);
+
+    this.selectedGroup = group.id;
   }
 
   setBounds(extendedView: SomeView) {

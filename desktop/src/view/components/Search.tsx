@@ -75,15 +75,12 @@ export default function Search() {
       }),
       api.onSelectedGroupChange(
         (_: any, newSelectedGroup: string, tabIds: number[]) => {
-          console.log('onSelectedGroupChange');
           setCurrentGroup(newSelectedGroup);
-          console.log('incoming tabIds', tabIds);
           setActiveTabIds(tabIds);
           inputRef.current.focus();
         }
       ),
       api.onUrlChange((_: any, newUrl: string, tabId: number) => {
-        console.log(newUrl);
         setTabsByProcessId((prevTabsByProcessId) => {
           return {
             ...prevTabsByProcessId,
@@ -123,6 +120,7 @@ export default function Search() {
       if (url.length > 20) {
         url = url.substring(0, 20) + '..';
       }
+    } else {
     }
     return url;
   };

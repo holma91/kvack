@@ -29,6 +29,7 @@ const start = (): void => {
     // load everything into the cache on startup
     mainProcess.createGroup(settings.groups[id]);
     mainProcess.setGroup(settings.groups[id]);
+    // console.log(settings.groups[id]);
   }
 
   const menu = new Menu();

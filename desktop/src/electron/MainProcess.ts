@@ -72,7 +72,7 @@ class MainProcess {
     this.mainWindow = window;
     this.mainWindow.webContents.setMaxListeners(30);
 
-    window.webContents.openDevTools({ mode: 'detach' });
+    // window.webContents.openDevTools({ mode: 'detach' });
   }
 
   createGroup(group: Group) {

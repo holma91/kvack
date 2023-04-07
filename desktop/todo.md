@@ -29,4 +29,7 @@ how to send the url to the renderer?
 - when focus is not on mainWindow and tabbing, the focus doesn't land on the input bar in the new tab
 - shortcuts including the arrow keys when input field is focused
 
-### Context isolation
+## History
+
+every search goes through the main process
+save query with group id and extension id

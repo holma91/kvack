@@ -7,6 +7,7 @@ import {
   globalShortcut,
   session,
 } from 'electron';
+
 import path from 'path';
 import MainProcess from './MainProcess';
 import {
@@ -22,6 +23,7 @@ if (require('electron-squirrel-startup')) {
 }
 
 const start = (): void => {
+  // const secondProcess = new MainProcess(settings);
   const mainProcess = new MainProcess(settings);
 
   // read the settings, load up all the groups
@@ -29,7 +31,6 @@ const start = (): void => {
     // load everything into the cache on startup
     mainProcess.createGroup(settings.groups[id]);
     mainProcess.setGroup(settings.groups[id]);
-    // console.log(settings.groups[id]);
   }
 
   const menu = new Menu();

@@ -17,7 +17,7 @@ export const searchqueries: { group: string; query: string }[] = [
   },
   {
     group: 'wikipedia',
-    query: 'differentiate 4 sinxy with respect to x',
+    query: 'differentiate 4 (sinx^3ycosx)/x with respect to x',
   },
   {
     group: 'google',

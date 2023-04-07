@@ -140,7 +140,7 @@ export default function Search() {
                 style += ' bg-[#1e2022]';
               }
               return (
-                <div className={style}>
+                <div className={style} key={group}>
                   {extensions.map((extension: string) => {
                     return (
                       <img
@@ -187,7 +187,7 @@ export default function Search() {
               );
             })}
           </div>
-          <div className="p-5 pt-0">
+          {/* <div className="p-5 pt-0">
             <div className="w-full">
               <div className="relative mt-1 flex items-center w-full ">
                 <input
@@ -204,7 +204,7 @@ export default function Search() {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       )}
       <div
